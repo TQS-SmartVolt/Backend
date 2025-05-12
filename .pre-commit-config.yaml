@@ -2,6 +2,23 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: check-yaml          # Check yaml files for syntax errors
-      - id: end-of-file-fixer   # Enforce a newline at the end of files
-      - id: trailing-whitespace # Remove trailing whitespace
+      - id: check-yaml                  # Check yaml files for syntax errors
+        name: Check YAML
+      - id: end-of-file-fixer           # Enforce a newline at the end of files
+        name: End of File Fixer
+      - id: trailing-whitespace         # Remove trailing whitespace
+        name: Trailing Whitespace Fixer
+  - repo: local
+    hooks:
+      - id: mvn-spotless-check
+        name: Maven Spotless - check
+        entry: bash -c "cd smartvolt && mvn spotless:check"
+        language: system
+        types: [java]
+
+      - id: mvn-spotless-apply
+        name: Maven Spotless - apply
+        entry: bash -c "cd smartvolt && mvn spotless:apply"
+        language: system
+        types: [java]
+        always_run: true
