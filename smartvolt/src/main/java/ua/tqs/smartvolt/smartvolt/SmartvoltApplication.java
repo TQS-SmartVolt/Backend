@@ -9,5 +9,8 @@ public class SmartvoltApplication {
   public static void main(String[] args) {
     SpringApplication.run(SmartvoltApplication.class, args);
     System.out.println("a b    ");
+    for (int i = 0; i < 100; i++) {
+      System.out.println("a b    ");
+    }
   }
 }
