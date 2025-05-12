@@ -2,7 +2,6 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: check-yaml        # Valida arquivos YAML
-      - id: check-json        # Valida arquivos JSON
-      - id: end-of-file-fixer # Garante uma linha em branco no final dos arquivos
-      - id: trailing-whitespace # Remove espaços em branco no  final das linhas
+      - id: check-yaml          # Check yaml files for syntax errors
+      - id: end-of-file-fixer   # Enforce a newline at the end of files
+      - id: trailing-whitespace # Remove trailing whitespace
