@@ -5,4 +5,4 @@ repos:
       - id: check-yaml        # Valida arquivos YAML
       - id: check-json        # Valida arquivos JSON
       - id: end-of-file-fixer # Garante uma linha em branco no final dos arquivos
-      - id: trailing-whitespace # Remove espaços em branco no final das linhas
+      - id: trailing-whitespace # Remove espaços em branco no  final das linhas
