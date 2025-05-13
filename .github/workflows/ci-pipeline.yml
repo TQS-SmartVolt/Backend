@@ -23,10 +23,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Pull built image
         run: |
           docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }}
+        working-directory: ${{ github.workspace }}/smartvolt
 
       - name: Build and run unit tests inside Docker
         run: |
