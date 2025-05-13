@@ -1,10 +1,11 @@
 name: CI Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
     branches: [main]
-  pull_request:
-      types: [opened, synchronize, reopened]
+    types: 
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -23,7 +24,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Pull built image
         run: |
           docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }}
