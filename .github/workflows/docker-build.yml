@@ -28,5 +28,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.repository }}:latest
-            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/tqs-smartvolt-backend:latest
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/tqs-smartvolt-backend:${{ github.sha }}
