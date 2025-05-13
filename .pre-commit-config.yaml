@@ -8,6 +8,16 @@ repos:
         name: End of File Fixer
       - id: trailing-whitespace         # Remove trailing whitespace
         name: Trailing Whitespace Fixer
+      - id: check-added-large-files     # Prevent large files from being added
+        name: Check Added Large Files
+        args: ['--maxkb=100']           # Set max file size to 100KB
+      - id: check-merge-conflict        # Check for merge conflict markers
+        name: Check Merge Conflict
+      - id: check-case-conflict       # Check for case conflicts in filenames
+        name: Check Case Conflict
+      - id: no-commit-to-branch       # Prevent commits to specific branches
+        name: No Commit to "main" or "dev"
+        args: ['--branch', 'main', '--branch', 'dev']
   - repo: local
     hooks:
       - id: mvn-spotless-check
