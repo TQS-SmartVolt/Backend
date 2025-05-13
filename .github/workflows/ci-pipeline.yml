@@ -38,7 +38,6 @@ jobs:
       - name: Pull built image
         run: |
           docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }}
-        working-directory: ${{ github.workspace }}/smartvolt
 
       - name: Build and run unit tests inside Docker
         run: |
