@@ -31,4 +31,4 @@ Check all files:
 pre-commit run --all-files
 ```
 
-> Tip: For issues, see Pre-commit Docs or ask the team.
+> Tip: For issues, see Pre-commit Docs or ask the team. `git commit --no-verify` can bypass hooks, but use it cautiously.
