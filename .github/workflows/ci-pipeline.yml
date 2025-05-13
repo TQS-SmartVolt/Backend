@@ -3,12 +3,14 @@ name: CI Pipeline
 on:
   workflow_run:
     workflows: ["Build and Push Docker Image"]
-    branches: [main]
+    branches: [dev]
     types: 
       - completed
 
 env:
   REGISTRY: ghcr.io
+  # IMAGE_VERSION: ${{ github.sha }}
+  IMAGE_VERSION: latest
 
 jobs:
   backend-sonarqube:
@@ -27,21 +29,21 @@ jobs:
 
       - name: Pull built image
         run: |
-          docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }}
+          docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }}
         working-directory: ${{ github.workspace }}/smartvolt
 
       - name: Build and run unit tests inside Docker
         run: |
           docker run --rm \
           --network host \
-          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }} \
           sh -c "mvn -B package --file pom.xml"
 
       - name: Run integration tests inside Docker
         run: |
           docker run --rm \
           --network host \
-          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }} \
           sh -c "mvn -B integration-test verify --file pom.xml"
 
       - name: Add code coverage information to PR
@@ -59,5 +61,5 @@ jobs:
         run: |
           docker run --rm \
           --network host \
-          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }} \
           sh -c "mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}"
