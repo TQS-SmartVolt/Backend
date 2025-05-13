@@ -42,21 +42,23 @@ jobs:
       - name: Build "test image" from build stage
         run: |
           docker build \
-          --target test \
+          --target build \
           -t ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ env.IMAGE_VERSION }} \
           --tag test-image \
           -f Dockerfile .
 
       - name: Build and run unit tests inside Docker
         run: |
-          docker run --rm test-image \
+          docker run --rm \
           --network host \
+          test-image \
           sh -c "mvn -B package --file pom.xml"
 
       - name: Run integration tests inside Docker
         run: |
-          docker run --rm test-image \
+          docker run --rm \
           --network host \
+          test-image \
           sh -c "mvn -B integration-test verify --file pom.xml"
 
       - name: Add code coverage information to PR
@@ -72,6 +74,7 @@ jobs:
 
       - name: Push code coverage information to SonarQube
         run: |
-          docker run --rm test-image \
+          docker run --rm \
           --network host \
+          test-image \
           sh -c "mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}"
