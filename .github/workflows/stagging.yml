@@ -1,22 +1,10 @@
-name: CI Pipeline
-
-# on:
-#   workflow_run:
-#     workflows: ["Build and Push Docker Image"]
-#     branches: [dev]
-#     types: 
-#       - completed
+name: Stagging
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
-env:
-  REGISTRY: ghcr.io
-  # IMAGE_VERSION: ${{ github.sha }}
-  IMAGE_VERSION: latest
 
 jobs:
   backend-sonarqube:
@@ -54,5 +42,3 @@ jobs:
             min-coverage-overall: 80
             min-coverage-changed-files: 80
 
-      - name: Push code coverage information to SonarQube
-        run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
