@@ -72,7 +72,6 @@
 				<version>2.43.0</version>
 				<configuration>
 					<java>
-					<!-- We can change the code style to the one we want -->
 					<googleJavaFormat/>
 					</java>
 				</configuration>
