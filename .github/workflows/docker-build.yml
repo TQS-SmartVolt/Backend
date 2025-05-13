@@ -1,13 +1,10 @@
 name: Build and Push Docker Image
 on:
-  push:
-    branches: ['main'] # TODO: change to `dev` and `release`
   pull_request:
-    branches: ['main'] # TODO: change to `dev` ONLY
+    branches: ['dev']
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-image:

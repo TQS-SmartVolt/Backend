@@ -1,0 +1,61 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  backend-sonarqube:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: smartvolt
+    steps:
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull built image
+        run: |
+          docker pull ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }}
+
+      - name: Build and run unit tests inside Docker
+        run: |
+          docker run --rm \
+          --network host \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          sh -c "mvn -B package --file pom.xml"
+
+      - name: Run integration tests inside Docker
+        run: |
+          docker run --rm \
+          --network host \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          sh -c "mvn -B integration-test verify --file pom.xml"
+
+      - name: Add code coverage information to PR
+        id: jacoco-pr
+        uses: madrapps/jacoco-report@v1.7.1
+        if: github.event_name == 'pull_request'
+        with:
+          paths: |
+            ${{ github.workspace }}/**/target/site/jacoco-merged-test-coverage-report/jacoco.xml
+            token: ${{ secrets.GITHUB_TOKEN }}
+            min-coverage-overall: 80
+            min-coverage-changed-files: 80
+
+      - name: Push code coverage information to SonarQube
+        run: |
+          docker run --rm \
+          --network host \
+          ${{ env.REGISTRY }}/tqs-smartvolt/tqs-smartvolt-backend:${{ github.sha }} \
+          sh -c "mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}"
