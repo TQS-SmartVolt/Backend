@@ -25,11 +25,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and run unit tests
-        run: mvn -B package --file pom.xml
+      - name: Run Unit and Service Tests
+        run: mvn -B test --file pom.xml
 
-      - name: Run integration tests
-        run: mvn -B integration-test verify --file pom.xml
+      - name: Run Simple Integration Tests
+        run: mvn -B integration-test -Dgroups=simple --file pom.xml # @Tag("simple") -> JUnit 5
 
       - name: Add code coverage information to PR
         id: jacoco-pr

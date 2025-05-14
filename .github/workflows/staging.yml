@@ -25,20 +25,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # Skip unit tests because it's already done in the commit stage
       - name: Build and run unit tests
         run: mvn -B package --file pom.xml
 
+      # springboot tags: mais complexos
       - name: Run integration tests
         run: mvn -B integration-test verify --file pom.xml
 
-      - name: Add code coverage information to PR
-        id: jacoco-pr
-        uses: madrapps/jacoco-report@v1.7.1
-        if: github.event_name == 'pull_request'
-        with:
-          paths: |
-            ${{ github.workspace }}/**/target/site/jacoco-merged-test-coverage-report/jacoco.xml
-            token: ${{ secrets.GITHUB_TOKEN }}
-            min-coverage-overall: 80
-            min-coverage-changed-files: 80
 
+# Em paralelo: faco tambem o package para  fazer os selenium e dpoiis compilo para fazer os de performance
+# Xray
