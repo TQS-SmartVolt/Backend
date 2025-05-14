@@ -8,11 +8,15 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: write # so that the action can add comments to the PR
 
 jobs:
   commit-stage:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: 17
+
     defaults:
       run:
         working-directory: smartvolt
@@ -25,7 +29,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: ${{ matrix.java }}
           distribution: 'temurin'
           cache: maven
 
@@ -33,7 +37,7 @@ jobs:
         run: mvn -B test --file pom.xml
 
       - name: Run Simple Integration Tests
-        run: mvn -B integration-test -Dgroups=simple --file pom.xml # @Tag("simple") -> JUnit 5
+        run: mvn -B integration-test verify -Dgroups=simple --file pom.xml # @Tag("simple") -> JUnit 5
 
       - name: Add code coverage information to PR
         id: jacoco-pr
@@ -48,3 +52,13 @@ jobs:
 
       - name: Push code coverage information to SonarQube
         run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
+      - name: Push results to Xray on Jira Cloud
+        if: always()
+        env:
+          XRAYCLOUD_CLIENT_ID: ${{ secrets.XRAYCLOUD_CLIENT_ID }}
+          XRAYCLOUD_CLIENT_SECRET: ${{ secrets.XRAYCLOUD_CLIENT_SECRET }}
+          XRAYCLOUD_TEST_PLAN_KEY: ${{ vars.XRAYCLOUD_TEST_PLAN_KEY }}
+          REVISON: ${{ github.ref_name}}
+          TEST_ENVIRONMENT: java${{ matrix.java }}
+        run: mvn -Dxray.clientId=${{ env.XRAYCLOUD_CLIENT_ID }} -Dxray.clientSecret=${{ env.XRAYCLOUD_CLIENT_SECRET }} -Dxray.testEnvironment=${{ env.TEST_ENVIRONMENT }} -Dxray.testPlanKey=${{ env.XRAYCLOUD_TEST_PLAN_KEY }} -Dxray.revision=${{ env.REVISON }} xray:import-results
