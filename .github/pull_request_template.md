@@ -15,8 +15,3 @@ and any notable implementation details. -->
 - [] I have added comments to code in hard-to-understand areas
 - [] My changes generate no new warnings
 - [] I have added tests that prove my fix is effective or that my feature works
-
-## Related issues
-<!-- A link to any related issues or bugs that the pull request
-addresses, connecting the code's context with the problem it
-solves. -->
