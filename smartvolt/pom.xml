@@ -25,7 +25,12 @@
         <tag/>
         <url/>
     </scm>
+
     <properties>
+
+        <!-- UnitTest, IT-Slow, IT-Fast, UAT-Web -->
+        <tests>UnitTest,IT-Slow,IT-Fast,UAT-Web</tests>
+
         <java.version>17</java.version>
 
         <sonar.projectKey>TQS-SmartVolt_Backend</sonar.projectKey>
@@ -335,6 +340,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <groups>${tests}</groups>
                     <argLine>${surefire.jacoco.args}</argLine>
                     <includes>
                         <include>**/*Test.java</include>

@@ -18,6 +18,7 @@ repos:
       - id: no-commit-to-branch       # Prevent commits to specific branches
         name: No Commit to "main" or "dev"
         args: ['--branch', 'main', '--branch', 'dev']
+        stages: [commit]
   - repo: local
     hooks:
       - id: mvn-spotless-check
