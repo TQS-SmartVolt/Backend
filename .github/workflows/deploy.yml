@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: read
     
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     
       - name: Checkout repository
