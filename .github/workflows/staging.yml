@@ -2,9 +2,9 @@ name: Staging
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev]
 
 env:
   REGISTRY: ghcr.io
@@ -33,7 +33,7 @@ jobs:
           cache: maven
 
       - name: Run Slow Integration Tests
-        run: mvn -B integration-test verify -Dgroups=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
+        run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
   uat-stage:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           cache: maven
 
       - name: Run UAT Web Tests
-        run: mvn -B test -Dgroups=UAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+        run: mvn -B test -Dtests=UAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
   capacity-stage:
     runs-on: self-hosted
