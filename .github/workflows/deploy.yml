@@ -1,30 +1,36 @@
 name: Deploy
 on:
-  workflow_run:
-    workflows: ["Commit Stage"]
+  # workflow_run:
+  #   workflows: ["Commit Stage"]
+  #   branches: [dev]
+  #   types: 
+  #     - completed
+  push:
     branches: [dev]
-    types: 
-      - completed
-
-permissions:
-  contents: read
 
 jobs:
   on-success:
     runs-on: self-hosted
 
+    permissions:
+      contents: read
+    
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+    
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Checkout additional repo
+      
+      -   uses: actions/checkout@v2
+      -
+      # - name: Checkout additional repo
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/checkout@v4
         with:
           repository: tqs-smartvolt/smartvolt
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           path: smartvolt
 
       - name: Deploy using Docker Compose
