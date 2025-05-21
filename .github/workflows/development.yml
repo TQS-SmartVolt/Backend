@@ -40,7 +40,7 @@ jobs:
         run: mvn -B test -Dgroups=UnitTest --file pom.xml
 
       - name: Run Fast Integration Tests
-        run: mvn -B integration-test verify -Dgroups=IT-Fast --file pom.xml # @Tag("it-simple") -> JUnit 5
+        run: mvn -B integration-test verify -Dgroups=IT-Fast --file pom.xml # @Tag("IT-Fast") -> JUnit 5
 
       - name: Add code coverage information to PR
         id: jacoco-pr
