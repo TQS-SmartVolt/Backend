@@ -38,9 +38,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Spotless Check (pre-commit validation)
-        run: mvn spotless:check --file pom.xml
-
       - name: Run Unit with Service Tests
         run: mvn -B test -Dtests=UnitTest --file pom.xml
 
