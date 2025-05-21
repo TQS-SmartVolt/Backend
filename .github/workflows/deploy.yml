@@ -34,7 +34,6 @@ jobs:
 
       - name: Deploy using Docker Compose
         run: |
-          cd smartvolt
           set -a
           source .env.production
           docker compose up -d --build
