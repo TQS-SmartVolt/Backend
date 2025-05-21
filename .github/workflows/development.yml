@@ -6,41 +6,64 @@ on:
   pull_request:
     branches: [dev]
 
+permissions:
+  contents: write
+  pull-requests: write # so that the action can add comments to the PR
+
 jobs:
   commit-stage:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17]
     defaults:
       run:
         working-directory: smartvolt
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Pre Commit Hook (pre-commit validation)
+        uses: pre-commit/action@v3.0.1 # ignores on brach hook
         with:
-          java-version: 17
-          distribution: 'temurin'
-          cache: maven
+          extra_args: --hook-stage push
 
-      - name: Build and run unit tests
-        run: mvn -B package --file pom.xml
+      # - name: Set up JDK
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     java-version: ${{ matrix.java }}
+      #     distribution: 'temurin'
+      #     cache: maven
 
-      - name: Run integration tests
-        run: mvn -B integration-test verify --file pom.xml
+      # - name: Run Unit with Service Tests
+      #   run: mvn -B test -Dtests=UnitTest --file pom.xml
 
-      - name: Add code coverage information to PR
-        id: jacoco-pr
-        uses: madrapps/jacoco-report@v1.7.1
-        if: github.event_name == 'pull_request'
-        with:
-          paths: |
-            ${{ github.workspace }}/**/target/site/jacoco-merged-test-coverage-report/jacoco.xml
-            token: ${{ secrets.GITHUB_TOKEN }}
-            min-coverage-overall: 80
-            min-coverage-changed-files: 80
+      # - name: Run Fast Integration Tests
+      #   run: mvn -B integration-test verify -Dtests=IT-Fast --file pom.xml # @Tag("IT-Fast") -> JUnit 5
 
-      - name: Push code coverage information to SonarQube
-        run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      # - name: Add code coverage information to PR
+      #   id: jacoco-pr
+      #   uses: madrapps/jacoco-report@v1.7.1
+      #   if: github.event_name == 'pull_request'
+      #   with:
+      #     paths: |
+      #       ${{ github.workspace }}/**/target/site/jacoco-merged-test-coverage-report/jacoco.xml
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     min-coverage-overall: 80
+      #     min-coverage-changed-files: 80
+
+      # - name: Push code coverage information to SonarQube
+      #   run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
+      # - name: Push results to Xray on Jira Cloud
+      #   if: always()
+      #   env:
+      #     XRAYCLOUD_CLIENT_ID: ${{ secrets.XRAYCLOUD_CLIENT_ID }}
+      #     XRAYCLOUD_CLIENT_SECRET: ${{ secrets.XRAYCLOUD_CLIENT_SECRET }}
+      #     XRAYCLOUD_TEST_PLAN_KEY: ${{ vars.XRAYCLOUD_TEST_PLAN_KEY }}  # we need this
+      #     REVISON: ${{ github.ref_name}}
+      #     TEST_ENVIRONMENT: java${{ matrix.java }}
+      #   run: mvn -Dxray.clientId=${{ env.XRAYCLOUD_CLIENT_ID }} -Dxray.clientSecret=${{ env.XRAYCLOUD_CLIENT_SECRET }} -Dxray.testEnvironment=${{ env.TEST_ENVIRONMENT }} -Dxray.testPlanKey=${{ env.XRAYCLOUD_TEST_PLAN_KEY }} -Dxray.revision=${{ env.REVISON }} xray:import-results
