@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: tqs-smartvolt/smartvolt
-          token: token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           path: smartvolt
 
       - name: Deploy using Docker Compose
