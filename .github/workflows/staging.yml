@@ -6,12 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
-  backend-sonarqube:
-    runs-on: self-hosted
+  integration-stage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17]
     defaults:
       run:
         working-directory: smartvolt
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,13 +32,62 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build (skip unit tests)
-        run: mvn -B package -DskipTests --file pom.xml
+      - name: Run Slow Integration Tests
+        run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
-      - name: Run Complex Integration Tests
-        run: mvn -B integration-test verify -Dgroups=complex --file pom.xml # @Tag("complex") -> JUnit 5
+  uat-stage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17]
+    defaults:
+      run:
+        working-directory: smartvolt
 
-# Skip unit tests because it's already done in the commit stage
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-# Em paralelo: faco tambem o package para fazer os selenium e depois compilo para fazer os de performance
-# Xray
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run UAT Web Tests
+        run: mvn -B test -Dtests=UAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+
+  capacity-stage:
+    runs-on: self-hosted
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push Backend Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
+
+      - name: Run Performance Tests
+        run: echo "TODO. Run the docker image and run the k6s performance tests"
