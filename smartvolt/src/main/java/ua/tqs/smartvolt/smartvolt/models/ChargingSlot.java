@@ -18,6 +18,7 @@ public class ChargingSlot {
 
   private boolean isLocked;
   private double pricePerKWh;
+  private double power;
   private double chargingSpeed;
 
   @ManyToOne private ChargingStation station;
@@ -28,9 +29,14 @@ public class ChargingSlot {
   public ChargingSlot() {}
 
   public ChargingSlot(
-      boolean isLocked, double pricePerKWh, double chargingSpeed, ChargingStation station) {
+      boolean isLocked,
+      double pricePerKWh,
+      double power,
+      double chargingSpeed,
+      ChargingStation station) {
     this.isLocked = isLocked;
     this.pricePerKWh = pricePerKWh;
+    this.power = power;
     this.chargingSpeed = chargingSpeed;
     this.station = station;
   }

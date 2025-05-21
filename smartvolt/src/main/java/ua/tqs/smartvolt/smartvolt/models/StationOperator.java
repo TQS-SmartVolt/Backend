@@ -18,4 +18,22 @@ public class StationOperator extends User {
   }
 
   // Getters and setters...
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    StationOperator that = (StationOperator) o;
+
+    return stations != null ? stations.equals(that.stations) : that.stations == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + (stations != null ? stations.hashCode() : 0);
+    return result;
+  }
 }

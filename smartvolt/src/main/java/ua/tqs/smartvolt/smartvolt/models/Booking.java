@@ -16,7 +16,7 @@ public class Booking {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long bookingId;
 
-  @ManyToOne private EvDriver evDriver;
+  @ManyToOne private EvDriver driver;
 
   @ManyToOne private ChargingSlot slot;
 
@@ -33,8 +33,8 @@ public class Booking {
   public Booking() {}
 
   public Booking(
-      EvDriver evDriver, ChargingSlot slot, LocalDateTime startTime, String status, double cost) {
-    this.evDriver = evDriver;
+      EvDriver driver, ChargingSlot slot, LocalDateTime startTime, String status, double cost) {
+    this.driver = driver;
     this.slot = slot;
     this.startTime = startTime;
     this.status = status;
