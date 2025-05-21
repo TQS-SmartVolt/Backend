@@ -1,7 +1,7 @@
 name: Deploy
 on:
   workflow_run:
-    workflows: ["Commit Stage"]
+    workflows: ["Staging"]
     branches: [main]
     types:
       - completed
