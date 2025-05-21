@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write # so that the action can add comments to the PR
+  pull-requests: write
 
 jobs:
   commit-stage:
