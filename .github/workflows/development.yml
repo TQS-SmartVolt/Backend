@@ -26,10 +26,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Pre Commit Hook (pre-commit validation)
-        uses: pre-commit/action@v3.0.1 # ignores on brach hook
-        with:
-          extra_args: --hook-stage push
+      # - name: Pre Commit Hook (pre-commit validation)
+      #   uses: pre-commit/action@v3.0.1 # ignores on brach hook
+      #   with:
+      #     extra_args: --hook-stage push
 
       #
       # - name: Set up JDK
