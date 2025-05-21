@@ -1,10 +1,12 @@
 name: Deploy
 on:
-  workflow_run:
-    workflows: ["Commit Stage"]
+  # workflow_run:
+  #   workflows: ["Commit Stage"]
+  #   branches: [dev]
+  #   types: 
+  #     - completed
+  push:
     branches: [dev]
-    types: 
-      - completed
 
 jobs:
   on-success:
