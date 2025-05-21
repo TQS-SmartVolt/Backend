@@ -12,14 +12,14 @@ permissions:
 
 jobs:
   commit-stage:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         java: [17]
-
     defaults:
       run:
         working-directory: smartvolt
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,11 +33,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run Unit and Service Tests
-        run: mvn -B test --file pom.xml
+      - name: Spotless Check (pre-commit validation)
+        run: mvn spotless:check --file pom.xml
 
-      - name: Run Simple Integration Tests
-        run: mvn -B integration-test verify -Dgroups=simple --file pom.xml # @Tag("simple") -> JUnit 5
+      - name: Run Unit with Service Tests
+        run: mvn -B test -Dgroups=UnitTest --file pom.xml
+
+      - name: Run Fast Integration Tests
+        run: mvn -B integration-test verify -Dgroups=IT-Fast --file pom.xml # @Tag("it-simple") -> JUnit 5
 
       - name: Add code coverage information to PR
         id: jacoco-pr
