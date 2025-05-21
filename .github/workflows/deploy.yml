@@ -6,17 +6,25 @@ on:
     types: 
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   on-success:
     runs-on: self-hosted
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Checkout additional repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: tqs-smartvolt/smartvolt
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           path: smartvolt
 
       - name: Deploy using Docker Compose
