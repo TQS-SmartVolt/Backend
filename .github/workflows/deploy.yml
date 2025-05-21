@@ -6,12 +6,20 @@ on:
     types: 
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   on-success:
     runs-on: self-hosted
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Checkout additional repo
         uses: actions/checkout@v3
         with:
