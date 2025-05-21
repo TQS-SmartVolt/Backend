@@ -26,12 +26,11 @@ jobs:
           fetch-depth: 0
       
       - name: Checkout SmartVolt repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
         # if: github.event.pull_request.head.repo.full_name == github.repository
         with:
           repository: tqs-smartvolt/smartvolt
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: smartvolt
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       - name: Deploy using Docker Compose
         run: |
