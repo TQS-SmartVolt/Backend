@@ -42,4 +42,8 @@ public class Booking {
   }
 
   // Getters and setters...
+  public Long getBookingId() {
+    return bookingId;
+  }
+  
 }
