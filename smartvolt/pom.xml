@@ -63,6 +63,7 @@
 		<selenium-java.version>4.29.0</selenium-java.version>
         <junit-platform-suite.version>1.10.1</junit-platform-suite.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
+        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
     </properties>
 
     <dependencies>
@@ -244,6 +245,11 @@
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
             <version>${javax.persistence-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
 	</dependencies>
 

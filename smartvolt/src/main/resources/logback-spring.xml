@@ -1,0 +1,31 @@
+<configuration>
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>logstash:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                          "severity": "%level",
+                          "service": "my-ev-app",
+                          "trace": "%X{X-B3-TraceId:-}",
+                          "span": "%X{X-B3-SpanId:-}",
+                          "exportable": "%X{X-Span-Export:-}",
+                          "pid": "${PID:-}",
+                          "thread": "%thread",
+                          "class": "%logger{40}",
+                          "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOGSTASH" />
+    </root>
+</configuration>
