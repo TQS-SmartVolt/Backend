@@ -8,9 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface ChargingSlotRepository extends JpaRepository<ChargingSlot, Long> {
-  Optional<ChargingSlot> findById(Long id);
-  double getPowerById(Long id);
-  double getPricePerKWhById(Long id);
+  Optional<ChargingSlot> findBySlotId(Long slotId);
+  double getPowerBySlotId(Long slotId);
+  double getPricePerKWhBySlotId(Long slotId);
 }
 
 
