@@ -46,7 +46,14 @@ public class BookingService {
 
     booking.setStatus("Not Used");
 
-    double cost = chargingSlotRepository.getCostById(slotId);
+    double power = chargingSlotRepository.getPowerById(slotId);
+    double pricePerKWh = chargingSlotRepository.getPricePerKWhById(slotId);
+
+    if (power < 0 || pricePerKWh < 0) {
+      throw new Exception("Invalid power or price");
+    }
+    double cost = power * pricePerKWh;
+
     if (cost < 0) {
       throw new Exception("Invalid cost");
     }

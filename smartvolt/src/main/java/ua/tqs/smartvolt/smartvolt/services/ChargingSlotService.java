@@ -34,4 +34,6 @@ public class ChargingSlotService {
 
     return response;
   }
+
+
 }
