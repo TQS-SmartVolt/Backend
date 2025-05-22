@@ -11,17 +11,17 @@
                     <timeZone>UTC</timeZone>
                 </timestamp>
                 <pattern>
-                    <pattern>
+                    <pattern>   <!-- Here, the log format is defined (processed) to JSON, so that it can be sent to Logstash, and then to Elasticsearch -->
                         {
-                          "severity": "%level",
-                          "service": "my-ev-app",
-                          "trace": "%X{X-B3-TraceId:-}",
-                          "span": "%X{X-B3-SpanId:-}",
-                          "exportable": "%X{X-Span-Export:-}",
-                          "pid": "${PID:-}",
-                          "thread": "%thread",
-                          "class": "%logger{40}",
-                          "message": "%message"
+                          "severity": "%level", <!-- Log level -->
+                          "service": "my-ev-app",   <!-- Service name -->
+                          "trace": "%X{X-B3-TraceId:-}",    <!-- Trace ID (trace is the parent of span and is used to group logs) -->
+                          "span": "%X{X-B3-SpanId:-}",   <!-- Span ID (a span is a unit of work in a trace, which can be a single log event) -->
+                          "exportable": "%X{X-Span-Export:-}",  <!-- Exportable flag (indicates whether the span should be exported to a tracing system) -->
+                          "pid": "${PID:-}",        <!-- Process ID -->
+                          "thread": "%thread",   <!-- Thread name -->
+                          "class": "%logger{40}",   <!-- Class name --> 
+                          "message": "%message"   <!-- Log message -->
                         }
                     </pattern>
                 </pattern>
