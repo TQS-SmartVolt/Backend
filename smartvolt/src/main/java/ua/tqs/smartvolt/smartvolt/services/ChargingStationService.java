@@ -23,21 +23,18 @@ public class ChargingStationService {
   }
 
   public ChargingStation createChargingStation(ChargingStationRequest request) throws Exception {
-    // StationOperator stationOperator =
-    //     stationOperatorRepository
-    //         .findById(request.getOperatorId())
-    //         .orElseThrow(
-    //             () ->
-    //                 new ResourceNotFoundException(
-    //                     "Operator not found with id: " + request.getOperatorId()));
-
-    // ============== REMOVE THIS ==================
-    StationOperator stationOperator = new StationOperator();
-    stationOperator.setName("Test Operator");
-    stationOperator.setEmail("operator@example.com");
-    stationOperator.setPassword("password");
-    stationOperatorRepository.save(stationOperator);
-    // ============== REMOVE THIS ==================
+    // TODO: Remove the hardcoded operator
+    StationOperator stationOperator =
+        stationOperatorRepository
+            .findById(request.getOperatorId())
+            .orElseGet(
+                () -> {
+                  StationOperator newOperator = new StationOperator();
+                  newOperator.setName("Test Operator");
+                  newOperator.setEmail("operator@example.com");
+                  newOperator.setPassword("password");
+                  return stationOperatorRepository.save(newOperator);
+                });
 
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
