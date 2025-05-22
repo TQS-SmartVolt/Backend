@@ -1,6 +1,7 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +27,15 @@ public class BookingController {
   }
 
   @PostMapping("/payment")
-  public Booking finalizeBooking(@RequestBody BookingRequest request)
+  public Booking finalizeBookingPayment(@RequestBody Long request)
       throws Exception {
-    return bookingService.finalizeBooking(request);
+    bookingService.finalizeBookingPayment(request);
+  }
+
+  @DeleteMapping("")
+  public Booking cancelBooking(@RequestBody Long bookingId)
+      throws Exception {
+    bookingService.cancelBooking(bookingId);
   }
 
 }
