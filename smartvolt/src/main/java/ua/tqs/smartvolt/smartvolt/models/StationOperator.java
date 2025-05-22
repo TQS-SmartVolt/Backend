@@ -1,9 +1,9 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
 @Entity
 public class StationOperator extends User {

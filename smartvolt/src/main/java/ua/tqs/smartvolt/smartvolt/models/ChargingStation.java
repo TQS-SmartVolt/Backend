@@ -1,14 +1,14 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class ChargingStation {
@@ -20,7 +20,6 @@ public class ChargingStation {
   private String name;
   private String location;
   private boolean availability;
-  private double power;
 
   @ManyToOne private StationOperator operator;
 
@@ -30,15 +29,60 @@ public class ChargingStation {
   public ChargingStation() {}
 
   public ChargingStation(
-      String name, String location, boolean availability, double power, StationOperator operator) {
+      String name, String location, boolean availability, StationOperator operator) {
     this.name = name;
     this.location = location;
     this.availability = availability;
-    this.power = power;
     this.operator = operator;
   }
 
-  // Getters and setters...
+  public Long getStationId() {
+    return stationId;
+  }
+
+  public void setStationId(Long stationId) {
+    this.stationId = stationId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public boolean isAvailability() {
+    return availability;
+  }
+
+  public void setAvailability(boolean availability) {
+    this.availability = availability;
+  }
+
+  public StationOperator getOperator() {
+    return operator;
+  }
+
+  public void setOperator(StationOperator operator) {
+    this.operator = operator;
+  }
+
+  public List<ChargingSlot> getSlots() {
+    return slots;
+  }
+
+  public void setSlots(List<ChargingSlot> slots) {
+    this.slots = slots;
+  }
 
   @Override
   public String toString() {
@@ -53,8 +97,6 @@ public class ChargingStation {
         + '\''
         + ", availability="
         + availability
-        + ", power="
-        + power
         + '}';
   }
 
