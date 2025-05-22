@@ -1,0 +1,14 @@
+{
+  "ecs.version": "1.x",
+  "@timestamp": { "json": "$${json:timestampMillis}" },
+  "log.level": { "json": "$${json:level}" },
+  "message": { "json": "$${json:message}" },
+  "service.name": "${SERVICE_NAME}", 
+  "process.pid": "${pid}",
+  "process.thread.name": "$${json:thread}",
+  "log.logger": "$${json:logger}",
+  "trace.id": "$${ctx:X-B3-TraceId}", 
+  "span.id": "$${ctx:X-B3-SpanId}",
+  "exported": "$${ctx:X-Span-Export}",
+  "error.stack_trace": "$${json:stacktrace}"
+}

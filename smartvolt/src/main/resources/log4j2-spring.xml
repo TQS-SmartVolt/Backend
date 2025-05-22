@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="LOGSTASH_HOST">${env:LOGSTASH_IP}</Property>
+        <Property name="LOGSTASH_PORT">${env:LOGSTASH_CONTAINER_PORT}</Property>
+        <Property name="SERVICE_NAME">my-ev-app</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <Socket name="Logstash" host="${LOGSTASH_HOST}" port="${LOGSTASH_PORT}" protocol="TCP">
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"/>
+        </Socket>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Logstash"/>
+        </Root>
+
+        </Loggers>
+</Configuration>
