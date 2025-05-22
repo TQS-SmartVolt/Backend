@@ -1,6 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>logstash:5000</destination>
+        <param name="Encoding" value="UTF-8"/>
+        <destination>${LOGSTASH_IP}:${LOGSTASH_CONTAINER_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
@@ -22,10 +26,10 @@
                     </pattern>
                 </pattern>
             </providers>
-        </encoder>
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="LOGSTASH" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 </configuration>
