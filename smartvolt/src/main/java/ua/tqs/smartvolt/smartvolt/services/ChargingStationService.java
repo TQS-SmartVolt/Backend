@@ -39,7 +39,13 @@ public class ChargingStationService {
 
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
-    chargingStation.setLocation(request.getLocation());
+    chargingStation.setLatitude(request.getLatitude());
+    chargingStation.setLongitude(request.getLongitude());
+
+    // TODO: Get address from a geocoding service
+    String address = "address";
+    chargingStation.setAddress(address);
+
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);
     chargingStation.setSlots(new ArrayList<>());
