@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -56,6 +55,7 @@ public class Booking {
   public Long getBookingId() {
     return bookingId;
   }
+
   public void setBookingId(Long bookingId) {
     this.bookingId = bookingId;
   }
@@ -63,6 +63,7 @@ public class Booking {
   public EvDriver getDriver() {
     return driver;
   }
+
   public void setDriver(EvDriver driver) {
     this.driver = driver;
   }
@@ -70,6 +71,7 @@ public class Booking {
   public ChargingSlot getSlot() {
     return slot;
   }
+
   public void setSlot(ChargingSlot slot) {
     this.slot = slot;
   }
@@ -77,6 +79,7 @@ public class Booking {
   public LocalDateTime getStartTime() {
     return startTime;
   }
+
   public void setStartTime(LocalDateTime startTime) {
     this.startTime = startTime;
   }
@@ -84,6 +87,7 @@ public class Booking {
   public String getStatus() {
     return status;
   }
+
   public void setStatus(String status) {
     this.status = status;
   }
@@ -91,6 +95,7 @@ public class Booking {
   public double getCost() {
     return cost;
   }
+
   public void setCost(double cost) {
     this.cost = cost;
   }
@@ -98,6 +103,7 @@ public class Booking {
   public ChargingSession getChargingSession() {
     return chargingSession;
   }
+
   public void setChargingSession(ChargingSession chargingSession) {
     this.chargingSession = chargingSession;
   }
@@ -105,6 +111,7 @@ public class Booking {
   public Payment getPayment() {
     return payment;
   }
+
   public void setPayment(Payment payment) {
     this.payment = payment;
   }
@@ -112,5 +119,4 @@ public class Booking {
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
-  
 }

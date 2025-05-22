@@ -45,21 +45,24 @@ public class ChargingSlot {
   public double getPower() {
     return power;
   }
+
   public void setPower(double power) {
     this.power = power;
   }
+
   public double getPricePerKWh() {
     return pricePerKWh;
   }
+
   public void setPricePerKWh(double pricePerKWh) {
     this.pricePerKWh = pricePerKWh;
   }
+
   public ChargingStation getStation() {
     return station;
   }
+
   public void setStation(ChargingStation station) {
     this.station = station;
   }
-
-
 }
