@@ -29,8 +29,7 @@ public class BookingService {
     Booking booking = new Booking();
 
     Long driverId = request.getDriverId();
-    EvDriver evDriver =
-        evDriverRepository.findById(driverId).orElseThrow(() -> new Exception("Driver not found"));
+    EvDriver evDriver = evDriverRepository.findById(driverId);
     booking.setDriver(evDriver);
 
     Long slotId = request.getSlotId();
