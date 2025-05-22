@@ -1,8 +1,10 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
@@ -50,5 +52,14 @@ public class ChargingStationService {
     chargingStation.setAvailability(true);
     chargingStation.setSlots(new ArrayList<>());
     return chargingStationRepository.save(chargingStation);
+  }
+
+  public List<ChargingStation> getAllChargingStations(Long operatorId) throws Exception {
+    StationOperator operator =
+        stationOperatorRepository
+            .findById(operatorId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
+    return chargingStationRepository.findByOperator(operator);
   }
 }
