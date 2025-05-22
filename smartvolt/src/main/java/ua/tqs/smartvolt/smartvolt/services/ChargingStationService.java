@@ -20,11 +20,14 @@ public class ChargingStationService {
     this.stationOperatorRepository = stationOperatorRepository;
   }
 
-  public ChargingStation createChargingStation(ChargingStationRequest request) {
+  public ChargingStation createChargingStation(ChargingStationRequest request) throws Exception {
     // StationOperator stationOperator =
     //     stationOperatorRepository
     //         .findById(request.getOperatorId())
-    //         .orElseThrow(() -> new RuntimeException("Station operator not found"));
+    //         .orElseThrow(
+    //             () ->
+    //                 new ResourceNotFoundException(
+    //                     "Operator not found with id: " + request.getOperatorId()));
 
     // ============== REMOVE THIS ==================
     StationOperator stationOperator = new StationOperator();

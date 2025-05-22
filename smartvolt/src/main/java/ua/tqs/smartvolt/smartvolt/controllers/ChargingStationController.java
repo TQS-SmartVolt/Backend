@@ -18,7 +18,8 @@ public class ChargingStationController {
   }
 
   @PostMapping
-  public ChargingStation createChargingStation(@RequestBody ChargingStationRequest request) {
+  public ChargingStation createChargingStation(@RequestBody ChargingStationRequest request)
+      throws Exception {
     return chargingStationService.createChargingStation(request);
   }
 }
