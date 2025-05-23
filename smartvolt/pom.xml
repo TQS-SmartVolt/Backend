@@ -275,6 +275,11 @@
                         <configuration>
                             <dataFile>${unit.coverage.file}</dataFile>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-unit-test-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                     <execution>
@@ -300,6 +305,11 @@
                             <dataFile>${it.coverage.file}</dataFile>
                             <outputDirectory>
                                 ${project.reporting.outputDirectory}/jacoco-it-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                     <execution>
@@ -330,6 +340,11 @@
                             <dataFile>${merged.coverage.file}</dataFile>
                             <outputDirectory>
                                 ${project.reporting.outputDirectory}/jacoco-merged-test-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
