@@ -59,7 +59,7 @@
 		<log4j-api.version>2.24.0</log4j-api.version>
 		<h2.version>2.2.224</h2.version>
 		<cucumber.version>7.15.0</cucumber.version>
-        <webdrivermanager.version>5.5.0</webdrivermanager.version>
+        <webdrivermanager.version>6.1.0</webdrivermanager.version>
 		<selenium-java.version>4.29.0</selenium-java.version>
         <junit-platform-suite.version>1.10.1</junit-platform-suite.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>

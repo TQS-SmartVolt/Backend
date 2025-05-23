@@ -1,0 +1,56 @@
+name: Deploy
+on:
+  workflow_run:
+    workflows: ["Staging"]
+    branches: [main]
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  on-success:
+    runs-on: self-hosted
+
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout AppConfig repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          repository: TQS-SmartVolt/AppConfig
+          token: ${{ secrets.SMART_VOLT_SECRET }}
+
+      - name: Update .env.production with backend tag
+        run: |
+          sed -i 's/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/' .env.production
+          if ! git diff --quiet .env.production; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .env.production
+            git commit -m "Update BACKEND_TAG in .env.production to ${{ github.sha }}"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit in .env.production"
+          fi
+        env:
+          DOCKER_PORT: 8080
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy using Docker Compose
+        run: |
+          set -a
+          source .env.production
+          docker compose --file compose.prod.yml down 
+          docker compose --file compose.prod.yml up -d --build
+        env:
+          DOCKER_PORT: 8080
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
