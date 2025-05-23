@@ -29,6 +29,17 @@ jobs:
           repository: TQS-SmartVolt/SmartVolt
           token: ${{ secrets.SMART_VOLT_SECRET }}
 
+      - name: Update .env.production with backend tag
+        run: |
+          sed -i 's/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/' .env.production
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .env.production
+          git commit -m "Update BACKEND_TAG in .env.production to ${{ github.sha }}"
+          git push origin HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Deploy using Docker Compose
         run: |
           set -a
