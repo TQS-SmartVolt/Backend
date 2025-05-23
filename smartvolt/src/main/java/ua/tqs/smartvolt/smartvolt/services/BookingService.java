@@ -27,17 +27,49 @@ public class BookingService {
   }
 
   public Booking createBooking(BookingRequest request) throws Exception {
+    // TODO: Remove the hardcoded driver and slot
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(request.getDriverId())
+            .orElseGet(
+                () -> {
+                  EvDriver newDriver = new EvDriver();
+                  newDriver.setName("Test Driver");
+                  newDriver.setEmail("xpto@gmail.com");
+                  newDriver.setPassword("password");
+                  return evDriverRepository.save(newDriver);
+                });
+
+    ChargingSlot slot =
+        chargingSlotRepository
+            .findById(request.getSlotId())
+            .orElseGet(
+                () -> {
+                  ChargingSlot newSlot = new ChargingSlot();
+                  newSlot.setLocked(true);
+                  newSlot.setPricePerKWh(0.5);
+                  newSlot.setPower(22.0);
+                  newSlot.setChargingSpeed(11.0);
+                  newSlot.setStation(null); // Set the station to null or assign a valid station
+                  return chargingSlotRepository.save(newSlot);
+                });
+
+    // Add a print statement to check if the driver is found
+    System.out.println("Driver found: " + evDriver.getName());
+    System.out.println("Slot found: " + slot.getSlotId());
+
     Booking booking = new Booking();
 
-    Long driverId = request.getDriverId();
-    EvDriver evDriver = evDriverRepository.findByUserId(driverId)
-        .orElseThrow(() -> new Exception("Driver not found"));
+    // Long driverId = request.getDriverId();
+    // EvDriver evDriver = evDriverRepository.findByUserId(driverId)
+    //     .orElseThrow(() -> new Exception("Driver not found"));
     booking.setDriver(evDriver);
 
-    Long slotId = request.getSlotId();
-    ChargingSlot slot =
-        chargingSlotRepository.findById(slotId).orElseThrow(() -> new Exception("Slot not found"));
+    // Long slotId = request.getSlotId();
+    // ChargingSlot slot =
+    //     chargingSlotRepository.findById(slotId).orElseThrow(() -> new Exception("Slot not found"));
     booking.setSlot(slot);
+    Long slotId = slot.getSlotId();
 
     LocalDateTime startTime = request.getStartTime();
     if (startTime == null) {
@@ -47,8 +79,11 @@ public class BookingService {
 
     booking.setStatus("Not Used");
 
-    double power = chargingSlotRepository.getPowerBySlotId(slotId);
-    double pricePerKWh = chargingSlotRepository.getPricePerKWhBySlotId(slotId);
+    double power = chargingSlotRepository.getPowerBySlotId(slotId)
+    .orElseThrow(() -> new Exception("Power not found for slotId: " + slotId));
+
+    double pricePerKWh = chargingSlotRepository.getPricePerKWhBySlotId(slotId)
+        .orElseThrow(() -> new Exception("Price not found for slotId: " + slotId));
 
     if (power < 0 || pricePerKWh < 0) {
       throw new Exception("Invalid power or price");

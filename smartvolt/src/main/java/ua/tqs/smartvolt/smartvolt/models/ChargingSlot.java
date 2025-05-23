@@ -42,26 +42,42 @@ public class ChargingSlot {
   }
 
   // Getters and setters...
-  public double getPower() {
-    return power;
+  public Long getSlotId() {
+    return slotId;
   }
 
-  public void setPower(double power) {
-    this.power = power;
+  public boolean isLocked() {
+    return isLocked;
+  }
+  public void setLocked(boolean locked) {
+    isLocked = locked;
   }
 
   public double getPricePerKWh() {
     return pricePerKWh;
   }
-
   public void setPricePerKWh(double pricePerKWh) {
     this.pricePerKWh = pricePerKWh;
   }
 
+  public double getPower() {
+    return power;
+  }
+  public void setPower(double power) {
+    this.power = power;
+  }
+
+  public double getChargingSpeed() {
+    return chargingSpeed;
+  }
+  public void setChargingSpeed(double chargingSpeed) {
+    this.chargingSpeed = chargingSpeed;
+  }
+
+
   public ChargingStation getStation() {
     return station;
   }
-
   public void setStation(ChargingStation station) {
     this.station = station;
   }

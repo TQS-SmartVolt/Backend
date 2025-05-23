@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 public class EvDriver extends User {
 
-  private String vehiclePlate;
 
   @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
   private List<Booking> bookings;
@@ -18,35 +17,33 @@ public class EvDriver extends User {
 
   public EvDriver() {}
 
-  public EvDriver(Long userId, String name, String email, String password, String vehiclePlate) {
+  public EvDriver(Long userId, String name, String email, String password) {
     super(userId, name, email, password);
-    this.vehiclePlate = vehiclePlate;
   }
 
   // Getters and setters...
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(Object o) { 
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (!(o instanceof EvDriver)) return false;
     if (!super.equals(o)) return false;
-
     EvDriver evDriver = (EvDriver) o;
-
-    return vehiclePlate != null
-        ? vehiclePlate.equals(evDriver.vehiclePlate)
-        : evDriver.vehiclePlate == null;
+    return getUserId().equals(evDriver.getUserId());
   }
 
   @Override
   public int hashCode() {
-    int result = super.hashCode();
-    result = 31 * result + (vehiclePlate != null ? vehiclePlate.hashCode() : 0);
-    return result;
+    return 31 * super.hashCode() + (getUserId() != null ? getUserId().hashCode() : 0);
   }
 
   @Override
   public String toString() {
-    return "EvDriver{" + "vehiclePlate='" + vehiclePlate + '\'' + "} " + super.toString();
+    return "EvDriver{" +
+        "userId=" + getUserId() +
+        ", name='" + getName() + '\'' +
+        ", email='" + getEmail() + '\'' +
+        ", password='" + getPassword() + '\'' +
+        '}';
   }
 }
