@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
@@ -75,5 +76,43 @@ public class ChargingStationServiceTest {
         .hasMessageContaining("Operator not found with id: " + invalidOperatorId);
 
     verify(chargingStationRepository, times(0)).findByOperator(stationOperator);
+  }
+
+  // ================== createChargingStation() Tests ==================
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-34")
+  void createChargingStation_WhenOperatorExists_CreatesChargingStation() throws Exception {
+    when(stationOperatorRepository.findById(stationOperator.getUserId()))
+        .thenReturn(Optional.of(stationOperator));
+    when(chargingStationRepository.save(chargingStations.get(0)))
+        .thenReturn(chargingStations.get(0));
+
+    ChargingStationRequest request =
+        new ChargingStationRequest("Station 1", 12.34, 56.78, stationOperator.getUserId());
+
+    ChargingStation result = chargingStationService.createChargingStation(request);
+
+    Assertions.assertThat(result).isNotNull();
+    Assertions.assertThat(result.getName()).isEqualTo("Station 1");
+
+    verify(chargingStationRepository, times(1)).save(chargingStations.get(0));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-34")
+  void createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()
+      throws Exception {
+    Long invalidOperatorId = 999L;
+    when(stationOperatorRepository.findById(invalidOperatorId)).thenReturn(Optional.empty());
+
+    ChargingStationRequest request =
+        new ChargingStationRequest("Station 1", 12.34, 56.78, invalidOperatorId);
+
+    Assertions.assertThatThrownBy(() -> chargingStationService.createChargingStation(request))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Operator not found with id: " + invalidOperatorId);
+    verify(chargingStationRepository, times(0)).save(chargingStations.get(0));
   }
 }
