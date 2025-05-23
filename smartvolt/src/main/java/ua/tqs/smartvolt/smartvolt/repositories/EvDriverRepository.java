@@ -9,5 +9,5 @@ import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 @Repository
 public interface EvDriverRepository extends JpaRepository<EvDriver, Long> {
   // Custom query methods can be defined here if needed
-  Optional<EvDriver> findById(Long id);
+  Optional<EvDriver> findByUserId(Long id);
 }

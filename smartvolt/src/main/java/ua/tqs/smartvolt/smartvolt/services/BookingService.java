@@ -9,6 +9,7 @@ import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -29,7 +30,8 @@ public class BookingService {
     Booking booking = new Booking();
 
     Long driverId = request.getDriverId();
-    EvDriver evDriver = evDriverRepository.findById(driverId);
+    EvDriver evDriver = evDriverRepository.findByUserId(driverId)
+        .orElseThrow(() -> new Exception("Driver not found"));
     booking.setDriver(evDriver);
 
     Long slotId = request.getSlotId();
@@ -45,8 +47,8 @@ public class BookingService {
 
     booking.setStatus("Not Used");
 
-    double power = chargingSlotRepository.getPowerById(slotId);
-    double pricePerKWh = chargingSlotRepository.getPricePerKWhById(slotId);
+    double power = chargingSlotRepository.getPowerBySlotId(slotId);
+    double pricePerKWh = chargingSlotRepository.getPricePerKWhBySlotId(slotId);
 
     if (power < 0 || pricePerKWh < 0) {
       throw new Exception("Invalid power or price");
