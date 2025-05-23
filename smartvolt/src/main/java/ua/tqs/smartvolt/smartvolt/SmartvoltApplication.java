@@ -12,9 +12,14 @@ public class SmartvoltApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(SmartvoltApplication.class, args);
-    // Test 100x logs
-    for (int i = 0; i < 100; i++) {
-      logger.info("Test log number: " + i);
+    // Wait 1 min and test 100x logs
+    try {
+      Thread.sleep(60000);
+    } catch (InterruptedException e) {
+      logger.error("Error while waiting", e);
+    }
+    for (int i = 0; i < 10; i++) {
+      logger.info("TestLogNumber" + i);
     }
   }
 }
