@@ -18,7 +18,9 @@ public class ChargingStation {
   private Long stationId;
 
   private String name;
-  private String location;
+  private double latitude;
+  private double longitude;
+  private String address;
   private boolean availability;
 
   @ManyToOne private StationOperator operator;
@@ -29,9 +31,16 @@ public class ChargingStation {
   public ChargingStation() {}
 
   public ChargingStation(
-      String name, String location, boolean availability, StationOperator operator) {
+      String name,
+      double latitude,
+      double longitude,
+      String address,
+      boolean availability,
+      StationOperator operator) {
     this.name = name;
-    this.location = location;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.address = address;
     this.availability = availability;
     this.operator = operator;
   }
@@ -52,12 +61,28 @@ public class ChargingStation {
     this.name = name;
   }
 
-  public String getLocation() {
-    return location;
+  public double getLatitude() {
+    return latitude;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setLatitude(double latitude) {
+    this.latitude = latitude;
+  }
+
+  public double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
   public boolean isAvailability() {
@@ -92,8 +117,8 @@ public class ChargingStation {
         + ", name='"
         + name
         + '\''
-        + ", location='"
-        + location
+        + ", address='"
+        + address
         + '\''
         + ", availability="
         + availability
