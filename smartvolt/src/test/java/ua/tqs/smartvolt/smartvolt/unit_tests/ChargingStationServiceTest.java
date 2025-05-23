@@ -45,6 +45,7 @@ public class ChargingStationServiceTest {
             new ChargingStation("Station 2", 23.45, 67.89, "Address 2", true, stationOperator));
   }
 
+  // ================== getAllChargingStations() Tests ==================
   @Test
   @Tag("UnitTest")
   @Requirement("SV-34")
