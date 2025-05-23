@@ -22,11 +22,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout SmartVolt repository
+      - name: Checkout AppConfig repository
         uses: actions/checkout@v2
         with:
           submodules: true
-          repository: TQS-SmartVolt/SmartVolt
+          repository: TQS-SmartVolt/AppConfig
           token: ${{ secrets.SMART_VOLT_SECRET }}
 
       - name: Update .env.production with backend tag
@@ -39,7 +39,7 @@ jobs:
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Deploy using Docker Compose
         run: |
           set -a
