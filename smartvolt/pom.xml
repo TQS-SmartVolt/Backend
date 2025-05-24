@@ -26,10 +26,70 @@
         <url/>
     </scm>
 
+    <profiles>
+    <profile>
+        <id>UAT-Web</id>
+        <properties>
+        <groups>UAT-Web</groups>
+        </properties>
+        <build>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <includes>
+                <include>**/CucumberTest.java</include>
+                </includes>
+                <testFailureIgnore>false</testFailureIgnore>
+            </configuration>
+            </plugin>
+        </plugins>
+        </build>
+    </profile>
+    <profile>
+
+    <id>UnitTests-IT</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+      <groups>UnitTest</groups>
+    </properties>
+    <build>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+                <groups>${tests}</groups>
+                <argLine>${surefire.jacoco.args}</argLine>
+                <includes>
+                    <include>**/*Test.java</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*IT.java</exclude>
+                </excludes>
+                <excludes>
+                    <exclude>**/CucumberTest.java</exclude>
+                </excludes>
+                <testFailureIgnore>false</testFailureIgnore>
+                <disableXmlReport>true</disableXmlReport>
+                <useFile>false</useFile>
+            </configuration>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+  </profiles>
+
     <properties>
 
-        <!-- UnitTest, IT-Slow, IT-Fast, UAT-Web -->
-        <tests>UnitTest,IT-Slow,IT-Fast,UAT-Web</tests>
+        <!-- UnitTest, IT-Slow, IT-Fast -->
+        <!-- `mnv test -Dtests="UnitTest"` -->
+        <!-- Note: for UAT tests: `mvn test -Pbdd -Dcucumber.filter.tags="@UAT-Web"` -->
+        <tests>UnitTest,IT-Slow,IT-Fast</tests>
 
         <java.version>17</java.version>
 
@@ -343,25 +403,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <groups>${tests}</groups>
-                    <argLine>${surefire.jacoco.args}</argLine>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                    </excludes>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <disableXmlReport>true</disableXmlReport>
-                    <useFile>false</useFile>
-                </configuration>
             </plugin>
 
             <plugin>
