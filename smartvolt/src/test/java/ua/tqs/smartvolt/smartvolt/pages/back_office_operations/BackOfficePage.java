@@ -40,10 +40,15 @@ public class BackOfficePage extends Website {
     return driver.findElements(By.cssSelector("[data-testid^='station-card-index-']"));
   }
 
-  public WebElement getStationCardByIndex(int stationIndex) {
-    String selector = String.format("[data-testid='station-card-index-%s']", stationIndex);
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
-    return driver.findElement(By.cssSelector(selector));
+  public WebElement getStationCardByName(String name) {
+    List<WebElement> stationCards = getStationCards();
+    for (WebElement card : stationCards) {
+      String title = getStationCardTitle(card);
+      if (title.equals(name)) {
+        return card;
+      }
+    }
+    throw new IllegalArgumentException("No station card found with name: " + name);
   }
 
   public String getStationCardTitle(WebElement stationCard) {
