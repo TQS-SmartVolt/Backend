@@ -66,10 +66,8 @@
                 <groups>${tests}</groups>
                 <includes>
                     <include>**/*Test.java</include>
+                    <include>**/*IT.java</include>
                 </includes>
-                <excludes>
-                    <exclude>**/*IT.java</exclude>
-                </excludes>
                 <excludes>
                     <exclude>**/CucumberTest.java</exclude>
                 </excludes>

@@ -22,7 +22,7 @@ public class ChargingStationService {
     this.stationOperatorRepository = stationOperatorRepository;
   }
 
-  public ChargingStation createChargingStation(ChargingStationRequest request) throws Exception {
+  public ChargingStation createChargingStation(ChargingStationRequest request) {
     // TODO: Remove the hardcoded operator
     StationOperator stationOperator =
         stationOperatorRepository
@@ -59,7 +59,8 @@ public class ChargingStationService {
     return chargingStationRepository.save(chargingStation);
   }
 
-  public List<ChargingStation> getAllChargingStations(Long operatorId) throws Exception {
+  public List<ChargingStation> getAllChargingStations(Long operatorId)
+      throws ResourceNotFoundException {
     StationOperator operator =
         stationOperatorRepository
             .findById(operatorId)
