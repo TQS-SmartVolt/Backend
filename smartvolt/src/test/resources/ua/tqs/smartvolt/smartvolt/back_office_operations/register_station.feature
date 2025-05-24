@@ -1,4 +1,4 @@
-# @smoke
+@UAT-Web
 Feature: Register Station
 
   Background: A user starts on the operator page

@@ -229,12 +229,12 @@
             <version>${webdrivermanager.version}</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>${cucumber.version}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
