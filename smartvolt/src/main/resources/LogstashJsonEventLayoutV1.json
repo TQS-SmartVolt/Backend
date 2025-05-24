@@ -1,0 +1,9 @@
+{
+  "@timestamp": "${instant}",
+  "log.level": "${level}",
+  "message": "${message}",
+  "service.name": "${SERVICE_NAME}",
+  "process.pid": "${pid}",
+  "process.thread.name": "${thread}",
+  "log.logger": "${logger}"
+}
