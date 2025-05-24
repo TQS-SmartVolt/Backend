@@ -81,4 +81,8 @@ public class ChargingSlot {
   public void setStation(ChargingStation station) {
     this.station = station;
   }
+
+  public List<Booking> getBookings() {
+    return bookings;
+  }
 }

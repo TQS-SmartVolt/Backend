@@ -10,6 +10,7 @@ import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 
+
 @Service
 public class ChargingStationService {
   private final ChargingStationRepository chargingStationRepository;
@@ -67,4 +68,5 @@ public class ChargingStationService {
                 () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
     return chargingStationRepository.findByOperator(operator);
   }
+  
 }
