@@ -1,14 +1,14 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class ChargingStation {
@@ -18,9 +18,10 @@ public class ChargingStation {
   private Long stationId;
 
   private String name;
-  private String location;
+  private double latitude;
+  private double longitude;
+  private String address;
   private boolean availability;
-  private double power;
 
   @ManyToOne private StationOperator operator;
 
@@ -30,15 +31,83 @@ public class ChargingStation {
   public ChargingStation() {}
 
   public ChargingStation(
-      String name, String location, boolean availability, double power, StationOperator operator) {
+      String name,
+      double latitude,
+      double longitude,
+      String address,
+      boolean availability,
+      StationOperator operator) {
     this.name = name;
-    this.location = location;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.address = address;
     this.availability = availability;
-    this.power = power;
     this.operator = operator;
   }
 
-  // Getters and setters...
+  public Long getStationId() {
+    return stationId;
+  }
+
+  public void setStationId(Long stationId) {
+    this.stationId = stationId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public double getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(double latitude) {
+    this.latitude = latitude;
+  }
+
+  public double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public boolean isAvailability() {
+    return availability;
+  }
+
+  public void setAvailability(boolean availability) {
+    this.availability = availability;
+  }
+
+  public StationOperator getOperator() {
+    return operator;
+  }
+
+  public void setOperator(StationOperator operator) {
+    this.operator = operator;
+  }
+
+  public List<ChargingSlot> getSlots() {
+    return slots;
+  }
+
+  public void setSlots(List<ChargingSlot> slots) {
+    this.slots = slots;
+  }
 
   @Override
   public String toString() {
@@ -48,13 +117,11 @@ public class ChargingStation {
         + ", name='"
         + name
         + '\''
-        + ", location='"
-        + location
+        + ", address='"
+        + address
         + '\''
         + ", availability="
         + availability
-        + ", power="
-        + power
         + '}';
   }
 
