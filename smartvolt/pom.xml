@@ -97,6 +97,8 @@
         <sonar.organization>tqs-smartvolt</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.exclusions>**/models/**.java</sonar.exclusions>
+        <sonar.coverage.exclusions>**/dto/**,**/exceptions/**,**/external/**</sonar.coverage.exclusions>
 
         <jacoco.version>0.8.13</jacoco.version>
 
