@@ -85,30 +85,45 @@ public class ChargingStationService {
 
   public ChargingStationsResponse getChargingStationsByChargingSpeed(String[] chargingSpeeds) throws ResourceNotFoundException {
 
-      // Use a Set to avoid duplicates
-      Set<ChargingStation> stationsSet = new HashSet<>();
+    // Use a Set to avoid duplicate stations
+    Set<ChargingStation> stationsSet = new HashSet<>();
 
-      for (String speed : chargingSpeeds) {
-          List<ChargingStation> matchingStations = chargingSlotRepository.findStationsByChargingSpeed(speed);
-          stationsSet.addAll(matchingStations);
-      }
+    for (String speed : chargingSpeeds) {
+        List<ChargingStation> matchingStations = chargingSlotRepository.findStationsByChargingSpeed(speed);
+        stationsSet.addAll(matchingStations);
+    }
 
-      if (stationsSet.isEmpty()) {
-          throw new ResourceNotFoundException("No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
-      }
+    if (stationsSet.isEmpty()) {
+        throw new ResourceNotFoundException("No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
+    }
 
-      List<ChargingStationResponse> stationResponses = stationsSet.stream()
-          .map(station -> new ChargingStationResponse(
-              station.getStationId(),
-              station.getName(),
-              station.getAddress(),
-              station.getLatitude(),
-              station.getLongitude()
-          ))
-          .toList();
+    List<ChargingStationResponse> stationResponses = new ArrayList<>();
 
-      return new ChargingStationsResponse(stationResponses);
+    for (ChargingStation station : stationsSet) {
+        // Collect distinct charging speeds at this station
+        Set<String> speedSet = new HashSet<>();
+        for (ChargingSlot slot : station.getSlots()) {
+            speedSet.add(slot.getChargingSpeed());
+        }
+
+        List<String> distinctSpeeds = new ArrayList<>(speedSet);
+
+        ChargingStationResponse response = new ChargingStationResponse(
+            station.getStationId(),
+            station.getName(),
+            station.getAddress(),
+            station.getLatitude(),
+            station.getLongitude(),
+            distinctSpeeds
+        );
+
+        stationResponses.add(response);
+    }
+
+    return new ChargingStationsResponse(stationResponses);
   }
+
+
 
   @PostConstruct
     public void init() {
@@ -137,6 +152,7 @@ public class ChargingStationService {
     chargingSlotRepository.saveAll(List.of(
         new ChargingSlot(true, 0.20, 10, "Slow", station1),
         new ChargingSlot(true, 0.20, 10, "Slow", station1),
+        new ChargingSlot(true, 0.30, 20, "Medium", station1),
         new ChargingSlot(true, 0.30, 20, "Medium", station2),
         new ChargingSlot(true, 0.50, 30, "Fast", station3),
         new ChargingSlot(true, 0.50, 30, "Fast", station3)

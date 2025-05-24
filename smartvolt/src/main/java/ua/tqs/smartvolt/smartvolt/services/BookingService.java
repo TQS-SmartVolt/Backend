@@ -123,8 +123,7 @@ public class BookingService {
   }
 
   public void cancelBooking(Long bookingId) throws Exception {
-    Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
     if (booking.getStatus().equals("Not Used")) {
       bookingRepository.delete(booking);
     } else {

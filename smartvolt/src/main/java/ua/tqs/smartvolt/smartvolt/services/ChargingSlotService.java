@@ -52,41 +52,35 @@ public class ChargingSlotService {
   }
 
   public ChargingSlotsResponse getAvailableSlots(Long stationId, String chargingSpeed, LocalDate date) throws ResourceNotFoundException {
-    // 1. Fetch the charging station by ID or throw if not found
     ChargingStation station = chargingStationRepository.findById(stationId)
         .orElseThrow(() -> new ResourceNotFoundException("Charging station not found with id: " + stationId));
 
-    // 2. Filter charging slots of the station by requested charging speed
     List<ChargingSlot> matchingSlots = station.getSlots().stream()
         .filter(slot -> slot.getChargingSpeed().equalsIgnoreCase(chargingSpeed))
         .toList();
 
-    System.out.println("Matching slots for speed " + chargingSpeed + ": " + matchingSlots.size());
-
-    // 3. If no slots match the speed, return 404
     if (matchingSlots.isEmpty()) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No slots found for the given speed.");
     }
 
-    // 4. Map to store for each 30-minute time slot, which charging slots are available
     Map<LocalDateTime, List<ChargingSlot>> slotAvailabilityMap = new HashMap<>();
 
-    // 5. Iterate over 48 half-hour slots in the selected day (00:00 to 23:30)
+    // Iterate over 48 half-hour slots in the selected day (00:00 to 23:30)
     LocalDateTime startOfDay = date.atStartOfDay();
     for (int i = 0; i < 48; i++) {
         LocalDateTime slotTime = startOfDay.plusMinutes(30L * i);
         for (ChargingSlot slot : matchingSlots) {
-          // 6. Check if this slot is already booked at this time  
+          // Check if this slot is already booked at this time  
           boolean isBooked = slot.getBookings().stream()
                 .anyMatch(b -> b.getStartTime().equals(slotTime));
-          // 7. If it's not booked, mark this slot as available for that time
+          // If it's not booked, mark this slot as available for that time
           if (!isBooked) {
               slotAvailabilityMap.computeIfAbsent(slotTime, k -> new ArrayList<>()).add(slot);
           }
         }
     }
 
-    // 8. Convert available map to a flat list of slotId + time pairs
+    // Convert available map to a flat list of slotId + time pairs
     List<ChargingSlotsResponse.SlotAvailability> availableSlotMapping = new ArrayList<>();
     for (Map.Entry<LocalDateTime, List<ChargingSlot>> entry : slotAvailabilityMap.entrySet()) {
         for (ChargingSlot slot : entry.getValue()) {
@@ -94,7 +88,7 @@ public class ChargingSlotService {
         }
     }
 
-    // 9. Create and return the response DTO
+    // Create and return the response DTO
     ChargingSlotsResponse response = new ChargingSlotsResponse();
     response.setAvailableSlotMapping(availableSlotMapping);
     response.setPricePerKWh(matchingSlots.get(0).getPricePerKWh());
