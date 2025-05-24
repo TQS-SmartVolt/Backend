@@ -36,6 +36,14 @@ public class ChargingStationService {
                   return stationOperatorRepository.save(newOperator);
                 });
 
+    // StationOperator stationOperator =
+    // stationOperatorRepository
+    // .findById(request.getOperatorId())
+    // .orElseThrow(
+    // () ->
+    // new ResourceNotFoundException(
+    // "Operator not found with id: " + request.getOperatorId()));
+
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
     chargingStation.setLatitude(request.getLatitude());

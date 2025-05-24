@@ -26,10 +26,70 @@
         <url/>
     </scm>
 
+    <profiles>
+    <profile>
+        <id>UAT-Web</id>
+        <properties>
+        <groups>UAT-Web</groups>
+        </properties>
+        <build>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <includes>
+                <include>**/CucumberTest.java</include>
+                </includes>
+                <testFailureIgnore>false</testFailureIgnore>
+            </configuration>
+            </plugin>
+        </plugins>
+        </build>
+    </profile>
+    <profile>
+
+    <id>UnitTests-IT</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+      <groups>UnitTest</groups>
+    </properties>
+    <build>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+                <groups>${tests}</groups>
+                <argLine>${surefire.jacoco.args}</argLine>
+                <includes>
+                    <include>**/*Test.java</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*IT.java</exclude>
+                </excludes>
+                <excludes>
+                    <exclude>**/CucumberTest.java</exclude>
+                </excludes>
+                <testFailureIgnore>false</testFailureIgnore>
+                <disableXmlReport>true</disableXmlReport>
+                <useFile>false</useFile>
+            </configuration>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+  </profiles>
+
     <properties>
 
-        <!-- UnitTest, IT-Slow, IT-Fast, UAT-Web -->
-        <tests>UnitTest,IT-Slow,IT-Fast,UAT-Web</tests>
+        <!-- UnitTest, IT-Slow, IT-Fast -->
+        <!-- `mnv test -Dtests="UnitTest"` -->
+        <!-- Note: for UAT tests: `mvn test -Pbdd -Dcucumber.filter.tags="@UAT-Web"` -->
+        <tests>UnitTest,IT-Slow,IT-Fast</tests>
 
         <java.version>17</java.version>
 
@@ -37,6 +97,8 @@
         <sonar.organization>tqs-smartvolt</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.exclusions>**/models/**.java</sonar.exclusions>
+        <sonar.coverage.exclusions>**/dto/**,**/exceptions/**,**/external/**</sonar.coverage.exclusions>
 
         <jacoco.version>0.8.13</jacoco.version>
 
@@ -59,7 +121,7 @@
 		<log4j-api.version>2.24.0</log4j-api.version>
 		<h2.version>2.2.224</h2.version>
 		<cucumber.version>7.15.0</cucumber.version>
-        <webdrivermanager.version>5.5.0</webdrivermanager.version>
+        <webdrivermanager.version>6.1.0</webdrivermanager.version>
 		<selenium-java.version>4.29.0</selenium-java.version>
         <junit-platform-suite.version>1.10.1</junit-platform-suite.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
@@ -69,6 +131,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,6 +156,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-layout-template-json</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,20 +184,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-streams</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -147,21 +215,10 @@
             <scope>test</scope>
         </dependency>
 
-
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4j-api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j-api.version}</version>
 		</dependency>
 		<dependency>
       		<groupId>org.junit.jupiter</groupId>
@@ -234,12 +291,12 @@
             <version>${webdrivermanager.version}</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>${cucumber.version}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
@@ -275,6 +332,11 @@
                         <configuration>
                             <dataFile>${unit.coverage.file}</dataFile>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-unit-test-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                     <execution>
@@ -300,6 +362,11 @@
                             <dataFile>${it.coverage.file}</dataFile>
                             <outputDirectory>
                                 ${project.reporting.outputDirectory}/jacoco-it-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                     <execution>
@@ -330,28 +397,14 @@
                             <dataFile>${merged.coverage.file}</dataFile>
                             <outputDirectory>
                                 ${project.reporting.outputDirectory}/jacoco-merged-test-coverage-report</outputDirectory>
+                            <excludes>
+                                <exclude>**/models/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <groups>${tests}</groups>
-                    <argLine>${surefire.jacoco.args}</argLine>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                    </excludes>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <disableXmlReport>true</disableXmlReport>
-                    <useFile>false</useFile>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -398,6 +451,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.4.5</version>
+                <configuration>
+                    <mainClass>ua.tqs.smartvolt.smartvolt.SmartvoltApplication</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>
