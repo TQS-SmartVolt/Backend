@@ -10,8 +10,6 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("ua/tqs/smartvolt/smartvolt")
-@ConfigurationParameter(
-    key = GLUE_PROPERTY_NAME,
-    value = "ua.tqs.smartvolt.smartvolt.functional_tests")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "ua.tqs.smartvolt.smartvolt")
 // @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@smoke")
 public class CucumberTest {}

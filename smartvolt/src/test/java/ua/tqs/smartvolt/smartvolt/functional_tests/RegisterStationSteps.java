@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.functional_tests.back_office_operations;
+package ua.tqs.smartvolt.smartvolt.functional_tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
