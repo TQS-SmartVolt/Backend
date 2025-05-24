@@ -6,9 +6,11 @@ import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
+import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import java.util.Optional;
 
 @Service
@@ -16,29 +18,43 @@ public class BookingService {
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
+  private final ChargingStationRepository chargingStationRepository;
 
   public BookingService(
       BookingRepository bookingRepository,
       EvDriverRepository evDriverRepository,
-      ChargingSlotRepository chargingSlotRepository) {
+      ChargingSlotRepository chargingSlotRepository,
+      ChargingStationRepository chargingStationRepository) {
     this.bookingRepository = bookingRepository;
     this.evDriverRepository = evDriverRepository;
     this.chargingSlotRepository = chargingSlotRepository;
+    this.chargingStationRepository = chargingStationRepository;
   }
 
   public Booking createBooking(BookingRequest request) throws Exception {
-    // TODO: Remove the hardcoded driver and slot
+    // Get the driver, slot and start time from the request
+    // TODO: Remove the hardcoded driver, station and slot
     EvDriver evDriver =
         evDriverRepository
             .findById(request.getDriverId())
             .orElseGet(
                 () -> {
                   EvDriver newDriver = new EvDriver();
-                  newDriver.setName("Test Driver");
-                  newDriver.setEmail("xpto@gmail.com");
-                  newDriver.setPassword("password");
+                  newDriver.setName("João Pinto");
+                  newDriver.setEmail("jpapinto@ua.pt");
+                  newDriver.setPassword("123");
                   return evDriverRepository.save(newDriver);
                 });
+    
+    // Create a hardcoded charging station
+    ChargingStation station = new ChargingStation();
+    station.setName("Station 1");
+    station.setLatitude(30);
+    station.setLongitude(30);
+    station.setAddress("123 Main St");
+    station.setAvailability(true);
+    station.setOperator(null); // Set the operator to null or assign a valid operator
+    chargingStationRepository.save(station);
 
     ChargingSlot slot =
         chargingSlotRepository
@@ -47,38 +63,22 @@ public class BookingService {
                 () -> {
                   ChargingSlot newSlot = new ChargingSlot();
                   newSlot.setLocked(true);
-                  newSlot.setPricePerKWh(0.5);
-                  newSlot.setPower(22.0);
-                  newSlot.setChargingSpeed(11.0);
-                  newSlot.setStation(null); // Set the station to null or assign a valid station
+                  newSlot.setPricePerKWh(1);
+                  newSlot.setPower(15.0);
+                  newSlot.setChargingSpeed("Slow");
+                  newSlot.setStation(station);
                   return chargingSlotRepository.save(newSlot);
                 });
-
-    // Add a print statement to check if the driver is found
-    System.out.println("Driver found: " + evDriver.getName());
-    System.out.println("Slot found: " + slot.getSlotId());
-
-    Booking booking = new Booking();
-
-    // Long driverId = request.getDriverId();
-    // EvDriver evDriver = evDriverRepository.findByUserId(driverId)
-    //     .orElseThrow(() -> new Exception("Driver not found"));
-    booking.setDriver(evDriver);
-
-    // Long slotId = request.getSlotId();
-    // ChargingSlot slot =
-    //     chargingSlotRepository.findById(slotId).orElseThrow(() -> new Exception("Slot not found"));
-    booking.setSlot(slot);
     Long slotId = slot.getSlotId();
 
     LocalDateTime startTime = request.getStartTime();
     if (startTime == null) {
       throw new Exception("Start time cannot be null");
     }
-    booking.setStartTime(startTime);
 
-    booking.setStatus("Not Used");
-
+    // Create a new booking
+    Booking booking = new Booking();
+    
     double power = chargingSlotRepository.getPowerBySlotId(slotId)
     .orElseThrow(() -> new Exception("Power not found for slotId: " + slotId));
 
@@ -93,27 +93,30 @@ public class BookingService {
     if (cost < 0) {
       throw new Exception("Invalid cost");
     }
+
+    // Set booking details
+    booking.setDriver(evDriver);
+    booking.setSlot(slot);
+    booking.setStartTime(startTime);
+    booking.setStatus("Not Used");
     booking.setCost(cost);
 
     return bookingRepository.save(booking);
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
-    Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
-
-    // Verify if booking has expired
+    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+    
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime createdAt = booking.getCreatedAt();
-
     if (createdAt.plusMinutes(5).isBefore(now)) {
-      // Delete the booking if it has expired
       bookingRepository.delete(booking);
       throw new Exception("Booking expired");
     }
 
     if (booking.getStatus().equals("Not Used")) {
       booking.setStatus("Paid");
+      bookingRepository.save(booking);
     } else {
       throw new Exception("Booking already paid");
     }

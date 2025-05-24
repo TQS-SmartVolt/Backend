@@ -19,7 +19,7 @@ public class ChargingSlot {
   private boolean isLocked;
   private double pricePerKWh;
   private double power;
-  private double chargingSpeed;
+  private String chargingSpeed;
 
   @ManyToOne private ChargingStation station;
 
@@ -32,7 +32,7 @@ public class ChargingSlot {
       boolean isLocked,
       double pricePerKWh,
       double power,
-      double chargingSpeed,
+      String chargingSpeed,
       ChargingStation station) {
     this.isLocked = isLocked;
     this.pricePerKWh = pricePerKWh;
@@ -67,10 +67,10 @@ public class ChargingSlot {
     this.power = power;
   }
 
-  public double getChargingSpeed() {
+  public String getChargingSpeed() {
     return chargingSpeed;
   }
-  public void setChargingSpeed(double chargingSpeed) {
+  public void setChargingSpeed(String chargingSpeed) {
     this.chargingSpeed = chargingSpeed;
   }
 

@@ -25,9 +25,9 @@ public class BookingController {
     return bookingService.createBooking(request);
   }
 
-  @PostMapping("/payment")
-  public void finalizeBookingPayment(@RequestBody Long request) throws Exception {
-    bookingService.finalizeBookingPayment(request);
+  @PostMapping("/{bookingId}/finalize-payment")
+  public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
+      bookingService.finalizeBookingPayment(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")
