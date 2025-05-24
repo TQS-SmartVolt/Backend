@@ -22,27 +22,15 @@ public class ChargingStationService {
     this.stationOperatorRepository = stationOperatorRepository;
   }
 
-  public ChargingStation createChargingStation(ChargingStationRequest request) throws Exception {
-    // TODO: Remove the hardcoded operator
+  public ChargingStation createChargingStation(ChargingStationRequest request)
+      throws ResourceNotFoundException {
     StationOperator stationOperator =
         stationOperatorRepository
             .findById(request.getOperatorId())
-            .orElseGet(
-                () -> {
-                  StationOperator newOperator = new StationOperator();
-                  newOperator.setName("Test Operator");
-                  newOperator.setEmail("operator@example.com");
-                  newOperator.setPassword("password");
-                  return stationOperatorRepository.save(newOperator);
-                });
-
-    // StationOperator stationOperator =
-    // stationOperatorRepository
-    // .findById(request.getOperatorId())
-    // .orElseThrow(
-    // () ->
-    // new ResourceNotFoundException(
-    // "Operator not found with id: " + request.getOperatorId()));
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Operator not found with id: " + request.getOperatorId()));
 
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
@@ -59,12 +47,27 @@ public class ChargingStationService {
     return chargingStationRepository.save(chargingStation);
   }
 
-  public List<ChargingStation> getAllChargingStations(Long operatorId) throws Exception {
+  public List<ChargingStation> getAllChargingStations(Long operatorId)
+      throws ResourceNotFoundException {
     StationOperator operator =
         stationOperatorRepository
             .findById(operatorId)
             .orElseThrow(
                 () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
     return chargingStationRepository.findByOperator(operator);
+  }
+
+  public ChargingStation updateChargingStationStatus(Long stationId, boolean activate)
+      throws ResourceNotFoundException {
+    ChargingStation chargingStation =
+        chargingStationRepository
+            .findById(stationId)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Charging station not found with id: " + stationId));
+
+    chargingStation.setAvailability(activate);
+    return chargingStationRepository.save(chargingStation);
   }
 }
