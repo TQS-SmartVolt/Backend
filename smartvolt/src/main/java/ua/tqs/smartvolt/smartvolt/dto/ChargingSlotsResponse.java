@@ -1,23 +1,54 @@
 package ua.tqs.smartvolt.smartvolt.dto;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ChargingSlotsResponse {
-    private LocalDateTime[] availableTimeSlots;
+
+    public static class SlotAvailability {
+        private Long slotId;
+        private LocalDateTime startTime;
+
+        public SlotAvailability() {}
+
+        public SlotAvailability(Long slotId, LocalDateTime startTime) {
+            this.slotId = slotId;
+            this.startTime = startTime;
+        }
+
+        public Long getSlotId() {
+            return slotId;
+        }
+
+        public void setSlotId(Long slotId) {
+            this.slotId = slotId;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+    }
+
+    private List<SlotAvailability> availableSlotMapping;
     private double pricePerKWh;
 
     public ChargingSlotsResponse() {}
 
-    public ChargingSlotsResponse(LocalDateTime[] availableTimeSlots, double pricePerKWh) {
-        this.availableTimeSlots = availableTimeSlots;
+    public ChargingSlotsResponse(List<SlotAvailability> availableSlotMapping, double pricePerKWh) {
+        this.availableSlotMapping = availableSlotMapping;
         this.pricePerKWh = pricePerKWh;
     }
 
-    public LocalDateTime[] getAvailableTimeSlots() {
-        return availableTimeSlots;
+    public List<SlotAvailability> getAvailableSlotMapping() {
+        return availableSlotMapping;
     }
 
-    public void setAvailableTimeSlots(LocalDateTime[] availableTimeSlots) {
-        this.availableTimeSlots = availableTimeSlots;
+    public void setAvailableSlotMapping(List<SlotAvailability> availableSlotMapping) {
+        this.availableSlotMapping = availableSlotMapping;
     }
 
     public double getPricePerKWh() {
@@ -26,5 +57,5 @@ public class ChargingSlotsResponse {
 
     public void setPricePerKWh(double pricePerKWh) {
         this.pricePerKWh = pricePerKWh;
-    }  
+    }
 }

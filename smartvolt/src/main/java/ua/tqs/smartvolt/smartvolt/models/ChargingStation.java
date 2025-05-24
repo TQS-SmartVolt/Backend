@@ -127,14 +127,14 @@ public class ChargingStation {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof ChargingStation)) return false;
-    ChargingStation that = (ChargingStation) o;
-    return Objects.equals(stationId, that.stationId);
+      if (this == o) return true;
+      if (!(o instanceof ChargingStation)) return false;
+      ChargingStation that = (ChargingStation) o;
+      return Objects.equals(stationId, that.stationId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(stationId);
+      return Objects.hash(stationId);
   }
 }

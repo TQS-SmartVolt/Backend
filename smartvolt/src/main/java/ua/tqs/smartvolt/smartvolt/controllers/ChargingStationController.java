@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 
 
 @RestController
@@ -46,7 +48,14 @@ public class ChargingStationController {
     @PathVariable Long stationId,
     @RequestParam String chargingSpeed,
     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-  ) {
+  ) throws ResourceNotFoundException {
     return chargingSlotService.getAvailableSlots(stationId, chargingSpeed, date);
+  }
+
+  @GetMapping("/map")
+  public ChargingStationsResponse getChargingStationsByChargingSpeed(
+    @RequestParam String[] chargingSpeeds
+  ) throws ResourceNotFoundException {
+    return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
   }
 }
