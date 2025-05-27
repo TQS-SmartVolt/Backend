@@ -1,4 +1,4 @@
-// package ua.tqs.smartvolt.smartvolt.controllers;
+// package ua.tqs.smartvolt.smartvolt.integration;
 
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -98,7 +98,7 @@
 //                 + " }";
 //         // When & Then
 //         mockMvc
-//
+
 // .perform(post("/api/v1/stations").contentType("application/json").content(requestBody))
 //                 .andExpect(status().isCreated())
 //                 .andExpect(content().contentType("application/json"))
