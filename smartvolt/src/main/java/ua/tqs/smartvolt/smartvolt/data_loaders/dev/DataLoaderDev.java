@@ -1,6 +1,5 @@
-package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
+package ua.tqs.smartvolt.smartvolt.data_loaders.dev;
 
-import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,16 +10,14 @@ import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 
 @Component
-@Profile("uat")
-public class DataLoaderUAT implements CommandLineRunner {
+@Profile("dev")
+public class DataLoaderDev implements CommandLineRunner {
 
   private final PasswordEncoder passwordEncoder;
   private final StationOperatorRepository stationOperatorRepository;
   private final ChargingStationRepository chargingStationRepository;
 
-  public static StationOperator stationOperator;
-
-  public DataLoaderUAT(
+  public DataLoaderDev(
       StationOperatorRepository sor,
       ChargingStationRepository csr,
       PasswordEncoder passwordEncoder) {
@@ -37,7 +34,6 @@ public class DataLoaderUAT implements CommandLineRunner {
   }
 
   @Override
-  @Transactional
   public void run(String... args) throws Exception {
     System.out.println("DataLoader is running...");
 
@@ -45,14 +41,13 @@ public class DataLoaderUAT implements CommandLineRunner {
     dropDatabase();
 
     // Create Station Operator
-    stationOperator =
+    StationOperator testStationOperator =
         new StationOperator(
             "John Doe", "johndoe@example.com", passwordEncoder.encode("password123"));
-
-    stationOperatorRepository.saveAndFlush(stationOperator);
+    stationOperatorRepository.saveAndFlush(testStationOperator);
     System.out.printf(
         "Station Operator created: %s with ID %s%n",
-        stationOperator.getName(), stationOperator.getUserId());
+        testStationOperator.getName(), testStationOperator.getUserId());
 
     // Create Charging Stations
     ChargingStation testChargingStationA =
@@ -62,13 +57,18 @@ public class DataLoaderUAT implements CommandLineRunner {
             -122.4194,
             "123 Main St, San Francisco, CA",
             true,
-            stationOperator);
+            testStationOperator);
     ChargingStation testChargingStationB =
         new ChargingStation(
-            "Station B", 34.0522, -118.2437, "456 Elm St, Los Angeles, CA", true, stationOperator);
+            "Station B",
+            34.0522,
+            -118.2437,
+            "456 Elm St, Los Angeles, CA",
+            true,
+            testStationOperator);
     ChargingStation testChargingStationC =
         new ChargingStation(
-            "Station C", 40.7128, -74.0060, "789 Oak St, New York, NY", false, stationOperator);
+            "Station C", 40.7128, -74.0060, "789 Oak St, New York, NY", false, testStationOperator);
 
     chargingStationRepository.saveAndFlush(testChargingStationA);
     chargingStationRepository.saveAndFlush(testChargingStationB);

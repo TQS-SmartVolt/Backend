@@ -9,18 +9,15 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-    info = @Info(
-        title = "Smart Volt API", 
-        version = "1.0.0",
-        description = "All the endpoints for the Smart Volt API"
-    ),
-    security = @SecurityRequirement(name = "bearerAuth")
-)
+    info =
+        @Info(
+            title = "Smart Volt API",
+            version = "1.0.0",
+            description = "All the endpoints for the Smart Volt API"),
+    security = @SecurityRequirement(name = "bearerAuth"))
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
     scheme = "bearer",
-    bearerFormat = "JWT"
-)
-public class OpenApiConfig {
-}
+    bearerFormat = "JWT")
+public class OpenApiConfig {}
