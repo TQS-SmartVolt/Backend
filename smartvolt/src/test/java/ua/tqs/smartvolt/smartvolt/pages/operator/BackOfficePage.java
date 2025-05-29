@@ -30,6 +30,21 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-station']")
   private WebElement confirmAddStationButton;
 
+  @FindBy(css = "[data-testid='station-card-deactivate']")
+  private WebElement stationCardDeactivateButton;
+
+  @FindBy(css = "[data-testid='station-card-activate']")
+  private WebElement stationCardActivateButton;
+
+  @FindBy(css = "[data-testid='confirm-deactivation-button']")
+  private WebElement confirmDeactivationButton;
+
+  @FindBy(css = "[data-testid='deactivation-reason-select']")
+  private WebElement deactivationReasonSelect;
+
+  @FindBy(css = "[data-testid='confirm-activation-button']")
+  private WebElement confirmActivationButton;
+
   public BackOfficePage() {
     super();
   }
@@ -120,5 +135,34 @@ public class BackOfficePage extends Website {
   public void confirmAddStation() {
     wait.until(ExpectedConditions.elementToBeClickable(confirmAddStationButton));
     confirmAddStationButton.click();
+  }
+
+  public void clickDeactivateStation(WebElement stationCard) {
+    WebElement deactivateButton =
+        stationCard.findElement(By.cssSelector("[data-testid='station-card-deactivate']"));
+    wait.until(ExpectedConditions.elementToBeClickable(deactivateButton));
+    deactivateButton.click();
+  }
+
+  public void clickActivateStation(WebElement stationCard) {
+    WebElement activateButton =
+        stationCard.findElement(By.cssSelector("[data-testid='station-card-activate']"));
+    wait.until(ExpectedConditions.elementToBeClickable(activateButton));
+    activateButton.click();
+  }
+
+  public void fillDeactivationReason(String reason) {
+    wait.until(ExpectedConditions.elementToBeClickable(deactivationReasonSelect));
+    deactivationReasonSelect.sendKeys(reason);
+  }
+
+  public void confirmDeactivation() {
+    wait.until(ExpectedConditions.elementToBeClickable(confirmDeactivationButton));
+    confirmDeactivationButton.click();
+  }
+
+  public void confirmActivation() {
+    wait.until(ExpectedConditions.elementToBeClickable(confirmActivationButton));
+    confirmActivationButton.click();
   }
 }
