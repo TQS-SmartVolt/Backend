@@ -6,8 +6,11 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.List;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -15,6 +18,7 @@ import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ChangeStationStatusSteps {
 
+  private WebDriver driver;
   private BackOfficePage backOfficePage;
   private LoginPage loginPage;
   private List<WebElement> stationCards;
@@ -22,10 +26,11 @@ public class ChangeStationStatusSteps {
   @Before
   public void setup() {
     System.out.println("Setting up WebDriver...");
-    this.backOfficePage = new BackOfficePage();
-    this.loginPage =
-        new LoginPage(
-            backOfficePage.getWebDriver(), backOfficePage.getWait()); // Not use WebDriver for login
+
+    WebDriverManager.chromedriver().setup();
+    this.driver = new ChromeDriver();
+    this.backOfficePage = new BackOfficePage(driver);
+    this.loginPage = new LoginPage(driver);
   }
 
   @After
