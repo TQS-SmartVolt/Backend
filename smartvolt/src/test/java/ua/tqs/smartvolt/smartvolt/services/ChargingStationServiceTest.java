@@ -20,6 +20,7 @@ import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 
@@ -28,6 +29,7 @@ public class ChargingStationServiceTest {
 
   @Mock private ChargingStationRepository chargingStationRepository;
   @Mock private StationOperatorRepository stationOperatorRepository;
+  @Mock private ChargingSlotRepository chargingSlotRepository;
 
   private ChargingStationService chargingStationService;
 
@@ -38,7 +40,7 @@ public class ChargingStationServiceTest {
   @BeforeEach
   void setUp() {
     chargingStationService =
-        new ChargingStationService(chargingStationRepository, stationOperatorRepository);
+        new ChargingStationService(chargingStationRepository, stationOperatorRepository, chargingSlotRepository);
 
     stationOperator = new StationOperator();
     stationOperator.setUserId(OPERATOR_ID);

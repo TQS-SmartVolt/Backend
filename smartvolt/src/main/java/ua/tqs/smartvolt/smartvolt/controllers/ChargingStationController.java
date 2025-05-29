@@ -22,6 +22,7 @@ import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
