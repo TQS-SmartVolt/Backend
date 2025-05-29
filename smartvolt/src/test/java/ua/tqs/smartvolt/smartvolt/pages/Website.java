@@ -5,21 +5,35 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 
 public class Website {
 
   protected WebDriver driver;
   protected Wait<WebDriver> wait;
 
-  private String WEBSITE_URL = "http://localhost"; // TODO: .env
-  private int WEB_DELAY = 1; // TODO: .env
+  @Value("${FRONTEND_PORT}")
+  private String frontendPort;
+
+  @Value("${FRONTEND_IP}")
+  private String frontendIp;
+
+  @Value("${FRONTEND_PROTOCOL}")
+  private String frontendprotocol;
+
+  private String websiteUrl;
+
+  @Value("${UAT_WEB_DELAY_SECONDS}")
+  private int UAT_WEB_DELAY_SECONDS;
 
   public Website(WebDriver driver) {
     this.driver = driver;
     driver.manage().window().maximize();
-    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(WEB_DELAY));
-    this.wait = new WebDriverWait(driver, Duration.ofSeconds(WEB_DELAY));
+    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
+    this.wait = new WebDriverWait(driver, Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     PageFactory.initElements(driver, this);
+
+    this.websiteUrl = String.format("%s://%s:%s", frontendprotocol, frontendIp, frontendPort);
   }
 
   public void quit() {
@@ -27,7 +41,7 @@ public class Website {
   }
 
   public void navigateTo(String page) {
-    driver.get(WEBSITE_URL + page);
+    driver.get(websiteUrl + page);
   }
 
   public WebDriver getWebDriver() {

@@ -18,13 +18,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig {
 
   @Value("${FRONTEND_PORT}")
-  private String frontendPort = "5173";
+  private String frontendPort;
 
   @Value("${FRONTEND_IP}")
-  private String frontendIp = "frontend";
+  private String frontendIp;
 
   @Value("${FRONTEND_PROTOCOL}")
-  private String frontendprotocol = "http";
+  private String frontendprotocol;
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {
