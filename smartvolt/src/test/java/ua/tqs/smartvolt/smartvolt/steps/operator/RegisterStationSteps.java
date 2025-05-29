@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.steps.back_office_operations;
+package ua.tqs.smartvolt.smartvolt.steps.operator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
