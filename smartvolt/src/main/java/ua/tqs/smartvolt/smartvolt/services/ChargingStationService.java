@@ -35,10 +35,7 @@ public class ChargingStationService {
     chargingStation.setName(request.getName());
     chargingStation.setLatitude(request.getLatitude());
     chargingStation.setLongitude(request.getLongitude());
-
-    // TODO: Get address from a geocoding service
-    String address = "address";
-    chargingStation.setAddress(address);
+    chargingStation.setAddress(request.getAddress());
 
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);

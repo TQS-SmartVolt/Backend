@@ -11,18 +11,23 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.tqs.smartvolt.smartvolt.pages.back_office_operations.BackOfficePage;
+import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
+import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RegisterStationSteps {
 
   private BackOfficePage backOfficePage;
+  private LoginPage loginPage;
   private List<WebElement> stationCards;
 
   @Before
   public void setup() {
     System.out.println("Setting up WebDriver...");
     this.backOfficePage = new BackOfficePage();
+    this.loginPage =
+        new LoginPage(
+            backOfficePage.getWebDriver(), backOfficePage.getWait()); // Not use WebDriver for login
   }
 
   @After
@@ -33,6 +38,11 @@ public class RegisterStationSteps {
   @Given("the website is available at page {string}")
   public void givenTheWebsiteIsAvailableAtPage(String page) {
     backOfficePage.navigateTo(page);
+  }
+
+  @Given("the operator is logged in with email {string} and password {string}")
+  public void theOperatorIsLoggedInWithEmailAndPassword(String email, String password) {
+    loginPage.login(email, password);
   }
 
   @When("the operator clicks on {string}")
@@ -54,9 +64,10 @@ public class RegisterStationSteps {
   }
 
   @When(
-      "the operator fills in the form with name {string}, latitude {double}, and longitude {double}")
-  public void theOperatorFillsInTheForm(String name, double latitude, double longitude) {
-    backOfficePage.fillStationDetails(name, latitude, longitude);
+      "the operator fills in the form with name {string}, address {string}, latitude {double}, and longitude {double}")
+  public void theOperatorFillsInTheForm(
+      String name, String address, double latitude, double longitude) {
+    backOfficePage.fillStationDetails(name, address, latitude, longitude);
   }
 
   @When("the operator confirms the registration")
@@ -64,19 +75,20 @@ public class RegisterStationSteps {
     backOfficePage.confirmAddStation();
   }
 
-  @Then("stations should have been found")
-  public void stationsShouldHaveBeenFound() {
+  @Then("{int} stations should have been found")
+  @Then("{int} station should have been found")
+  public void stationsShouldHaveBeenFound(int expectedCount) {
     stationCards = backOfficePage.getStationCards();
     assertTrue(
-        !stationCards.isEmpty(),
+        stationCards.size() == expectedCount,
         "No station cards found. At least one station should be registered.");
   }
 
   @Then(
-      "a station should have the name {string}, status {string}, address {string}, and {int} slots")
+      "station {int} should have the name {string}, status {string}, address {string}, and {int} slots")
   public void stationShouldHaveTheNameStatusAddressAndSlots(
-      String name, String status, String address, int slots) {
-    WebElement stationCard = backOfficePage.getStationCardByName(name);
+      int index, String name, String status, String address, int slots) {
+    WebElement stationCard = backOfficePage.getStationByIndex(index);
 
     assertEquals(
         name,

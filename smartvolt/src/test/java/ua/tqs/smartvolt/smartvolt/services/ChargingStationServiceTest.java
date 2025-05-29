@@ -1,6 +1,7 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,7 +33,7 @@ public class ChargingStationServiceTest {
 
   private StationOperator stationOperator;
   private List<ChargingStation> chargingStations;
-  private Long OPERATOR_ID = stationOperator.getUserId();
+  private Long OPERATOR_ID;
 
   @BeforeEach
   void setUp() {
@@ -93,17 +94,19 @@ public class ChargingStationServiceTest {
   @Test
   @Tag("UnitTest")
   @Requirement("SV-34")
-  void createChargingStation_WhenOperatorExists_CreatesChargingStation() {
+  void createChargingStation_WhenOperatorExists_CreatesChargingStation()
+      throws ResourceNotFoundException {
     // Arrange
     Long operatorId = OPERATOR_ID;
     when(stationOperatorRepository.findById(operatorId)).thenReturn(Optional.of(stationOperator));
     when(chargingStationRepository.save(chargingStations.get(0)))
         .thenReturn(chargingStations.get(0));
     ChargingStationRequest chargingStation =
-        new ChargingStationRequest("Station 1", 12.34, 56.78, stationOperator.getUserId());
+        new ChargingStationRequest("Station 1", "Thrid Street", 12.34, 56.78);
 
     // Act
-    ChargingStation result = chargingStationService.createChargingStation(chargingStation);
+    ChargingStation result =
+        chargingStationService.createChargingStation(chargingStation, stationOperator.getUserId());
 
     // Assert
     assertThat(result).isNotNull();
@@ -112,24 +115,22 @@ public class ChargingStationServiceTest {
     verify(chargingStationRepository, times(1)).save(chargingStations.get(0));
   }
 
-  // TODO: Uncomment the test, this test only works when login and register are
-  // implemented
-  // @Test
-  // @Tag("UnitTest")
-  // @Requirement("SV-34")
-  // void
-  // createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()
-  // throws Exception {
-  // Long invalidOperatorId = 999L;
-  // when(stationOperatorRepository.findById(invalidOperatorId)).thenReturn(Optional.empty());
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-34")
+  void createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()
+      throws Exception {
+    // Arrange
+    Long invalidOperatorId = 999L;
+    when(stationOperatorRepository.findById(invalidOperatorId)).thenReturn(Optional.empty());
 
-  // ChargingStationRequest request =
-  // new ChargingStationRequest("Station 1", 12.34, 56.78, invalidOperatorId);
-
-  // Assertions.assertThatThrownBy(() ->
-  // chargingStationService.createChargingStation(request))
-  // .isInstanceOf(ResourceNotFoundException.class)
-  // .hasMessageContaining("Operator not found with id: " + invalidOperatorId);
-  // verify(chargingStationRepository, times(0)).save(chargingStations.get(0));
-  // }
+    // Act & Assert
+    ChargingStationRequest request =
+        new ChargingStationRequest("Station 1", "Second Stree", 12.34, 56.78);
+    assertThatThrownBy(
+            () -> chargingStationService.createChargingStation(request, invalidOperatorId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Operator not found with id: " + invalidOperatorId);
+    verify(chargingStationRepository, times(0)).save(chargingStations.get(0));
+  }
 }

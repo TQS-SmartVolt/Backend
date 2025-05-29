@@ -25,11 +25,25 @@ public class Website {
     PageFactory.initElements(driver, this);
   }
 
+  public Website(WebDriver driver, Wait<WebDriver> wait) {
+    PageFactory.initElements(driver, this);
+    this.driver = driver;
+    this.wait = wait;
+  }
+
   public void quit() {
     driver.quit();
   }
 
   public void navigateTo(String page) {
     driver.get(WEBSITE_URL + page);
+  }
+
+  public WebDriver getWebDriver() {
+    return driver;
+  }
+
+  public Wait<WebDriver> getWait() {
+    return wait;
   }
 }

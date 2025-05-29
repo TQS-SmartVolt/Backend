@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.pages.back_office_operations;
+package ua.tqs.smartvolt.smartvolt.pages.operator;
 
 import java.util.List;
 import org.openqa.selenium.By;
@@ -17,6 +17,9 @@ public class BackOfficePage extends Website {
 
   @FindBy(css = "[data-testid='add-station-name']")
   private WebElement stationNameInput;
+
+  @FindBy(css = "[data-testid='add-station-address']")
+  private WebElement stationAddressInput;
 
   @FindBy(css = "[data-testid='add-station-latitude']")
   private WebElement stationLatitudeInput;
@@ -38,6 +41,11 @@ public class BackOfficePage extends Website {
         ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("[data-testid^='station-card-index-']")));
     return driver.findElements(By.cssSelector("[data-testid^='station-card-index-']"));
+  }
+
+  public WebElement getStationByIndex(int index) {
+    List<WebElement> stationCards = getStationCards();
+    return stationCards.get(index - 1);
   }
 
   public WebElement getStationCardByName(String name) {
@@ -102,8 +110,9 @@ public class BackOfficePage extends Website {
     addStationButton.click();
   }
 
-  public void fillStationDetails(String name, double latitude, double longitude) {
+  public void fillStationDetails(String name, String address, double latitude, double longitude) {
     stationNameInput.sendKeys(name);
+    stationAddressInput.sendKeys(address);
     stationLatitudeInput.sendKeys(String.valueOf(latitude));
     stationLongitudeInput.sendKeys(String.valueOf(longitude));
   }
