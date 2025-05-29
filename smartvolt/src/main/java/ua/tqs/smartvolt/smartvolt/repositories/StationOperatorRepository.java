@@ -8,4 +8,5 @@ import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 @Repository
 public interface StationOperatorRepository extends JpaRepository<StationOperator, Long> {
   Optional<StationOperator> findById(Long id);
+  Optional<StationOperator> findByEmail(String email);
 }

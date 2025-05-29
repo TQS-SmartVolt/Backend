@@ -1,13 +1,20 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
@@ -19,16 +26,21 @@ public abstract class User {
   private Long userId;
 
   private String name;
+
+  @Column(unique = true)
   private String email;
+  
   private String password;
+
+  private Set<String> roles;
 
   protected User() {}
 
-  protected User(Long userId, String name, String email, String password) {
-    this.userId = userId;
+  protected User(String name, String email, String password, Set<String> roles) {
     this.name = name;
     this.email = email;
     this.password = password;
+    this.roles = roles;
   }
 
   public Long getUserId() {
@@ -61,6 +73,14 @@ public abstract class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public Set<String> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<String> roles) {
+    this.roles = roles;
   }
 
   @Override

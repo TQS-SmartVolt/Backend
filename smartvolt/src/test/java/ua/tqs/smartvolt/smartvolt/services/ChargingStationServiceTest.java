@@ -32,7 +32,7 @@ public class ChargingStationServiceTest {
 
   private StationOperator stationOperator;
   private List<ChargingStation> chargingStations;
-  private Long OPERATOR_ID = 1L;
+  private Long OPERATOR_ID = stationOperator.getUserId();
 
   @BeforeEach
   void setUp() {
