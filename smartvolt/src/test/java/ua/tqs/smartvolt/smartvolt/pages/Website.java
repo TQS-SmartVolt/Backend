@@ -5,26 +5,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Value;
 
 public class Website {
 
   protected WebDriver driver;
   protected Wait<WebDriver> wait;
 
-  @Value("${FRONTEND_PORT}")
-  private String frontendPort;
-
-  @Value("${FRONTEND_IP}")
-  private String frontendIp;
-
-  @Value("${FRONTEND_PROTOCOL}")
-  private String frontendprotocol;
+  private String frontendprotocol = "http";
+  private String frontendIp = "localhost";
+  private String frontendPort = "80";
 
   private String websiteUrl;
 
-  @Value("${UAT_WEB_DELAY_SECONDS}")
-  private int UAT_WEB_DELAY_SECONDS;
+  private int UAT_WEB_DELAY_SECONDS = 1;
 
   public Website(WebDriver driver) {
     this.driver = driver;
