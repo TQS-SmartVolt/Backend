@@ -2,6 +2,9 @@ package ua.tqs.smartvolt.smartvolt.controllers;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,18 +30,24 @@ public class ChargingStationController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
   public ChargingStation createChargingStation(@RequestBody ChargingStationRequest request)
       throws ResourceNotFoundException {
-    return chargingStationService.createChargingStation(request);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Long currentId = Long.parseLong(authentication.getName());
+    return chargingStationService.createChargingStation(request, currentId);
   }
 
   @GetMapping
-  public List<ChargingStation> getAllChargingStations(@RequestParam Long operatorId)
-      throws ResourceNotFoundException {
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  public List<ChargingStation> getAllChargingStations() throws ResourceNotFoundException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Long operatorId = Long.parseLong(authentication.getName());
     return chargingStationService.getAllChargingStations(operatorId);
   }
 
   @PatchMapping("/{stationId}/status")
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
   public ChargingStation updateChargingStationStatus(
       @PathVariable Long stationId, @RequestParam boolean activate)
       throws ResourceNotFoundException {

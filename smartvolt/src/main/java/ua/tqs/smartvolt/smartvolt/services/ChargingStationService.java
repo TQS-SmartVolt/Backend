@@ -22,24 +22,20 @@ public class ChargingStationService {
     this.stationOperatorRepository = stationOperatorRepository;
   }
 
-  public ChargingStation createChargingStation(ChargingStationRequest request)
+  public ChargingStation createChargingStation(ChargingStationRequest request, Long operatorId)
       throws ResourceNotFoundException {
+
     StationOperator stationOperator =
         stationOperatorRepository
-            .findById(request.getOperatorId())
+            .findById(operatorId)
             .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        "Operator not found with id: " + request.getOperatorId()));
+                () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
 
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
     chargingStation.setLatitude(request.getLatitude());
     chargingStation.setLongitude(request.getLongitude());
-
-    // TODO: Get address from a geocoding service
-    String address = "address";
-    chargingStation.setAddress(address);
+    chargingStation.setAddress(request.getAddress());
 
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);

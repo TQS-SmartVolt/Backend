@@ -4,11 +4,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class EvDriver extends User {
-
-  private String vehiclePlate;
 
   @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
   private List<Booking> bookings;
@@ -18,9 +17,8 @@ public class EvDriver extends User {
 
   public EvDriver() {}
 
-  public EvDriver(Long userId, String name, String email, String password, String vehiclePlate) {
-    super(userId, name, email, password);
-    this.vehiclePlate = vehiclePlate;
+  public EvDriver(String name, String email, String password) {
+    super(name, email, password, Set.of("ROLE_EV_DRIVER"));
   }
 
   // Getters and setters...
@@ -29,24 +27,16 @@ public class EvDriver extends User {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
-
-    EvDriver evDriver = (EvDriver) o;
-
-    return vehiclePlate != null
-        ? vehiclePlate.equals(evDriver.vehiclePlate)
-        : evDriver.vehiclePlate == null;
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    int result = super.hashCode();
-    result = 31 * result + (vehiclePlate != null ? vehiclePlate.hashCode() : 0);
-    return result;
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
-    return "EvDriver{" + "vehiclePlate='" + vehiclePlate + '\'' + "} " + super.toString();
+    return "EvDriver{} " + super.toString();
   }
 }

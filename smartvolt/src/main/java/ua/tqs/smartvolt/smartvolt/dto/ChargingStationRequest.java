@@ -2,17 +2,17 @@ package ua.tqs.smartvolt.smartvolt.dto;
 
 public class ChargingStationRequest {
   private String name;
+  private String address;
   private double latitude;
   private double longitude;
-  private Long operatorId;
 
   public ChargingStationRequest() {}
 
-  public ChargingStationRequest(String name, double latitude, double longitude, Long operatorId) {
+  public ChargingStationRequest(String name, String address, double latitude, double longitude) {
     this.name = name;
+    this.address = address;
     this.latitude = latitude;
     this.longitude = longitude;
-    this.operatorId = operatorId;
   }
 
   public String getName() {
@@ -21,6 +21,14 @@ public class ChargingStationRequest {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
   public double getLatitude() {
@@ -37,13 +45,5 @@ public class ChargingStationRequest {
 
   public void setLongitude(double longitude) {
     this.longitude = longitude;
-  }
-
-  public Long getOperatorId() {
-    return operatorId;
-  }
-
-  public void setOperatorId(Long operatorId) {
-    this.operatorId = operatorId;
   }
 }
