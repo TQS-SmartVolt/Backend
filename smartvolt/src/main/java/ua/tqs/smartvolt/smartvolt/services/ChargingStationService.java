@@ -37,36 +37,20 @@ public class ChargingStationService {
     
   }
 
-  public ChargingStation createChargingStation(ChargingStationRequest request) throws Exception {
-    // TODO: Remove the hardcoded operator
-    StationOperator stationOperator =
-    stationOperatorRepository
-    .findById(request.getOperatorId())
-    .orElseGet(
-    () -> {
-    StationOperator newOperator = new StationOperator();
-    newOperator.setName("Test Operator");
-    newOperator.setEmail("operator@example.com");
-    newOperator.setPassword("password");
-    return stationOperatorRepository.save(newOperator);
-    });
+  public ChargingStation createChargingStation(ChargingStationRequest request, Long operatorId)
+      throws ResourceNotFoundException {
 
-    // StationOperator stationOperator =
-    //     stationOperatorRepository
-    //         .findById(request.getOperatorId())
-    //         .orElseThrow(
-    //             () ->
-    //                 new ResourceNotFoundException(
-    //                     "Operator not found with id: " + request.getOperatorId()));
+    StationOperator stationOperator =
+        stationOperatorRepository
+            .findById(operatorId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
 
     ChargingStation chargingStation = new ChargingStation();
     chargingStation.setName(request.getName());
     chargingStation.setLatitude(request.getLatitude());
     chargingStation.setLongitude(request.getLongitude());
-
-    // TODO: Get address from a geocoding service
-    String address = "address";
-    chargingStation.setAddress(address);
+    chargingStation.setAddress(request.getAddress());
 
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);
@@ -74,7 +58,8 @@ public class ChargingStationService {
     return chargingStationRepository.save(chargingStation);
   }
 
-  public List<ChargingStation> getAllChargingStations(Long operatorId) throws Exception {
+  public List<ChargingStation> getAllChargingStations(Long operatorId)
+      throws ResourceNotFoundException {
     StationOperator operator =
         stationOperatorRepository
             .findById(operatorId)

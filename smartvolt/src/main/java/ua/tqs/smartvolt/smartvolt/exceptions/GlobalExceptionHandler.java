@@ -1,10 +1,9 @@
-package ua.tqs.smartvolt.smartvolt.config;
+package ua.tqs.smartvolt.smartvolt.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

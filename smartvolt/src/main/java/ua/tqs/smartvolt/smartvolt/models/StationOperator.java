@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class StationOperator extends User {
@@ -13,8 +14,8 @@ public class StationOperator extends User {
 
   public StationOperator() {}
 
-  public StationOperator(Long userId, String name, String email, String password) {
-    super(userId, name, email, password);
+  public StationOperator(String name, String email, String password) {
+    super(name, email, password, Set.of("ROLE_STATION_OPERATOR"));
   }
 
   public Long getUserId() {

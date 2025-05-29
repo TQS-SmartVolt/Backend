@@ -5,8 +5,4 @@ import org.springframework.stereotype.Repository;
 import ua.tqs.smartvolt.smartvolt.models.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-  // Custom query methods can be defined here if needed
-  // For example, find users by username, email, etc.
-
-}
+public interface UserRepository extends JpaRepository<User, Long> {}
