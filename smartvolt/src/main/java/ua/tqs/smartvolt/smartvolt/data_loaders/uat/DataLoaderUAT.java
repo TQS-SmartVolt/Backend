@@ -41,6 +41,9 @@ public class DataLoaderUAT implements CommandLineRunner {
   public void run(String... args) throws Exception {
     System.out.println("DataLoader is running...");
 
+    System.out.println("Test password");
+    System.out.println("Encoded password: " + passwordEncoder.encode("password123"));
+
     // Clear the database
     dropDatabase();
 

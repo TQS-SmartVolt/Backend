@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,36 +43,25 @@ class ChargingStationControllerIT {
     return "http://localhost:" + port + "/api/v1/stations";
   }
 
-  // spotless:off
-  @Test
-  void whenGetMenuById_thenReturnCorrectDetails() {
-    given()
-        .contentType("application/json")
-        .when()
-        .get(getBaseUrl() + "/1")
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .body("name", equalTo("Lunch Menu 1"))
-        .body("numMenuOptions", equalTo(4))
-        .body("numAvailableOptions", equalTo(4))
-        .body("weatherCode", notNullValue())
-        .body("weatherTemperature", notNullValue());
+  private String getLoginUrl() {
+    return "http://localhost:" + port + "/api/v1/auth/sign-in";
   }
 
-  // spotless:on
+  String validSvToken;
 
-  @Test
-  void whenGetMealOptions_thenReturnGroupedMeals() {
-    given()
-        .contentType("application/json")
-        .when()
-        .get(getBaseUrl() + "/1/meal-options")
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .body("SOUP.size()", greaterThan(0))
-        .body("MAIN_COURSE.size()", greaterThan(0))
-        .body("DESSERT.size()", greaterThan(0))
-        .body("DRINK.size()", greaterThan(0));
+  @BeforeEach
+  public void setUp() {
+    validSvToken =
+        given()
+            .contentType("application/json")
+            .body("{\"email\":\"test@example.com\", \"password\":\"password123\"}")
+            .post(getLoginUrl())
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .path("token");
+
+    System.out.println("> Valid SV Token: " + validSvToken);
   }
 
   @Test
@@ -90,73 +80,39 @@ class ChargingStationControllerIT {
         .statusCode(HttpStatus.FORBIDDEN.value());
   }
 
-  // @Test
-  // @Tag("IT-Fast")
-  // @Requirement("SV-34")
-  // void testGetAllChargingStations_WhenOperatorNotExists_ThrowsResourceNotFoundException()
-  // 		throws Exception {
-  // 	Long operatorId = 999L; // Non-existing operator ID
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34")
+  void getAllChargingStations_WhenOperatorExists_ThenListOfChargingStations() throws Exception {
 
-  // 	// When & Then
-  // 	mockMvc
-  // 			.perform(get("/api/v1/stations?operatorId=" + operatorId))
-  // 			.andExpect(status().isNotFound())
-  // 			.andExpect(content().string("Operator not found with id: " + operatorId));
-  // }
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .when()
+        .get(getBaseUrl())
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("$", hasSize(greaterThan(0)))
+        .body("[0].name", equalTo("Station 1"));
+  }
 
-  // 	@Test
-  // 	@Tag("IT-Fast")
-  // 	@Requirement("SV-34")
-  // 	void testGetAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations()
-  // 			throws Exception {
-  // 		// Given
-  // 		StationOperator operator = new StationOperator();
-  // 		operator.setName("Test Operator");
-  // 		operator.setEmail("test@example.com");
-  // 		operator.setPassword("password");
-  // 		stationOperatorRepository.save(operator);
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34")
+  void createChargingStation_WhenOperatorExists_ThenCreatesChargingStation() throws Exception {
 
-  // 		ChargingStation station1 = new ChargingStation();
-  // 		station1.setName("Station 1");
-  // 		station1.setLatitude(12.34);
-  // 		station1.setLongitude(56.78);
-  // 		station1.setAddress("Address 1");
-  // 		station1.setAvailability(true);
-  // 		station1.setOperator(operator);
-  // 		chargingStationRepository.save(station1);
-
-  // 		// When & Then
-  // 		mockMvc
-  // 				.perform(get("/api/v1/stations?operatorId=" + operator.getUserId()))
-  // 				.andExpect(status().isOk())
-  // 				.andExpect(content().contentType("application/json"))
-  // 				.andExpect(jsonPath("$[0].name").value("Station 1"));
-  // 	}
-
-  // 	@Test
-  //     @Tag("IT-Fast")
-  //     @Requirement("SV-34")
-  //     void testCreateChargingStation_WhenOperatorExists_CreatesChargingStation() throws Exception
-  // {
-  //         // Given
-  //         StationOperator operator = new StationOperator();
-  //         operator.setName("Test Operator");
-  //         operator.setEmail("test@example.com");
-  //         operator.setPassword("password");
-  //         stationOperatorRepository.save(operator);
-
-  //         String requestBody = "{ \"name\": \"Station 1\", \"latitude\": 12.34, \"longitude\":
-  // 56.78, \"operatorId\": "
-  //                 + operator.getUserId()
-  //                 + " }";
-  //         // When & Then
-  //         mockMvc
-
-  // .perform(post("/api/v1/stations").contentType("application/json").content(requestBody))
-  //                 .andExpect(status().isCreated())
-  //                 .andExpect(content().contentType("application/json"))
-  //                 .andExpect(jsonPath("$.name").value("Station 1"))
-  //                 .andExpect(jsonPath("$.latitude").value(12.34))
-  //                 .andExpect(jsonPath("$.longitude").value(56.78));
-  //     }
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .body(
+            "{\"name\":\"Station 2\", \"latitude\": 12.34, \"longitude\": 56.78, \"address\": \"123 Main St\"}")
+        .when()
+        .post(getBaseUrl())
+        .then()
+        .statusCode(HttpStatus.CREATED.value())
+        .body("name", equalTo("Station 2"))
+        .body("latitude", equalTo(12.34f))
+        .body("longitude", equalTo(56.78f))
+        .body("address", equalTo("123 Main St"));
+  }
 }

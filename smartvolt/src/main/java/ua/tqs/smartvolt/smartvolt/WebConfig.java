@@ -17,13 +17,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class WebConfig {
 
-  @Value("${FRONTEND_PORT}")
+  @Value("${FRONTEND_PORT:80}")
   private String frontendPort;
 
-  @Value("${FRONTEND_IP}")
+  @Value("${FRONTEND_IP:localhost}")
   private String frontendIp;
 
-  @Value("${FRONTEND_PROTOCOL}")
+  @Value("${FRONTEND_PROTOCOL:http}")
   private String frontendprotocol;
 
   @Bean
