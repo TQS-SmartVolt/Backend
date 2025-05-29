@@ -1,109 +1,118 @@
-// package ua.tqs.smartvolt.smartvolt.integration;
+package ua.tqs.smartvolt.smartvolt.integration;
 
-// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
-// import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Tag;
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-// import org.springframework.test.web.servlet.MockMvc;
+import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-// import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
-// import ua.tqs.smartvolt.smartvolt.models.StationOperator;
-// import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
-// import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
+@Testcontainers
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+// @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ActiveProfiles("testcontainers")
+class ChargingStationControllerIT {
 
-// @WebMvcTest(ChargingStationController.class)
-// class ChargingStationControllerIT {
+  @Container
+  public static final PostgreSQLContainer<?> container =
+      new PostgreSQLContainer<>("postgres:12")
+          .withDatabaseName("meals_db")
+          .withUsername("testuser")
+          .withPassword("testpass");
 
-//     @Autowired
-//     private MockMvc mockMvc; //Mock the MVC layer
+  @DynamicPropertySource
+  static void overrideProps(DynamicPropertyRegistry registry) {
+    registry.add("spring.datasource.url", container::getJdbcUrl);
+    registry.add("spring.datasource.username", container::getUsername);
+    registry.add("spring.datasource.password", container::getPassword);
+  }
 
-//     @Autowired
-//     private ChargingStationRepository chargingStationRepository;
+  @LocalServerPort private int port;
 
-//     @Autowired
-//     private StationOperatorRepository stationOperatorRepository;
+  private String getBaseUrl() {
+    return "http://localhost:" + port + "/api/v1/stations";
+  }
 
-//     @BeforeEach
-//     void setUp() {
-//         // Clear the repository before each test
-//         chargingStationRepository.deleteAll();
-//         stationOperatorRepository.deleteAll();
-//     }
+  private String getLoginUrl() {
+    return "http://localhost:" + port + "/api/v1/auth/sign-in";
+  }
 
-//     @Test
-//     @Tag("IT-Fast")
-//     @Requirement("SV-34")
-//     void testGetAllChargingStations_WhenOperatorNotExists_ThrowsResourceNotFoundException()
-//             throws Exception {
-//         Long operatorId = 999L; // Non-existing operator ID
+  String validSvToken;
 
-//         // When & Then
-//         mockMvc
-//                 .perform(get("/api/v1/stations?operatorId=" + operatorId))
-//                 .andExpect(status().isNotFound())
-//                 .andExpect(content().string("Operator not found with id: " + operatorId));
-//     }
+  @BeforeEach
+  public void setUp() {
+    validSvToken =
+        given()
+            .contentType("application/json")
+            .body("{\"email\":\"test@example.com\", \"password\":\"password123\"}")
+            .post(getLoginUrl())
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .path("token");
 
-//     @Test
-//     @Tag("IT-Fast")
-//     @Requirement("SV-34")
-//     void testGetAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations()
-//             throws Exception {
-//         // Given
-//         StationOperator operator = new StationOperator();
-//         operator.setName("Test Operator");
-//         operator.setEmail("test@example.com");
-//         operator.setPassword("password");
-//         stationOperatorRepository.save(operator);
+    System.out.println("> Valid SV Token: " + validSvToken);
+  }
 
-//         ChargingStation station1 = new ChargingStation();
-//         station1.setName("Station 1");
-//         station1.setLatitude(12.34);
-//         station1.setLongitude(56.78);
-//         station1.setAddress("Address 1");
-//         station1.setAvailability(true);
-//         station1.setOperator(operator);
-//         chargingStationRepository.save(station1);
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34")
+  void getAllChargingStations_WhenOperatorNotExists_ThenThrowsResourceNotFoundException()
+      throws Exception {
+    String invalidSvToken = "invalid-token";
 
-//         // When & Then
-//         mockMvc
-//                 .perform(get("/api/v1/stations?operatorId=" + operator.getUserId()))
-//                 .andExpect(status().isOk())
-//                 .andExpect(content().contentType("application/json"))
-//                 .andExpect(jsonPath("$[0].name").value("Station 1"));
-//     }
+    given()
+        .contentType("application/json")
+        .cookie("sv_token", invalidSvToken)
+        .when()
+        .get(getBaseUrl())
+        .then()
+        .statusCode(HttpStatus.FORBIDDEN.value());
+  }
 
-//     @Test
-//     @Tag("IT-Fast")
-//     @Requirement("SV-34")
-//     void testCreateChargingStation_WhenOperatorExists_CreatesChargingStation() throws Exception {
-//         // Given
-//         StationOperator operator = new StationOperator();
-//         operator.setName("Test Operator");
-//         operator.setEmail("test@example.com");
-//         operator.setPassword("password");
-//         stationOperatorRepository.save(operator);
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34")
+  void getAllChargingStations_WhenOperatorExists_ThenListOfChargingStations() throws Exception {
 
-//         String requestBody = "{ \"name\": \"Station 1\", \"latitude\": 12.34, \"longitude\":
-// 56.78, \"operatorId\": "
-//                 + operator.getUserId()
-//                 + " }";
-//         // When & Then
-//         mockMvc
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .when()
+        .get(getBaseUrl())
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("$", hasSize(greaterThan(0)))
+        .body("[0].name", equalTo("Station 1"));
+  }
 
-// .perform(post("/api/v1/stations").contentType("application/json").content(requestBody))
-//                 .andExpect(status().isCreated())
-//                 .andExpect(content().contentType("application/json"))
-//                 .andExpect(jsonPath("$.name").value("Station 1"))
-//                 .andExpect(jsonPath("$.latitude").value(12.34))
-//                 .andExpect(jsonPath("$.longitude").value(56.78));
-//     }
-// }
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34")
+  void createChargingStation_WhenOperatorExists_ThenCreatesChargingStation() throws Exception {
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .body(
+            "{\"name\":\"Station 2\", \"latitude\": 12.34, \"longitude\": 56.78, \"address\": \"123 Main St\"}")
+        .when()
+        .post(getBaseUrl())
+        .then()
+        .statusCode(HttpStatus.CREATED.value())
+        .body("name", equalTo("Station 2"))
+        .body("latitude", equalTo(12.34f))
+        .body("longitude", equalTo(56.78f))
+        .body("address", equalTo("123 Main St"));
+  }
+}
