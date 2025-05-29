@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.functional_tests;
+package ua.tqs.smartvolt.smartvolt.steps;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
@@ -10,6 +10,6 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("ua/tqs/smartvolt/smartvolt")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "ua.tqs.smartvolt.smartvolt")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "ua.tqs.smartvolt.smartvolt.steps")
 @ConfigurationParameter(key = "cucumber.filter.tags", value = "@UAT-Web")
 public class CucumberTest {}
