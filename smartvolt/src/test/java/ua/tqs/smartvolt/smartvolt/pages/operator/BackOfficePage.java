@@ -2,6 +2,7 @@ package ua.tqs.smartvolt.smartvolt.pages.operator;
 
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,8 +31,8 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-station']")
   private WebElement confirmAddStationButton;
 
-  public BackOfficePage() {
-    super();
+  public BackOfficePage(WebDriver driver) {
+    super(driver);
   }
 
   // Access methods for WebElements
