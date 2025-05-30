@@ -64,11 +64,11 @@ public class ChargingStationService {
 
   public ChargingStationsResponse getChargingStationsByChargingSpeed(String[] chargingSpeeds)
       throws ResourceNotFoundException {
-    
+
     if (chargingSpeeds == null || chargingSpeeds.length == 0) {
-        throw new ResourceNotFoundException("No charging speeds provided");
+      throw new ResourceNotFoundException("No charging speeds provided");
     }
-    
+
     // Use a Set to avoid duplicate stations
     Set<ChargingStation> stationsSet = new HashSet<>();
 
@@ -79,7 +79,8 @@ public class ChargingStationService {
     }
 
     if (stationsSet.isEmpty()) {
-      throw new ResourceNotFoundException("No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
+      throw new ResourceNotFoundException(
+          "No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
     }
 
     List<ChargingStationResponse> stationResponses = new ArrayList<>();
@@ -108,7 +109,7 @@ public class ChargingStationService {
 
     return new ChargingStationsResponse(stationResponses);
   }
-  
+
   public ChargingStation updateChargingStationStatus(Long stationId, boolean activate)
       throws ResourceNotFoundException {
     ChargingStation chargingStation =

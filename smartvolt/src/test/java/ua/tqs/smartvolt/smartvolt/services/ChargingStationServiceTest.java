@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +64,7 @@ public class ChargingStationServiceTest {
         List.of(
             new ChargingStation("Station 1", 12.34, 56.78, "Address 1", true, stationOperator),
             new ChargingStation("Station 2", 23.45, 67.89, "Address 2", true, stationOperator));
-    
+
     // Setup for getChargingStationsByChargingSpeed tests
     stationA = new ChargingStation("Station A", 40.0, -8.0, "Address A", true, stationOperator);
     stationB = new ChargingStation("Station B", 41.0, -9.0, "Address B", true, stationOperator);
@@ -231,8 +230,7 @@ public class ChargingStationServiceTest {
     // Mock findByStation for each found station to get their distinct speeds
     when(chargingSlotRepository.findByStation(stationA))
         .thenReturn(Arrays.asList(slotA_Slow, slotA_Medium));
-    when(chargingSlotRepository.findByStation(stationB))
-        .thenReturn(Arrays.asList(slotB_Fast));
+    when(chargingSlotRepository.findByStation(stationB)).thenReturn(Arrays.asList(slotB_Fast));
 
     // Act
     ChargingStationsResponse response =
@@ -245,12 +243,14 @@ public class ChargingStationServiceTest {
     // Verify StationA details
     assertThat(response.getStations().get(0).getStationId()).isEqualTo(stationA.getStationId());
     assertThat(response.getStations().get(0).getName()).isEqualTo(stationA.getName());
-    assertThat(response.getStations().get(0).getStationSlotChargingSpeeds()).containsExactlyInAnyOrder("Slow", "Medium");
+    assertThat(response.getStations().get(0).getStationSlotChargingSpeeds())
+        .containsExactlyInAnyOrder("Slow", "Medium");
 
     // Verify StationB details
     assertThat(response.getStations().get(1).getStationId()).isEqualTo(stationB.getStationId());
     assertThat(response.getStations().get(1).getName()).isEqualTo(stationB.getName());
-    assertThat(response.getStations().get(1).getStationSlotChargingSpeeds()).containsExactlyInAnyOrder("Fast");
+    assertThat(response.getStations().get(1).getStationSlotChargingSpeeds())
+        .containsExactlyInAnyOrder("Fast");
 
     // Verify repository calls
     verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Slow");
@@ -274,10 +274,12 @@ public class ChargingStationServiceTest {
             ResourceNotFoundException.class,
             () -> chargingStationService.getChargingStationsByChargingSpeed(speeds));
 
-    String expectedMessage = "No charging stations found for the given speeds: " + Arrays.toString(speeds);
+    String expectedMessage =
+        "No charging stations found for the given speeds: " + Arrays.toString(speeds);
     assertThat(exception.getMessage()).isEqualTo(expectedMessage);
 
-    // Verify findStationsByChargingSpeed was called for each speed, but findByStation was never called
+    // Verify findStationsByChargingSpeed was called for each speed, but findByStation was never
+    // called
     verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Slow");
     verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Fast");
     verify(chargingSlotRepository, never()).findByStation(any(ChargingStation.class));
@@ -306,7 +308,8 @@ public class ChargingStationServiceTest {
   @Test
   @Tag("UnitTest")
   @Requirement("SV-19")
-  void getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException() {
+  void
+      getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException() {
     // Arrange
     String[] speeds = {};
 
@@ -322,5 +325,4 @@ public class ChargingStationServiceTest {
     verify(chargingSlotRepository, never()).findStationsByChargingSpeed(anyString());
     verify(chargingSlotRepository, never()).findByStation(any(ChargingStation.class));
   }
-
 }
