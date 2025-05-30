@@ -45,17 +45,27 @@ jobs:
         working-directory: smartvolt
 
     steps:
+      - name: Checkout AppConfig repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          repository: TQS-SmartVolt/AppConfig
+          token: ${{ secrets.SMART_VOLT_SECRET }}
+
+      - name: Staging with Docker Compose
+        run: |
+          set -a
+          source .env.staging
+          docker compose --file compose.prod.yml down
+          docker compose --file compose.prod.yml up -d --build
+        env:
+          DOCKER_PORT: 8080
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-          cache: maven
 
       - name: Run UAT Web Tests
         run: mvn -B test -Dtests=UAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
