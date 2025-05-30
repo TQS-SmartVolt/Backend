@@ -28,7 +28,6 @@ public class DataLoaderDev implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvDriverRepository evDriverRepository;
   private final BookingRepository bookingRepository;
-  private StationOperator stationOperator;
 
   public DataLoaderDev(
       StationOperatorRepository sor,
@@ -72,7 +71,7 @@ public class DataLoaderDev implements CommandLineRunner {
     dropDatabase();
 
     // Create Station Operator
-    stationOperator =
+    StationOperator stationOperator =
         new StationOperator(
             "John Doe", "johndoe@example.com", passwordEncoder.encode("password123"));
 
