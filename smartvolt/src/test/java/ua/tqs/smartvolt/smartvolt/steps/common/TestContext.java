@@ -1,8 +1,10 @@
 package ua.tqs.smartvolt.smartvolt.steps.common;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Value;
+
+import ua.tqs.smartvolt.smartvolt.MyTestConfiguration;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 
@@ -11,9 +13,27 @@ public class TestContext {
   private LoginPage loginPage;
   private BackOfficePage backOfficePage;
 
+  public static String FRONTEND_PROTOCOL = "http";
+  public static String FRONTEND_IP = MyTestConfiguration.getHost();
+  public static String FRONTEND_PORT = "80"; 
+
+  private BrowserSelenium container;
+
   public void initialize() {
-    WebDriverManager.chromedriver().setup();
-    this.driver = new ChromeDriver();
+
+    if (FRONTEND_IP.equals("host.testcontainers.internal")) {
+
+      // Testcontainers!
+      container = BrowserSelenium.getBrowserContainer();
+      org.testcontainers.Testcontainers.exposeHostPorts(Integer.parseInt(FRONTEND_PORT));
+      container.browser.start();
+
+      this.driver = new RemoteWebDriver(container.browser.getSeleniumAddress(), container.options);
+
+    } else {
+      this.driver = BrowserSelenium.getWebDriver();
+    }
+
     this.loginPage = new LoginPage(driver);
     this.backOfficePage = new BackOfficePage(driver);
   }
@@ -34,5 +54,10 @@ public class TestContext {
     if (driver != null) {
       driver.quit();
     }
+    if (container != null && container.browser != null) {
+      container.browser.stop();
+      container.browser.close();
+    }
   }
+
 }

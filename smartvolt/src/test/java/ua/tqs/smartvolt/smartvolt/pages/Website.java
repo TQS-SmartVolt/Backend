@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ua.tqs.smartvolt.smartvolt.steps.common.TestContext;
 
 public class Website {
 
@@ -13,17 +14,19 @@ public class Website {
 
   private String websiteUrl;
 
-  private int UAT_WEB_DELAY_SECONDS = 5;
+  private int UAT_WEB_DELAY_SECONDS = 10;
 
-  public Website(
-      WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
+  public Website(WebDriver driver) {
     this.driver = driver;
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     PageFactory.initElements(driver, this);
 
-    this.websiteUrl = String.format("%s://%s:%s", frontendProtocol, frontendIp, frontendPort);
+    this.websiteUrl =
+        String.format(
+            "%s://%s:%s",
+            TestContext.FRONTEND_PROTOCOL, TestContext.FRONTEND_IP, TestContext.FRONTEND_PORT);
     System.out.println("Website URL: " + this.websiteUrl);
   }
 

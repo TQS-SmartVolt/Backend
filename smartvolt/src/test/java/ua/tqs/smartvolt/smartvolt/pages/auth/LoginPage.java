@@ -17,9 +17,8 @@ public class LoginPage extends Website {
   @FindBy(css = "[data-testid='login-submit-button']")
   private WebElement loginSubmitButton;
 
-  public LoginPage(
-      WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
-    super(driver, frontendProtocol, frontendIp, frontendPort);
+  public LoginPage(WebDriver driver) {
+    super(driver);
   }
 
   // Access methods for WebElements
@@ -27,18 +26,23 @@ public class LoginPage extends Website {
     navigateTo("/login");
 
     // Email
+    System.out.println("Entering email: " + email);
     wait.until(ExpectedConditions.visibilityOf(loginEmailInput));
     loginEmailInput.sendKeys(email);
 
     // Password
+    System.out.println("Entering password: " + password);
     wait.until(ExpectedConditions.visibilityOf(loginPasswordInput));
     loginPasswordInput.sendKeys(password);
 
     // Submit
+    System.out.println("Clicking submit button");
     wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
     loginSubmitButton.click();
 
+    System.out.println("Waiting for redirection after login...");
     if (isOperator) {
+      System.out.println("Expecting redirection to operator page");
       wait.until(ExpectedConditions.urlContains("/operator"));
     } else {
       wait.until(ExpectedConditions.urlContains("/service/stations-map"));
