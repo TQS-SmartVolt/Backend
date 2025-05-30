@@ -1,13 +1,19 @@
 package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
+import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
+import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
+import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.UserRepository;
 
@@ -18,6 +24,9 @@ public class DataLoaderUAT implements CommandLineRunner {
   private final PasswordEncoder passwordEncoder;
   private final StationOperatorRepository stationOperatorRepository;
   private final ChargingStationRepository chargingStationRepository;
+  private final ChargingSlotRepository chargingSlotRepository;
+  private final EvDriverRepository evDriverRepository;
+  private final BookingRepository bookingRepository;
   private final UserRepository userRepository;
 
   public static StationOperator stationOperator;
@@ -25,18 +34,27 @@ public class DataLoaderUAT implements CommandLineRunner {
   public DataLoaderUAT(
       StationOperatorRepository sor,
       ChargingStationRepository csr,
+      ChargingSlotRepository cslr,
+      EvDriverRepository evr,
+      BookingRepository bR,
       UserRepository ur,
       PasswordEncoder passwordEncoder) {
     this.stationOperatorRepository = sor;
     this.chargingStationRepository = csr;
+    this.chargingSlotRepository = cslr;
+    this.evDriverRepository = evr;
+    this.bookingRepository = bR;
     this.userRepository = ur;
     this.passwordEncoder = passwordEncoder;
   }
 
   private void dropDatabase() {
-    // Increment this!a
+    // Order matters due to foreign key constraints
+    bookingRepository.deleteAll(); // Delete bookings first
+    chargingSlotRepository.deleteAll(); // Then slots
     chargingStationRepository.deleteAll();
     stationOperatorRepository.deleteAll();
+    evDriverRepository.deleteAll(); // Also delete EvDrivers
     userRepository.deleteAll();
     System.out.println("Database cleared.");
   }
@@ -61,6 +79,13 @@ public class DataLoaderUAT implements CommandLineRunner {
     System.out.printf(
         "Station Operator created: %s with ID %s%n",
         stationOperator.getName(), stationOperator.getUserId());
+
+    // Create EV Driver
+    EvDriver testEvDriver =
+        new EvDriver("Jane Smith", "jane@example.com", passwordEncoder.encode("password123"));
+    evDriverRepository.saveAndFlush(testEvDriver);
+    System.out.printf(
+        "EV Driver created: %s with ID %s%n", testEvDriver.getName(), testEvDriver.getUserId());
 
     // Create Charging Stations
     ChargingStation testChargingStationA =
@@ -90,6 +115,20 @@ public class DataLoaderUAT implements CommandLineRunner {
     System.out.printf(
         "Charging Station created: %s with ID %s%n",
         testChargingStationC.getName(), testChargingStationC.getStationId());
+
+    // Create Charging Slots for the stations with different speeds
+    chargingSlotRepository.saveAll(
+        List.of(
+            // Station A: 1 Slow, 1 Medium
+            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStationA),
+            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStationA),
+
+            // Station B: 1 Fast
+            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStationB),
+
+            // Station C: 1 Slow (initially inactive)
+            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStationC)));
+    System.out.println("Charging slots created.");
 
     System.out.println("DataLoader finished.");
   }
