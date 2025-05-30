@@ -21,12 +21,6 @@ public class EvDriverStationSteps {
     this.serviceStationsMapPage = this.context.getServiceStationsMapPage();
   }
 
-  // This step is now handled by CommonSteps if you adopt the suggested change
-  // @Given("the website is available at page {string}")
-  // public void theWebsiteIsAvailableAtPage(String page) {
-  //     serviceStationsMapPage.navigateTo(page);
-  // }
-
   @Then("I should see the map displayed")
   public void iShouldSeeTheMapDisplayed() {
     assertTrue(serviceStationsMapPage.isMapDisplayed(), "The map should be displayed.");

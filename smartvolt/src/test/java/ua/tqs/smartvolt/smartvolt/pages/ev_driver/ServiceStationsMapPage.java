@@ -48,10 +48,26 @@ public class ServiceStationsMapPage extends Website {
   // --- Page Actions ---
 
   public boolean isMapDisplayed() {
+    System.out.println("DEBUG: ServiceStationsMapPage.isMapDisplayed() - Entering method.");
     try {
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - Waiting for visibility of mapContainer ([data-testid='station-map-container'])...");
       wait.until(ExpectedConditions.visibilityOf(mapContainer));
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - mapContainer is visible. Now waiting for a Leaflet map tile ([data-testid='station-map-container'] img.leaflet-tile)...");
+
+      // This wait ensures the actual map content (tiles) has loaded
+      wait.until(
+          ExpectedConditions.visibilityOfElementLocated(
+              By.cssSelector("[data-testid='station-map-container'] img.leaflet-tile")));
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - Map tiles are visible. Map is considered displayed.");
+
       return mapContainer.isDisplayed();
     } catch (Exception e) {
+      System.err.println(
+          "ERROR: ServiceStationsMapPage.isMapDisplayed() - Map display check failed: "
+              + e.getMessage());
       return false;
     }
   }

@@ -17,7 +17,7 @@ public class Website {
 
   private String websiteUrl;
 
-  private int UAT_WEB_DELAY_SECONDS = 1;
+  private int UAT_WEB_DELAY_SECONDS = 30;
 
   public Website(WebDriver driver) {
     this.driver = driver;
