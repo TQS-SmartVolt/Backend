@@ -83,6 +83,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Display directory structure
+        run: ls -R
+
       - name: Change working directory
         run: cd smartvolt/backend
 
