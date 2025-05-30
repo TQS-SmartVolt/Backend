@@ -28,7 +28,7 @@ public class DataLoaderDev implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvDriverRepository evDriverRepository;
   private final BookingRepository bookingRepository;
-  public static StationOperator stationOperator;
+  private StationOperator stationOperator;
 
   public DataLoaderDev(
       StationOperatorRepository sor,
