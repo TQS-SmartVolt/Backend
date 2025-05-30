@@ -3,7 +3,7 @@ Feature: Register Station
   To allow operators to register new stations.
 
   Background:
-    Given the operator is logged in with email "johndoe@example.com" and password "password123"
+    Given the operator is logged in with email "johndoe@example.com" and password "StrongPassword!"
     And the website is available at page "/operator"
 
   Scenario: Add a new Station

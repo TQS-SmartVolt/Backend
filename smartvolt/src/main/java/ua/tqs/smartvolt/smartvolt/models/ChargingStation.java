@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
@@ -23,7 +24,9 @@ public class ChargingStation {
   private String address;
   private boolean availability;
 
-  @ManyToOne private StationOperator operator;
+  @ManyToOne
+  @JoinColumn(name = "operator_id")
+  private StationOperator operator;
 
   @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
   private List<ChargingSlot> slots;
