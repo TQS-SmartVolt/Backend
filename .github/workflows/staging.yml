@@ -84,10 +84,10 @@ jobs:
           fetch-depth: 0
 
       - name: Display directory structure
-        run: ls -R
+        run: ls -R smartvolt
 
       - name: Change working directory
-        run: cd smartvolt/backend
+        run: cd smartvolt
 
       - name: Set up JDK
         uses: actions/setup-java@v4
