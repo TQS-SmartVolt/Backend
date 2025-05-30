@@ -2,6 +2,7 @@ package ua.tqs.smartvolt.smartvolt.pages.operator;
 
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -91,9 +92,19 @@ public class BackOfficePage extends Website {
 
   public String getStationCardAvailability(WebElement stationCard) {
     wait.until(ExpectedConditions.visibilityOf(stationCard));
-    WebElement availabilityElement =
-        stationCard.findElement(By.cssSelector("[data-testid='station-card-active']"));
-    return availabilityElement.getText();
+    try {
+      WebElement activeLabel =
+          wait.until(
+              ExpectedConditions.presenceOfNestedElementLocatedBy(
+                  stationCard, By.cssSelector("[data-testid='station-card-active']")));
+      return activeLabel.getText();
+    } catch (TimeoutException e) {
+      WebElement inactiveLabel =
+          wait.until(
+              ExpectedConditions.presenceOfNestedElementLocatedBy(
+                  stationCard, By.cssSelector("[data-testid='station-card-inactive']")));
+      return inactiveLabel.getText();
+    }
   }
 
   public int getStationCardNumSlots(WebElement stationCard) {

@@ -3,7 +3,7 @@ Feature: Change Station Status
   To allow operators to change stations status
 
   Background:
-    Given the operator is logged in with email "johndoe@example.com" and password "password123"
+    Given the operator is logged in with email "johndoe@example.com" and password "StrongPassword!"
     And the website is available at page "/operator"
 
   Scenario: Deactivate a station
@@ -11,4 +11,4 @@ Feature: Change Station Status
     And the operator fills in the form with reason "Maintenance"
     And the operator confirms the "deactivation" action
 
-    Then station 4 should have the status "Inactive"
+    Then station 2 should have the status "Inactive"
