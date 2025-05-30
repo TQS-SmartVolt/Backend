@@ -572,10 +572,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
 
             <plugin>
                 <groupId>app.getxray</groupId>
@@ -587,6 +583,10 @@
                     <reportFormat>junit</reportFormat>
                     <reportFile>reports/TEST-junit-jupiter.xml</reportFile>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

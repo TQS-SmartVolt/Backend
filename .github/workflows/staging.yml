@@ -99,7 +99,7 @@ jobs:
 
   capacity-stage:
     runs-on: self-hosted
-    needs: uat-stage
+    # needs: uat-stage
 
     permissions:
       contents: read
