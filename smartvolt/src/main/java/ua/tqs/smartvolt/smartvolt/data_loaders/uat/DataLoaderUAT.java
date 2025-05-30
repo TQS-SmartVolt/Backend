@@ -55,7 +55,7 @@ public class DataLoaderUAT implements CommandLineRunner {
     // Create Station Operator
     stationOperator =
         new StationOperator(
-            "John Doe", "johndoe@example.com", passwordEncoder.encode("password123"));
+            "John Doe", "johndoe@example.com", passwordEncoder.encode("StrongPassword!"));
 
     stationOperatorRepository.saveAndFlush(stationOperator);
     System.out.printf(

@@ -17,8 +17,9 @@ public class LoginPage extends Website {
   @FindBy(css = "[data-testid='login-submit-button']")
   private WebElement loginSubmitButton;
 
-  public LoginPage(WebDriver driver) {
-    super(driver);
+  public LoginPage(
+      WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
+    super(driver, frontendProtocol, frontendIp, frontendPort);
   }
 
   // Access methods for WebElements

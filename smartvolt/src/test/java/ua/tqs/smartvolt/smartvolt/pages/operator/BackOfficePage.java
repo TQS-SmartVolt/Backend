@@ -31,8 +31,9 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-station']")
   private WebElement confirmAddStationButton;
 
-  public BackOfficePage(WebDriver driver) {
-    super(driver);
+  public BackOfficePage(
+      WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
+    super(driver, frontendProtocol, frontendIp, frontendPort);
   }
 
   // Access methods for WebElements

@@ -11,22 +11,20 @@ public class Website {
   protected WebDriver driver;
   protected Wait<WebDriver> wait;
 
-  private String frontendprotocol = "http";
-  private String frontendIp = "localhost";
-  private String frontendPort = "80";
-
   private String websiteUrl;
 
-  private int UAT_WEB_DELAY_SECONDS = 1;
+  private int UAT_WEB_DELAY_SECONDS = 5;
 
-  public Website(WebDriver driver) {
+  public Website(
+      WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
     this.driver = driver;
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     PageFactory.initElements(driver, this);
 
-    this.websiteUrl = String.format("%s://%s:%s", frontendprotocol, frontendIp, frontendPort);
+    this.websiteUrl = String.format("%s://%s:%s", frontendProtocol, frontendIp, frontendPort);
+    System.out.println("Website URL: " + this.websiteUrl);
   }
 
   public void quit() {
@@ -34,6 +32,7 @@ public class Website {
   }
 
   public void navigateTo(String page) {
+    System.out.println("Navigating to: " + websiteUrl + page);
     driver.get(websiteUrl + page);
   }
 

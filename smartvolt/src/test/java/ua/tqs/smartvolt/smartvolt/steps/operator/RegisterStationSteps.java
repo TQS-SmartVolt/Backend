@@ -13,7 +13,6 @@ import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -26,16 +25,28 @@ public class RegisterStationSteps {
   private LoginPage loginPage;
   private List<WebElement> stationCards;
 
+  // container {
+  // @Container
+  // private BrowserWebDriverContainer<?> chrome;
+  // // }
+
+  private String frontendProtocol = "http";
+  private String frontendIp = "localhost"; // Use host.testcontainers.internal for local testing
+  private String frontendPort = "80";
+
   @Before
   public void setup() {
     System.out.println("Setting up WebDriver...");
+    System.out.println(
+        "Frontend Full URL: " + frontendProtocol + "://" + frontendIp + ":" + frontendPort);
 
     WebDriverManager.chromedriver().setup();
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" + System.currentTimeMillis());
-    this.driver = new ChromeDriver(options);
-    this.backOfficePage = new BackOfficePage(driver);
-    this.loginPage = new LoginPage(driver);
+    this.driver = new ChromeDriver();
+    // driver.navigate().to(frontendProtocol + "://" + frontendIp + ":" + frontendPort);
+
+    this.backOfficePage =
+        new BackOfficePage(this.driver, frontendProtocol, frontendIp, frontendPort);
+    this.loginPage = new LoginPage(this.driver, frontendProtocol, frontendIp, frontendPort);
   }
 
   @After

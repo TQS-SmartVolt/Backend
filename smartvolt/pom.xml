@@ -249,14 +249,17 @@
 			<artifactId>postgresql</artifactId>
 			<scope>test</scope>
 		</dependency>
-    		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>1.21.1</version>
+    <scope>test</scope>
+</dependency>
+
         <dependency>
     <groupId>org.testcontainers</groupId>
     <artifactId>selenium</artifactId>
+    <version>1.21.1</version>
     <scope>test</scope>
 </dependency>
 <dependency>
@@ -329,6 +332,12 @@
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>selenium-jupiter</artifactId>
+            <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
 		<!-- <dependency>
@@ -548,6 +557,11 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
 
             <plugin>
                 <groupId>app.getxray</groupId>
