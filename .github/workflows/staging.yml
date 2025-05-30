@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
 
       - name: Change working directory
-        run: cd smartvolt
+        run: cd smartvolt/backend
 
       - name: Set up JDK
         uses: actions/setup-java@v4
