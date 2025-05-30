@@ -42,7 +42,7 @@ jobs:
         java: [17]
     defaults:
       run:
-        working-directory: smartvolt
+        working-directory: backend
 
     steps:
       - name: Checkout AppConfig repository
