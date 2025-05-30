@@ -15,7 +15,7 @@ public class EvDriver extends User {
   // Getters and setters...
 
   @Override
-  public boolean equals(Object o) { 
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     return super.equals(o);

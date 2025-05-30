@@ -2,7 +2,6 @@ package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
 
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -27,8 +26,7 @@ public class DataLoaderUAT implements CommandLineRunner {
       StationOperatorRepository sor,
       ChargingStationRepository csr,
       UserRepository ur,
-      PasswordEncoder passwordEncoder
-      ) {
+      PasswordEncoder passwordEncoder) {
     this.stationOperatorRepository = sor;
     this.chargingStationRepository = csr;
     this.userRepository = ur;

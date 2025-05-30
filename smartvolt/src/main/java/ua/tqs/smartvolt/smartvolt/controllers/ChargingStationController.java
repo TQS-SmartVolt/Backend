@@ -2,28 +2,26 @@ package ua.tqs.smartvolt.smartvolt.controllers;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
-import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
-import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 
 @RestController
 @RequestMapping("/api/v1/stations")
@@ -31,7 +29,8 @@ public class ChargingStationController {
   private final ChargingStationService chargingStationService;
   private final ChargingSlotService chargingSlotService;
 
-  public ChargingStationController(ChargingStationService chargingStationService, ChargingSlotService chargingSlotService) {
+  public ChargingStationController(
+      ChargingStationService chargingStationService, ChargingSlotService chargingSlotService) {
     this.chargingStationService = chargingStationService;
     this.chargingSlotService = chargingSlotService;
   }
@@ -55,18 +54,17 @@ public class ChargingStationController {
   }
 
   @GetMapping("{stationId}/slots")
-  public ChargingSlotsResponse getChargingSlotsByStationId( 
-    @PathVariable Long stationId,
-    @RequestParam String chargingSpeed,
-    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-  ) throws ResourceNotFoundException {
+  public ChargingSlotsResponse getChargingSlotsByStationId(
+      @PathVariable Long stationId,
+      @RequestParam String chargingSpeed,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
+      throws ResourceNotFoundException {
     return chargingSlotService.getAvailableSlots(stationId, chargingSpeed, date);
   }
 
   @GetMapping("/map")
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
-    @RequestParam String[] chargingSpeeds
-  ) throws ResourceNotFoundException {
+      @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
   }
 }

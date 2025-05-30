@@ -33,7 +33,7 @@ public class BookingController {
 
   @PostMapping("/{bookingId}/finalize-payment")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
-      bookingService.finalizeBookingPayment(bookingId);
+    bookingService.finalizeBookingPayment(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")

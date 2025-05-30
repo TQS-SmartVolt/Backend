@@ -40,7 +40,8 @@ public class ChargingStationServiceTest {
   @BeforeEach
   void setUp() {
     chargingStationService =
-        new ChargingStationService(chargingStationRepository, stationOperatorRepository, chargingSlotRepository);
+        new ChargingStationService(
+            chargingStationRepository, stationOperatorRepository, chargingSlotRepository);
 
     stationOperator = new StationOperator();
     stationOperator.setUserId(OPERATOR_ID);

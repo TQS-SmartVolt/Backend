@@ -46,6 +46,7 @@ public class ChargingSlot {
   public boolean isLocked() {
     return isLocked;
   }
+
   public void setLocked(boolean locked) {
     isLocked = locked;
   }
@@ -53,6 +54,7 @@ public class ChargingSlot {
   public double getPricePerKWh() {
     return pricePerKWh;
   }
+
   public void setPricePerKWh(double pricePerKWh) {
     this.pricePerKWh = pricePerKWh;
   }
@@ -60,6 +62,7 @@ public class ChargingSlot {
   public double getPower() {
     return power;
   }
+
   public void setPower(double power) {
     this.power = power;
   }
@@ -67,14 +70,15 @@ public class ChargingSlot {
   public String getChargingSpeed() {
     return chargingSpeed;
   }
+
   public void setChargingSpeed(String chargingSpeed) {
     this.chargingSpeed = chargingSpeed;
   }
 
-
   public ChargingStation getStation() {
     return station;
   }
+
   public void setStation(ChargingStation station) {
     this.station = station;
   }

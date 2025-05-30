@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,10 +24,10 @@ public class ChargingSlotService {
   private final ChargingStationRepository chargingStationRepository;
   private final BookingRepository bookingRepository;
 
-  public ChargingSlotService(ChargingSlotRepository chargingSlotRepository,
-                             ChargingStationRepository chargingStationRepository,
-                             BookingRepository bookingRepository
-                             ) {
+  public ChargingSlotService(
+      ChargingSlotRepository chargingSlotRepository,
+      ChargingStationRepository chargingStationRepository,
+      BookingRepository bookingRepository) {
     this.chargingSlotRepository = chargingSlotRepository;
     this.chargingStationRepository = chargingStationRepository;
     this.bookingRepository = bookingRepository;
@@ -53,14 +52,22 @@ public class ChargingSlotService {
     return response;
   }
 
-  public ChargingSlotsResponse getAvailableSlots(Long stationId, String chargingSpeed, LocalDate date) throws ResourceNotFoundException {
-    ChargingStation station = chargingStationRepository.findById(stationId)
-        .orElseThrow(() -> new ResourceNotFoundException("Charging station not found with id: " + stationId));
+  public ChargingSlotsResponse getAvailableSlots(
+      Long stationId, String chargingSpeed, LocalDate date) throws ResourceNotFoundException {
+    ChargingStation station =
+        chargingStationRepository
+            .findById(stationId)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Charging station not found with id: " + stationId));
 
-    List<ChargingSlot> matchingSlots = chargingSlotRepository.findByStationAndChargingSpeed(station, chargingSpeed);
+    List<ChargingSlot> matchingSlots =
+        chargingSlotRepository.findByStationAndChargingSpeed(station, chargingSpeed);
 
     if (matchingSlots.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No slots found for the given speed.");
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, "No slots found for the given speed.");
     }
 
     Map<LocalDateTime, List<ChargingSlot>> slotAvailabilityMap = new HashMap<>();
@@ -68,25 +75,25 @@ public class ChargingSlotService {
     // Iterate over 48 half-hour slots in the selected day (00:00 to 23:30)
     LocalDateTime startOfDay = date.atStartOfDay();
     for (int i = 0; i < 48; i++) {
-        LocalDateTime slotTime = startOfDay.plusMinutes(30L * i);
-        for (ChargingSlot slot : matchingSlots) {
-          // Check if this slot is already booked at this time    
-          boolean isBooked = bookingRepository.existsBySlotAndStartTime(slot, slotTime);
+      LocalDateTime slotTime = startOfDay.plusMinutes(30L * i);
+      for (ChargingSlot slot : matchingSlots) {
+        // Check if this slot is already booked at this time
+        boolean isBooked = bookingRepository.existsBySlotAndStartTime(slot, slotTime);
 
-          
-          // If it's not booked, mark this slot as available for that time
-          if (!isBooked) {
-              slotAvailabilityMap.computeIfAbsent(slotTime, k -> new ArrayList<>()).add(slot);
-          }
+        // If it's not booked, mark this slot as available for that time
+        if (!isBooked) {
+          slotAvailabilityMap.computeIfAbsent(slotTime, k -> new ArrayList<>()).add(slot);
         }
+      }
     }
 
     // Convert available map to a flat list of slotId + time pairs
     List<ChargingSlotsResponse.SlotAvailability> availableSlotMapping = new ArrayList<>();
     for (Map.Entry<LocalDateTime, List<ChargingSlot>> entry : slotAvailabilityMap.entrySet()) {
-        for (ChargingSlot slot : entry.getValue()) {
-            availableSlotMapping.add(new ChargingSlotsResponse.SlotAvailability(slot.getSlotId(), entry.getKey()));
-        }
+      for (ChargingSlot slot : entry.getValue()) {
+        availableSlotMapping.add(
+            new ChargingSlotsResponse.SlotAvailability(slot.getSlotId(), entry.getKey()));
+      }
     }
 
     // Create and return the response DTO
@@ -96,5 +103,4 @@ public class ChargingSlotService {
 
     return response;
   }
-
 }

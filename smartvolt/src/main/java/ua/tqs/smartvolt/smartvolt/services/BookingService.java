@@ -6,12 +6,10 @@ import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
-import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
-import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
-import java.util.Optional;
+import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 
 @Service
 public class BookingService {
@@ -33,14 +31,16 @@ public class BookingService {
 
   public Booking createBooking(BookingRequest request, Long driverId) throws Exception {
     // Get the driver, slot and start time from the request
-    EvDriver evDriver = evDriverRepository
-        .findById(driverId)
-        .orElseThrow(() -> new Exception("Driver not found with id: " + driverId));
-  
-    Long slotId = slotId = request.getSlotId();
-    ChargingSlot slot = chargingSlotRepository
-        .findById(slotId)
-        .orElseThrow(() -> new Exception("Slot not found with id: " + slotId));
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new Exception("Driver not found with id: " + driverId));
+
+    final Long slotId = request.getSlotId();
+    ChargingSlot slot =
+        chargingSlotRepository
+            .findById(slotId)
+            .orElseThrow(() -> new Exception("Slot not found with id: " + slotId));
 
     LocalDateTime startTime = request.getStartTime();
     if (startTime == null) {
@@ -49,12 +49,16 @@ public class BookingService {
 
     // Create a new booking
     Booking booking = new Booking();
-    
-    double power = chargingSlotRepository.getPowerBySlotId(slotId)
-    .orElseThrow(() -> new Exception("Power not found for slotId: " + slotId));
 
-    double pricePerKWh = chargingSlotRepository.getPricePerKWhBySlotId(slotId)
-        .orElseThrow(() -> new Exception("Price not found for slotId: " + slotId));
+    final double power =
+        chargingSlotRepository
+            .getPowerBySlotId(slotId)
+            .orElseThrow(() -> new Exception("Power not found for slotId: " + slotId));
+
+    final double pricePerKWh =
+        chargingSlotRepository
+            .getPricePerKWhBySlotId(slotId)
+            .orElseThrow(() -> new Exception("Price not found for slotId: " + slotId));
 
     if (power < 0 || pricePerKWh < 0) {
       throw new Exception("Invalid power or price");
@@ -76,8 +80,9 @@ public class BookingService {
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
-    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
-    
+    Booking booking =
+        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime createdAt = booking.getCreatedAt();
     if (createdAt.plusMinutes(5).isBefore(now)) {
@@ -94,7 +99,8 @@ public class BookingService {
   }
 
   public void cancelBooking(Long bookingId) throws Exception {
-    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+    Booking booking =
+        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
     if (booking.getStatus().equals("Not Used")) {
       bookingRepository.delete(booking);
     } else {
