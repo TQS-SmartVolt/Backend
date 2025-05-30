@@ -18,6 +18,5 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="Logstash"/>
         </Root>
-
-        </Loggers>
+    </Loggers>
 </Configuration>
