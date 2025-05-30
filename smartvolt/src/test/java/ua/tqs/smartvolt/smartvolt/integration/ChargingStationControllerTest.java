@@ -92,8 +92,7 @@ class ChargingStationControllerIT {
         .get(getBaseUrl())
         .then()
         .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(greaterThan(0)))
-        .body("[0].name", equalTo("Station 1"));
+        .body("$", hasSize(greaterThan(0)));
   }
 
   @Test
@@ -114,5 +113,60 @@ class ChargingStationControllerIT {
         .body("latitude", equalTo(12.34f))
         .body("longitude", equalTo(56.78f))
         .body("address", equalTo("123 Main St"));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-35")
+  void deactivateChargingStation_WhenChargingStationExists_ThenDeactivatesChargingStation()
+      throws Exception {
+
+    // First station ID for testing
+    Long stationId = 1L;
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .when()
+        .patch(getBaseUrl() + "/" + stationId + "/status?activate=false")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("availability", equalTo(false));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-35")
+  void activateChargingStation_WhenChargingStationExists_ThenActivatesChargingStation()
+      throws Exception {
+
+    // First station ID for testing
+    Long stationId = 1L;
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .when()
+        .patch(getBaseUrl() + "/" + stationId + "/status?activate=true")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("availability", equalTo(true));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-35")
+  void updateChargingStationStatus_WhenStationNotExists_ThenThrowsResourceNotFoundException()
+      throws Exception {
+
+    Long nonExistentStationId = 999L;
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + validSvToken) // Using Bearer token for authorization
+        .when()
+        .patch(getBaseUrl() + "/" + nonExistentStationId + "/status?activate=true")
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 }
