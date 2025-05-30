@@ -27,7 +27,7 @@ jobs:
         with:
           submodules: true
           repository: TQS-SmartVolt/AppConfig
-          token: ${{ secrets.SMART_VOLT_SECRET }}
+          token: ${{ secrets.SMART_VOLT_SECRET }} 
 
       - name: Update .env.production and .env.staging with backend tag
         run: |
