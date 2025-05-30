@@ -36,7 +36,7 @@ jobs:
         run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
   uat-stage:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         java: [17]
