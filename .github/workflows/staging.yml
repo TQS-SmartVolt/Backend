@@ -60,6 +60,14 @@ jobs:
           repository: TQS-SmartVolt/AppConfig
           token: ${{ secrets.SMART_VOLT_SECRET }}
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: Staging with Docker Compose
         run: |
           set -a
