@@ -63,6 +63,7 @@ public class ChargingStationController {
   }
 
   @GetMapping("/map")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
       @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);

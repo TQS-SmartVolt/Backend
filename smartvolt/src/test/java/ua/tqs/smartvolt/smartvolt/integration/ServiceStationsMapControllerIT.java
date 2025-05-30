@@ -79,9 +79,11 @@ class ServiceStationsMapControllerIT {
         .get(getBaseUrl() + "/map")
         .then()
         .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(2)) // Station Slow (102) and Station Mixed (105)
-        .body("name", hasItems("Station Slow", "Station Mixed"))
-        .body("name", not(hasItems("Station Medium", "Station Fast", "Station 1")));
+        .body("stations", hasSize(2)) // Corrected JSON path
+        .body("stations.name", hasItems("Station Slow", "Station Mixed")) // Corrected JSON path
+        .body(
+            "stations.name",
+            not(hasItems("Station Medium", "Station Fast", "Station 1"))); // Corrected JSON path
   }
 
   @Test
@@ -96,9 +98,11 @@ class ServiceStationsMapControllerIT {
         .get(getBaseUrl() + "/map")
         .then()
         .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(2)) // Station Medium (103) and Station Mixed (105)
-        .body("name", hasItems("Station Medium", "Station Mixed"))
-        .body("name", not(hasItems("Station Slow", "Station Fast", "Station 1")));
+        .body("stations", hasSize(2)) // Corrected JSON path
+        .body("stations.name", hasItems("Station Medium", "Station Mixed")) // Corrected JSON path
+        .body(
+            "stations.name",
+            not(hasItems("Station Slow", "Station Fast", "Station 1"))); // Corrected JSON path
   }
 
   @Test
@@ -113,10 +117,16 @@ class ServiceStationsMapControllerIT {
         .get(getBaseUrl() + "/map")
         .then()
         .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(1)) // Station Fast (104)
-        .body("name", hasItems("Station Fast"))
+        .body("stations", hasSize(1)) // Corrected JSON path
+        .body("stations.name", hasItems("Station Fast")) // Corrected JSON path
         .body(
-            "name", not(hasItems("Station Slow", "Station Medium", "Station Mixed", "Station 1")));
+            "stations.name",
+            not(
+                hasItems(
+                    "Station Slow",
+                    "Station Medium",
+                    "Station Mixed",
+                    "Station 1"))); // Corrected JSON path
   }
 
   @Test
@@ -131,24 +141,26 @@ class ServiceStationsMapControllerIT {
         .get(getBaseUrl() + "/map")
         .then()
         .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(3)) // Station Slow (102), Station Medium (103), Station Mixed (105)
-        .body("name", hasItems("Station Slow", "Station Medium", "Station Mixed"))
-        .body("name", not(hasItems("Station Fast", "Station 1")));
+        .body("stations", hasSize(3)) // Corrected JSON path
+        .body(
+            "stations.name",
+            hasItems("Station Slow", "Station Medium", "Station Mixed")) // Corrected JSON path
+        .body("stations.name", not(hasItems("Station Fast", "Station 1"))); // Corrected JSON path
   }
 
   @Test
   @Tag("IT-Fast")
   @Requirement("SV-19")
-  void getChargingStationsByChargingSpeed_NoFilters_ReturnsEmptyList() {
+  void getChargingStationsByChargingSpeed_NoFilters_ReturnsBadRequest() { // Method name updated for
+    // clarity
     given()
         .contentType("application/json")
         .header("Authorization", "Bearer " + driverSvToken)
-        // No queryParam("chargingSpeeds") means empty filter
+        // No queryParam("chargingSpeeds") as per the requirement for 400 Bad Request
         .when()
         .get(getBaseUrl() + "/map")
         .then()
-        .statusCode(HttpStatus.OK.value())
-        .body("$", hasSize(0)); // As per frontend logic, if no filters, return empty.
+        .statusCode(HttpStatus.BAD_REQUEST.value()); // Expected 400 as a filter is required
   }
 
   @Test
@@ -170,8 +182,6 @@ class ServiceStationsMapControllerIT {
   @Tag("IT-Fast")
   @Requirement("SV-19")
   void getChargingStationsByChargingSpeed_InvalidSpeed_ReturnsEmptyListOrError() {
-    // Depending on backend implementation, this might return an empty list or a bad request.
-    // Assuming it returns an empty list for unknown speeds.
     given()
         .contentType("application/json")
         .header("Authorization", "Bearer " + driverSvToken)
@@ -179,7 +189,6 @@ class ServiceStationsMapControllerIT {
         .when()
         .get(getBaseUrl() + "/map")
         .then()
-        .statusCode(HttpStatus.OK.value()) // Or HttpStatus.BAD_REQUEST.value() if backend validates
-        .body("$", hasSize(0));
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 }
