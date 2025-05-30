@@ -2,8 +2,6 @@ package ua.tqs.smartvolt.smartvolt.steps.common;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.beans.factory.annotation.Value;
-
 import ua.tqs.smartvolt.smartvolt.MyTestConfiguration;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -15,7 +13,7 @@ public class TestContext {
 
   public static String FRONTEND_PROTOCOL = "http";
   public static String FRONTEND_IP = MyTestConfiguration.getHost();
-  public static String FRONTEND_PORT = "80"; 
+  public static String FRONTEND_PORT = "80";
 
   private BrowserSelenium container;
 
@@ -59,5 +57,4 @@ public class TestContext {
       container.browser.close();
     }
   }
-
 }
