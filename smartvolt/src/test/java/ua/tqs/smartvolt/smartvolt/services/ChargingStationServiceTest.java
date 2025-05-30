@@ -171,8 +171,6 @@ public class ChargingStationServiceTest {
     verify(chargingStationRepository, times(0)).save(chargingStations.get(0));
   }
 
-  // --- NEW TESTS FOR getChargingStationsByChargingSpeed ---
-
   @Test
   @Tag("UnitTest")
   @Requirement("SV-19") // Assign a new requirement ID
