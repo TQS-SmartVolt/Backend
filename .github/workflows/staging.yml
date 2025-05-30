@@ -42,9 +42,9 @@ jobs:
         java: [17]
     permissions:
       contents: read
-    defaults:
-      run:
-        working-directory: backend
+    # defaults:
+    #   run:
+    #     working-directory: backend
 
     steps:
       - name: Checkout repository
