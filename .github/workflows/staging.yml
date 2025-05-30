@@ -40,9 +40,9 @@ jobs:
     strategy:
       matrix:
         java: [17]
-    defaults:
-      run:
-        working-directory: backend
+    # defaults:
+    #   run:
+    #     working-directory: backend
 
     steps:
       - name: Checkout AppConfig repository
