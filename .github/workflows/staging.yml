@@ -68,7 +68,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run UAT Web Tests
-        run: mvn -B test -Dtests=UAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+        run: mvn -B test -PUAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
   capacity-stage:
     runs-on: self-hosted
