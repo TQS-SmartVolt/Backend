@@ -23,6 +23,10 @@ public interface ChargingSlotRepository extends JpaRepository<ChargingSlot, Long
   @Query("SELECT DISTINCT s.station FROM ChargingSlot s WHERE s.chargingSpeed = :chargingSpeed")
   List<ChargingStation> findStationsByChargingSpeed(@Param("chargingSpeed") String chargingSpeed);
 
+  List<ChargingSlot> findByStationAndChargingSpeed(ChargingStation station, String chargingSpeed);
+
+  List<ChargingSlot> findByStation(ChargingStation station);
+
 }
 
 

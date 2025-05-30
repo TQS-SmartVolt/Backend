@@ -54,7 +54,6 @@ public class ChargingStationService {
 
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);
-    chargingStation.setSlots(new ArrayList<>());
     return chargingStationRepository.save(chargingStation);
   }
 
@@ -79,6 +78,7 @@ public class ChargingStationService {
     }
 
     if (stationsSet.isEmpty()) {
+        System.out.println("No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
         throw new ResourceNotFoundException("No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
     }
 
@@ -87,7 +87,8 @@ public class ChargingStationService {
     for (ChargingStation station : stationsSet) {
         // Collect distinct charging speeds at this station
         Set<String> speedSet = new HashSet<>();
-        for (ChargingSlot slot : station.getSlots()) {
+        List<ChargingSlot> slots = chargingSlotRepository.findByStation(station);
+        for (ChargingSlot slot : slots ) {
             speedSet.add(slot.getChargingSpeed());
         }
 
@@ -107,42 +108,4 @@ public class ChargingStationService {
 
     return new ChargingStationsResponse(stationResponses);
   }
-
-
-
-  @PostConstruct
-    public void init() {
-        populateTestStations(); // Called only once on app startup
-  }
-
-  // TODO: Remove this method after testing
-  private void populateTestStations() {
-    if (!chargingStationRepository.findAll().isEmpty()) return; // avoid duplicates on restart
-
-    StationOperator operator = stationOperatorRepository.findByEmail("test@example.com")
-        .orElseGet(() -> {
-            StationOperator op = new StationOperator();
-            op.setName("Test Operator");
-            op.setEmail("test@example.com");
-            op.setPassword("pass");
-            return stationOperatorRepository.save(op);
-        });
-
-    ChargingStation station1 = new ChargingStation("Station 1",  40.6343605, -8.647361, "Rua 1", true, operator);
-    ChargingStation station2 = new ChargingStation("Station 2", 40.613605, -8.647361, "Rua 2", true, operator);
-    ChargingStation station3 = new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", true, operator);
-
-    chargingStationRepository.saveAll(List.of(station1, station2, station3));
-
-    chargingSlotRepository.saveAll(List.of(
-        new ChargingSlot(true, 0.20, 10, "Slow", station1),
-        new ChargingSlot(true, 0.20, 10, "Slow", station1),
-        new ChargingSlot(true, 0.30, 20, "Medium", station1),
-        new ChargingSlot(true, 0.30, 20, "Medium", station2),
-        new ChargingSlot(true, 0.50, 30, "Fast", station3),
-        new ChargingSlot(true, 0.50, 30, "Fast", station3)
-    ));
-}
-
-
 }

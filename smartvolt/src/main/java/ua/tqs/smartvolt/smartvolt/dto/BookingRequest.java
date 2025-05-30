@@ -3,24 +3,14 @@ package ua.tqs.smartvolt.smartvolt.dto;
 import java.time.LocalDateTime;
 
 public class BookingRequest {
-  private Long driverId;
   private Long slotId;
   private LocalDateTime startTime;
 
   public BookingRequest() {}
 
-  public BookingRequest(Long driverId, Long slotId, LocalDateTime startTime) {
-    this.driverId = driverId;
+  public BookingRequest(Long slotId, LocalDateTime startTime) {
     this.slotId = slotId;
     this.startTime = startTime;
-  }
-
-  public Long getDriverId() {
-    return driverId;
-  }
-
-  public void setDriverId(Long driverId) {
-    this.driverId = driverId;
   }
 
   public Long getSlotId() {

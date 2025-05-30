@@ -1,19 +1,10 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class EvDriver extends User {
-
-  @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-  private List<Booking> bookings;
-
-  @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-  private List<Payment> payments;
 
   public EvDriver() {}
 

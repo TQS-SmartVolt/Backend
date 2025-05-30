@@ -31,45 +31,16 @@ public class BookingService {
     this.chargingStationRepository = chargingStationRepository;
   }
 
-  public Booking createBooking(BookingRequest request) throws Exception {
+  public Booking createBooking(BookingRequest request, Long driverId) throws Exception {
     // Get the driver, slot and start time from the request
-    // TODO: Remove the hardcoded driver, station and slot
-    EvDriver evDriver =
-        evDriverRepository
-            .findById(request.getDriverId())
-            .orElseGet(
-                () -> {
-                  EvDriver newDriver = new EvDriver();
-                  newDriver.setName("João Pinto");
-                  newDriver.setEmail("jpapinto@ua.pt");
-                  newDriver.setPassword("123");
-                  return evDriverRepository.save(newDriver);
-                });
-    
-    // Create a hardcoded charging station
-    ChargingStation station = new ChargingStation();
-    station.setName("Station 1");
-    station.setLatitude(30);
-    station.setLongitude(30);
-    station.setAddress("123 Main St");
-    station.setAvailability(true);
-    station.setOperator(null); // Set the operator to null or assign a valid operator
-    chargingStationRepository.save(station);
-
-    ChargingSlot slot =
-        chargingSlotRepository
-            .findById(request.getSlotId())
-            .orElseGet(
-                () -> {
-                  ChargingSlot newSlot = new ChargingSlot();
-                  newSlot.setLocked(true);
-                  newSlot.setPricePerKWh(1);
-                  newSlot.setPower(15.0);
-                  newSlot.setChargingSpeed("Slow");
-                  newSlot.setStation(station);
-                  return chargingSlotRepository.save(newSlot);
-                });
-    Long slotId = slot.getSlotId();
+    EvDriver evDriver = evDriverRepository
+        .findById(driverId)
+        .orElseThrow(() -> new Exception("Driver not found with id: " + driverId));
+  
+    Long slotId = slotId = request.getSlotId();
+    ChargingSlot slot = chargingSlotRepository
+        .findById(slotId)
+        .orElseThrow(() -> new Exception("Slot not found with id: " + slotId));
 
     LocalDateTime startTime = request.getStartTime();
     if (startTime == null) {

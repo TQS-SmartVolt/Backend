@@ -13,23 +13,25 @@ import org.springframework.web.server.ResponseStatusException;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
-import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
+import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
-
-import java.time.LocalDateTime;
 
 @Service
 public class ChargingSlotService {
   private final ChargingSlotRepository chargingSlotRepository;
   private final ChargingStationRepository chargingStationRepository;
+  private final BookingRepository bookingRepository;
 
   public ChargingSlotService(ChargingSlotRepository chargingSlotRepository,
-                             ChargingStationRepository chargingStationRepository) {
+                             ChargingStationRepository chargingStationRepository,
+                             BookingRepository bookingRepository
+                             ) {
     this.chargingSlotRepository = chargingSlotRepository;
     this.chargingStationRepository = chargingStationRepository;
+    this.bookingRepository = bookingRepository;
   }
 
   public ChargingSlotResponse getSlotDetailsById(Long slotId) {
@@ -55,9 +57,7 @@ public class ChargingSlotService {
     ChargingStation station = chargingStationRepository.findById(stationId)
         .orElseThrow(() -> new ResourceNotFoundException("Charging station not found with id: " + stationId));
 
-    List<ChargingSlot> matchingSlots = station.getSlots().stream()
-        .filter(slot -> slot.getChargingSpeed().equalsIgnoreCase(chargingSpeed))
-        .toList();
+    List<ChargingSlot> matchingSlots = chargingSlotRepository.findByStationAndChargingSpeed(station, chargingSpeed);
 
     if (matchingSlots.isEmpty()) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No slots found for the given speed.");
@@ -70,9 +70,10 @@ public class ChargingSlotService {
     for (int i = 0; i < 48; i++) {
         LocalDateTime slotTime = startOfDay.plusMinutes(30L * i);
         for (ChargingSlot slot : matchingSlots) {
-          // Check if this slot is already booked at this time  
-          boolean isBooked = slot.getBookings().stream()
-                .anyMatch(b -> b.getStartTime().equals(slotTime));
+          // Check if this slot is already booked at this time    
+          boolean isBooked = bookingRepository.existsBySlotAndStartTime(slot, slotTime);
+
+          
           // If it's not booked, mark this slot as available for that time
           if (!isBooked) {
               slotAvailabilityMap.computeIfAbsent(slotTime, k -> new ArrayList<>()).add(slot);
