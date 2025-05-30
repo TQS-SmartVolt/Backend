@@ -13,7 +13,6 @@ import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -32,7 +31,8 @@ public class RegisterStationSteps {
 
     WebDriverManager.chromedriver().setup();
     // ChromeOptions options = new ChromeOptions();
-    // options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" + System.currentTimeMillis());
+    // options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" +
+    // System.currentTimeMillis());
     this.driver = new ChromeDriver();
     this.backOfficePage = new BackOfficePage(driver);
     this.loginPage = new LoginPage(driver);
