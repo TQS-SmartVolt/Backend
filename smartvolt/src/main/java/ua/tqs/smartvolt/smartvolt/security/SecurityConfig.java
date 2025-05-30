@@ -17,16 +17,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-  @Value("${BACKEND_API_PREFIX}")
+  @Value("${BACKEND_API_PREFIX:/api/v1}")
   private String backendApiPrefix;
 
-  @Value("${SWAGGER_API_DOCS_PATH}")
+  @Value("${SWAGGER_API_DOCS_PATH:/api/v1/api-docs}")
   private String swaggerApiDocsPath;
 
-  @Value("${SWAGGER_UI_PATH}")
+  @Value("${SWAGGER_UI_PATH:/swagger-ui.html}")
   private String swaggerUiPath;
 
-  @Value("${SWAGGER_UI_PART_PATH}")
+  @Value("${SWAGGER_UI_PART_PATH:/swagger-ui/}")
   private String swaggerUiPartPath;
 
   @Bean

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
@@ -21,7 +22,9 @@ public class ChargingSlot {
   private double power;
   private String chargingSpeed;
 
-  @ManyToOne private ChargingStation station;
+  @ManyToOne
+  @JoinColumn(name = "station_id")
+  private ChargingStation station;
 
   @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL)
   private List<Booking> bookings;

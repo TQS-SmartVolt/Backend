@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.steps.back_office_operations;
+package ua.tqs.smartvolt.smartvolt.steps.operator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,8 +8,11 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.List;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -17,6 +20,7 @@ import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RegisterStationSteps {
 
+  private WebDriver driver;
   private BackOfficePage backOfficePage;
   private LoginPage loginPage;
   private List<WebElement> stationCards;
@@ -24,10 +28,11 @@ public class RegisterStationSteps {
   @Before
   public void setup() {
     System.out.println("Setting up WebDriver...");
-    this.backOfficePage = new BackOfficePage();
-    this.loginPage =
-        new LoginPage(
-            backOfficePage.getWebDriver(), backOfficePage.getWait()); // Not use WebDriver for login
+
+    WebDriverManager.chromedriver().setup();
+    this.driver = new ChromeDriver();
+    this.backOfficePage = new BackOfficePage(driver);
+    this.loginPage = new LoginPage(driver);
   }
 
   @After
@@ -42,7 +47,7 @@ public class RegisterStationSteps {
 
   @Given("the operator is logged in with email {string} and password {string}")
   public void theOperatorIsLoggedInWithEmailAndPassword(String email, String password) {
-    loginPage.login(email, password);
+    loginPage.login(email, password, true);
   }
 
   @When("the operator clicks on {string}")

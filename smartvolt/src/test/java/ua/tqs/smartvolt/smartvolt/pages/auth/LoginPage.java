@@ -1,11 +1,9 @@
 package ua.tqs.smartvolt.smartvolt.pages.auth;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
 import ua.tqs.smartvolt.smartvolt.pages.Website;
 
 public class LoginPage extends Website {
@@ -19,36 +17,30 @@ public class LoginPage extends Website {
   @FindBy(css = "[data-testid='login-submit-button']")
   private WebElement loginSubmitButton;
 
-  public LoginPage() {
-    super();
-  }
-
-  public LoginPage(WebDriver driver, Wait<WebDriver> wait) {
-    super(driver, wait);
+  public LoginPage(WebDriver driver) {
+    super(driver);
   }
 
   // Access methods for WebElements
-  public void login(String email, String password) {
+  public void login(String email, String password, boolean isOperator) {
     navigateTo("/login");
 
     // Email
-    wait.until(
-        ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("[data-testid='login-email-input']")));
+    wait.until(ExpectedConditions.visibilityOf(loginEmailInput));
     loginEmailInput.sendKeys(email);
 
     // Password
-    wait.until(
-        ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("[data-testid='login-password-input']")));
+    wait.until(ExpectedConditions.visibilityOf(loginPasswordInput));
     loginPasswordInput.sendKeys(password);
 
     // Submit
-    wait.until(
-        ExpectedConditions.elementToBeClickable(
-            By.cssSelector("[data-testid='login-submit-button']")));
+    wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
     loginSubmitButton.click();
 
-    driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
+    if (isOperator) {
+      wait.until(ExpectedConditions.urlContains("/operator"));
+    } else {
+      wait.until(ExpectedConditions.urlContains("/service/stations-map"));
+    }
   }
 }

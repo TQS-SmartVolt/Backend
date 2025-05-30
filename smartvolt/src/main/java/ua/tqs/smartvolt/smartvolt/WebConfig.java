@@ -17,14 +17,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class WebConfig {
 
-  @Value("${FRONTEND_PORT}")
-  private String frontendPort = "5173";
+  @Value("${FRONTEND_PORT:80}")
+  private String frontendPort;
 
-  @Value("${FRONTEND_IP}")
-  private String frontendIp = "frontend";
+  @Value("${FRONTEND_IP:localhost}")
+  private String frontendIp;
 
-  @Value("${FRONTEND_PROTOCOL}")
-  private String frontendprotocol = "http";
+  @Value("${FRONTEND_PROTOCOL:http}")
+  private String frontendprotocol;
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {

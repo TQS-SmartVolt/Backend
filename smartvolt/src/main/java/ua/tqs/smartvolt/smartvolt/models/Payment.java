@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
@@ -14,7 +15,9 @@ public class Payment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long paymentId;
 
-  @ManyToOne private EvDriver driver;
+  @ManyToOne
+  @JoinColumn(name = "driver_id")
+  private EvDriver driver;
 
   @OneToOne private Booking booking;
 

@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -18,9 +19,13 @@ public class Booking {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long bookingId;
 
-  @ManyToOne private EvDriver driver;
+  @ManyToOne
+  @JoinColumn(name = "driver_id")
+  private EvDriver driver;
 
-  @ManyToOne private ChargingSlot slot;
+  @ManyToOne
+  @JoinColumn(name = "slot_id")
+  private ChargingSlot slot;
 
   private LocalDateTime startTime;
   private String status;
