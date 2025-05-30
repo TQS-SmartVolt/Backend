@@ -15,5 +15,3 @@ Feature: Register Station
     Then the modal should "close"
     And 4 stations should have been found
     And station 4 should have the name "Station Test", status "Active", address "Third Street", and 0 slots
-
- # TODO: change "address" to the expected address once the geocoding service is implemented!

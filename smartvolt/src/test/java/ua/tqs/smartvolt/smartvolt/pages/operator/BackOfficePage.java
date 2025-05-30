@@ -2,6 +2,7 @@ package ua.tqs.smartvolt.smartvolt.pages.operator;
 
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +36,21 @@ public class BackOfficePage extends Website {
       WebDriver driver, String frontendProtocol, String frontendIp, String frontendPort) {
     super(driver, frontendProtocol, frontendIp, frontendPort);
   }
+
+  @FindBy(css = "[data-testid='station-card-deactivate']")
+  private WebElement stationCardDeactivateButton;
+
+  @FindBy(css = "[data-testid='station-card-activate']")
+  private WebElement stationCardActivateButton;
+
+  @FindBy(css = "[data-testid='confirm-deactivation-button']")
+  private WebElement confirmDeactivationButton;
+
+  @FindBy(css = "[data-testid='deactivation-reason-select']")
+  private WebElement deactivationReasonSelect;
+
+  @FindBy(css = "[data-testid='confirm-activation-button']")
+  private WebElement confirmActivationButton;
 
   // Access methods for WebElements
 
@@ -77,9 +93,19 @@ public class BackOfficePage extends Website {
 
   public String getStationCardAvailability(WebElement stationCard) {
     wait.until(ExpectedConditions.visibilityOf(stationCard));
-    WebElement availabilityElement =
-        stationCard.findElement(By.cssSelector("[data-testid='station-card-active']"));
-    return availabilityElement.getText();
+    try {
+      WebElement activeLabel =
+          wait.until(
+              ExpectedConditions.presenceOfNestedElementLocatedBy(
+                  stationCard, By.cssSelector("[data-testid='station-card-active']")));
+      return activeLabel.getText();
+    } catch (TimeoutException e) {
+      WebElement inactiveLabel =
+          wait.until(
+              ExpectedConditions.presenceOfNestedElementLocatedBy(
+                  stationCard, By.cssSelector("[data-testid='station-card-inactive']")));
+      return inactiveLabel.getText();
+    }
   }
 
   public int getStationCardNumSlots(WebElement stationCard) {
@@ -122,5 +148,34 @@ public class BackOfficePage extends Website {
   public void confirmAddStation() {
     wait.until(ExpectedConditions.elementToBeClickable(confirmAddStationButton));
     confirmAddStationButton.click();
+  }
+
+  public void clickDeactivateStation(WebElement stationCard) {
+    WebElement deactivateButton =
+        stationCard.findElement(By.cssSelector("[data-testid='station-card-deactivate']"));
+    wait.until(ExpectedConditions.elementToBeClickable(deactivateButton));
+    deactivateButton.click();
+  }
+
+  public void clickActivateStation(WebElement stationCard) {
+    WebElement activateButton =
+        stationCard.findElement(By.cssSelector("[data-testid='station-card-activate']"));
+    wait.until(ExpectedConditions.elementToBeClickable(activateButton));
+    activateButton.click();
+  }
+
+  public void fillDeactivationReason(String reason) {
+    wait.until(ExpectedConditions.elementToBeClickable(deactivationReasonSelect));
+    deactivationReasonSelect.sendKeys(reason);
+  }
+
+  public void confirmDeactivation() {
+    wait.until(ExpectedConditions.elementToBeClickable(confirmDeactivationButton));
+    confirmDeactivationButton.click();
+  }
+
+  public void confirmActivation() {
+    wait.until(ExpectedConditions.elementToBeClickable(confirmActivationButton));
+    confirmActivationButton.click();
   }
 }

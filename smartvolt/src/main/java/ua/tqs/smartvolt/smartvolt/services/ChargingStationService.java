@@ -52,4 +52,18 @@ public class ChargingStationService {
                 () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
     return chargingStationRepository.findByOperator(operator);
   }
+
+  public ChargingStation updateChargingStationStatus(Long stationId, boolean activate)
+      throws ResourceNotFoundException {
+    ChargingStation chargingStation =
+        chargingStationRepository
+            .findById(stationId)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Charging station not found with id: " + stationId));
+
+    chargingStation.setAvailability(activate);
+    return chargingStationRepository.save(chargingStation);
+  }
 }
