@@ -86,9 +86,6 @@ jobs:
       - name: Display directory structure
         run: ls -R smartvolt
 
-      - name: Change working directory
-        run: cd smartvolt
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -97,6 +94,7 @@ jobs:
           cache: maven
 
       - name: Run UAT Web Tests
+        working-directory: smartvolt
         run: mvn -B test -PUAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
   capacity-stage:
