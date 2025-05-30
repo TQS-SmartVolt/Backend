@@ -70,14 +70,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
       - name: Staging with Docker Compose
         run: |
           set -a
@@ -86,6 +78,8 @@ jobs:
           docker compose --file compose.prod.yml up -d --build
         env:
           DOCKER_PORT: 8080
+          username: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Change working directory
         run: cd ..
