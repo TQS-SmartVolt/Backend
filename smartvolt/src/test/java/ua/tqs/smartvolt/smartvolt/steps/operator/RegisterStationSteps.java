@@ -31,9 +31,9 @@ public class RegisterStationSteps {
     System.out.println("Setting up WebDriver...");
 
     WebDriverManager.chromedriver().setup();
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("--disable-extensions"); // Avoid user-data-dir conflicts
-    this.driver = new ChromeDriver(options);
+    // ChromeOptions options = new ChromeOptions();
+    // options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" + System.currentTimeMillis());
+    this.driver = new ChromeDriver();
     this.backOfficePage = new BackOfficePage(driver);
     this.loginPage = new LoginPage(driver);
   }
