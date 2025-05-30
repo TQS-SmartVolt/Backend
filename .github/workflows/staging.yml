@@ -45,11 +45,13 @@ jobs:
 
     steps:
 
-      # - name: Install Chrome
-      #   run: |
-      #     sudo apt update
-      #     sudo apt install -y wget
-      #     sudo apt install -y libxss1 libappindicator3-1 libindicator7
+      - name: Install Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          sudo apt-get install libxss1 libappindicator1 libindicator7
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome*.deb
 
       - name: Checkout repository
         uses: actions/checkout@v4
