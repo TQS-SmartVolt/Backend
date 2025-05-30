@@ -80,6 +80,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Change working directory
+        run: cd smartvolt
+
       - name: Run UAT Web Tests
         run: mvn -B test -PUAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
