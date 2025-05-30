@@ -108,4 +108,18 @@ public class ChargingStationService {
 
     return new ChargingStationsResponse(stationResponses);
   }
+  
+  public ChargingStation updateChargingStationStatus(Long stationId, boolean activate)
+      throws ResourceNotFoundException {
+    ChargingStation chargingStation =
+        chargingStationRepository
+            .findById(stationId)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Charging station not found with id: " + stationId));
+
+    chargingStation.setAvailability(activate);
+    return chargingStationRepository.save(chargingStation);
+  }
 }

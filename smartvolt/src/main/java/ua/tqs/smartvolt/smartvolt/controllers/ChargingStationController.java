@@ -8,6 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+<<<<<<< HEAD
+=======
+import org.springframework.web.bind.annotation.PatchMapping;
+>>>>>>> dev
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +51,7 @@ public class ChargingStationController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
-  public List<ChargingStation> getAllChargingStations() throws Exception {
+  public List<ChargingStation> getAllChargingStations() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long operatorId = Long.parseLong(authentication.getName());
     return chargingStationService.getAllChargingStations(operatorId);
@@ -67,5 +71,13 @@ public class ChargingStationController {
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
       @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
+  }
+  
+  @PatchMapping("/{stationId}/status")
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  public ChargingStation updateChargingStationStatus(
+      @PathVariable Long stationId, @RequestParam boolean activate)
+      throws ResourceNotFoundException {
+    return chargingStationService.updateChargingStationStatus(stationId, activate);
   }
 }

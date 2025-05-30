@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Properties>
-        <Property name="LOGSTASH_HOST">logstash</Property>
-        <Property name="LOGSTASH_PORT">5000</Property>
         <Property name="SERVICE_NAME">my-ev-app</Property>
     </Properties>
 
@@ -10,7 +8,7 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <Socket name="Logstash" host="${LOGSTASH_HOST}" port="${LOGSTASH_PORT}" protocol="TCP">
+        <Socket name="Logstash" host="${env:LOGSTASH_IP}" port="${env:LOGSTASH_CONTAINER_PORT}" protocol="tcp" ignoreExceptions="true">
             <JsonLayout compact="true" eventEol="true"/>
         </Socket>
     </Appenders>
@@ -20,6 +18,5 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="Logstash"/>
         </Root>
-
-        </Loggers>
+    </Loggers>
 </Configuration>

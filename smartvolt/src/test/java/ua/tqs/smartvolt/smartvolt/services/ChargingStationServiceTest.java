@@ -173,6 +173,49 @@ public class ChargingStationServiceTest {
 
   @Test
   @Tag("UnitTest")
+  @Requirement("SV-35")
+  void updateChargingStationStatus_WhenStationExists_UpdatesAvailability()
+      throws ResourceNotFoundException {
+    // Arrange
+    Long stationId = 1L;
+    boolean newAvailability = false;
+
+    ChargingStation existingStation = chargingStations.get(0);
+    existingStation.setStationId(stationId);
+
+    when(chargingStationRepository.findById(stationId)).thenReturn(Optional.of(existingStation));
+    when(chargingStationRepository.save(existingStation)).thenReturn(existingStation);
+
+    // Act
+    ChargingStation updatedStation =
+        chargingStationService.updateChargingStationStatus(stationId, newAvailability);
+
+    // Assert
+    assertThat(updatedStation).isNotNull();
+    assertThat(updatedStation.isAvailability()).isEqualTo(newAvailability);
+    verify(chargingStationRepository, times(1)).findById(stationId);
+    verify(chargingStationRepository, times(1)).save(existingStation);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-35")
+  void updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long invalidStationId = 999L;
+    when(chargingStationRepository.findById(invalidStationId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(
+            () -> chargingStationService.updateChargingStationStatus(invalidStationId, true))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Charging station not found with id: " + invalidStationId);
+    verify(chargingStationRepository, times(1)).findById(invalidStationId);
+    verify(chargingStationRepository, times(0)).save(new ChargingStation());
+  }
+
+  @Test
+  @Tag("UnitTest")
   @Requirement("SV-19") // Assign a new requirement ID
   void getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse()
       throws ResourceNotFoundException {
