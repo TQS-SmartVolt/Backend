@@ -95,7 +95,7 @@ jobs:
 
       - name: Run UAT Web Tests
         working-directory: smartvolt
-        run: mvn -B test -PUAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+        run: mvn -B clean test -PUAT-Web -Dbrowser=chrome -Dhost=host.testcontainers.internal --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
   capacity-stage:
     runs-on: self-hosted
