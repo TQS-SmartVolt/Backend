@@ -9,6 +9,7 @@ import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
+import ua.tqs.smartvolt.smartvolt.repositories.UserRepository;
 
 @Component
 @Profile("uat")
@@ -17,22 +18,26 @@ public class DataLoaderUAT implements CommandLineRunner {
   private final PasswordEncoder passwordEncoder;
   private final StationOperatorRepository stationOperatorRepository;
   private final ChargingStationRepository chargingStationRepository;
+  private final UserRepository userRepository;
 
   public static StationOperator stationOperator;
 
   public DataLoaderUAT(
       StationOperatorRepository sor,
       ChargingStationRepository csr,
+      UserRepository ur,
       PasswordEncoder passwordEncoder) {
     this.stationOperatorRepository = sor;
     this.chargingStationRepository = csr;
+    this.userRepository = ur;
     this.passwordEncoder = passwordEncoder;
   }
 
   private void dropDatabase() {
     // Increment this!a
-    stationOperatorRepository.deleteAll();
     chargingStationRepository.deleteAll();
+    stationOperatorRepository.deleteAll();
+    userRepository.deleteAll();
     System.out.println("Database cleared.");
   }
 
@@ -40,6 +45,9 @@ public class DataLoaderUAT implements CommandLineRunner {
   @Transactional
   public void run(String... args) throws Exception {
     System.out.println("DataLoader is running...");
+
+    System.out.println("Test password");
+    System.out.println("Encoded password: " + passwordEncoder.encode("password123"));
 
     // Clear the database
     dropDatabase();

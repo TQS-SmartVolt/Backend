@@ -1,6 +1,5 @@
 package ua.tqs.smartvolt.smartvolt.pages.auth;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,21 +26,15 @@ public class LoginPage extends Website {
     navigateTo("/login");
 
     // Email
-    wait.until(
-        ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("[data-testid='login-email-input']")));
+    wait.until(ExpectedConditions.visibilityOf(loginEmailInput));
     loginEmailInput.sendKeys(email);
 
     // Password
-    wait.until(
-        ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("[data-testid='login-password-input']")));
+    wait.until(ExpectedConditions.visibilityOf(loginPasswordInput));
     loginPasswordInput.sendKeys(password);
 
     // Submit
-    wait.until(
-        ExpectedConditions.elementToBeClickable(
-            By.cssSelector("[data-testid='login-submit-button']")));
+    wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
     loginSubmitButton.click();
 
     if (isOperator) {

@@ -29,18 +29,20 @@ jobs:
           repository: TQS-SmartVolt/AppConfig
           token: ${{ secrets.SMART_VOLT_SECRET }}
 
-      - name: Update .env.production with backend tag
+      - name: Update .env.production and .env.staging with backend tag
         run: |
-          sed -i 's/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/' .env.production
-          if ! git diff --quiet .env.production; then
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add .env.production
-            git commit -m "Update BACKEND_TAG in .env.production to ${{ github.sha }}"
-            git push origin HEAD:main
-          else
-            echo "No changes to commit in .env.production"
-          fi
+          for env_file in .env.production .env.staging; do
+            sed -i "s/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/" $env_file
+            if ! git diff --quiet $env_file; then
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+              git add $env_file
+              git commit -m "Update BACKEND_TAG in $env_file to ${{ github.sha }}"
+            else
+              echo "No changes to commit in $env_file"
+            fi
+          done
+          git push origin HEAD:main
         env:
           DOCKER_PORT: 8080
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +51,7 @@ jobs:
         run: |
           set -a
           source .env.production
-          docker compose --file compose.prod.yml down 
+          docker compose --file compose.prod.yml down
           docker compose --file compose.prod.yml up -d --build
         env:
           DOCKER_PORT: 8080
