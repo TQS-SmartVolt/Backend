@@ -8,15 +8,9 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <Socket name="Logstash"
-                host="${env:LOGSTASH_IP}"
-                port="${env:LOGSTASH_CONTAINER_PORT:-5000}"
-                protocol="tcp"
-                ignoreExceptions="true"
-                condition="${env:LOGSTASH_IP:-} != ''">
+        <Socket name="Logstash" host="${env:LOGSTASH_IP}" port="${env:LOGSTASH_CONTAINER_PORT}" protocol="tcp" ignoreExceptions="true">
             <JsonLayout compact="true" eventEol="true"/>
         </Socket>
-
     </Appenders>
 
     <Loggers>
