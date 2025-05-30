@@ -49,10 +49,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y wget
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
           sudo apt install -y libxss1 libappindicator3-1 libindicator7
-          
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -107,6 +105,7 @@ jobs:
 
   capacity-stage:
     runs-on: self-hosted
+    needs: uat-stage
 
     permissions:
       contents: read
