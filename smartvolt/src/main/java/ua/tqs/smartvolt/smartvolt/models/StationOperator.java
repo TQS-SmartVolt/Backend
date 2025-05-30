@@ -1,9 +1,10 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 public class StationOperator extends User {
@@ -13,11 +14,41 @@ public class StationOperator extends User {
 
   public StationOperator() {}
 
-  public StationOperator(Long userId, String name, String email, String password) {
-    super(userId, name, email, password);
+  public StationOperator(String name, String email, String password) {
+    super(name, email, password, Set.of("ROLE_STATION_OPERATOR"));
   }
 
-  // Getters and setters...
+  public Long getUserId() {
+    return super.getUserId();
+  }
+
+  public void setUserId(Long userId) {
+    super.setUserId(userId);
+  }
+
+  public String getName() {
+    return super.getName();
+  }
+
+  public void setName(String name) {
+    super.setName(name);
+  }
+
+  public String getEmail() {
+    return super.getEmail();
+  }
+
+  public void setEmail(String email) {
+    super.setEmail(email);
+  }
+
+  public String getPassword() {
+    return super.getPassword();
+  }
+
+  public void setPassword(String password) {
+    super.setPassword(password);
+  }
 
   @Override
   public boolean equals(Object o) {
