@@ -49,10 +49,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y wget
+          sudo apt-get install -y libxss1 libappindicator1 libindicator7
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
-          sudo apt install -y libxss1 libappindicator3-1 libindicator7
-          
+          sudo apt install -y ./google-chrome*.deb
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -72,7 +72,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Staging with Docker Compose
         run: |
           set -a
@@ -81,6 +80,7 @@ jobs:
           docker compose --file compose.prod.yml up -d --build
         env:
           DOCKER_PORT: 8080
+          username: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Change working directory
@@ -107,6 +107,7 @@ jobs:
 
   capacity-stage:
     runs-on: self-hosted
+    needs: uat-stage
 
     permissions:
       contents: read

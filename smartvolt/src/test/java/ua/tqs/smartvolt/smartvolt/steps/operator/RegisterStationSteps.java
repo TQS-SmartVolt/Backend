@@ -32,8 +32,7 @@ public class RegisterStationSteps {
 
     WebDriverManager.chromedriver().setup();
     ChromeOptions options = new ChromeOptions();
-    options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" +
-    System.currentTimeMillis());
+    options.addArguments("--user-data-dir=/tmp/unique-user-data-dir-" + System.currentTimeMillis());
     this.driver = new ChromeDriver(options);
     this.backOfficePage = new BackOfficePage(driver);
     this.loginPage = new LoginPage(driver);
