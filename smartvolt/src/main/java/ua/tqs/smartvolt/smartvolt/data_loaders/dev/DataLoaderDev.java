@@ -56,6 +56,7 @@ public class DataLoaderDev implements CommandLineRunner {
     // Proceed with other deletions
     chargingStationRepository.deleteAll();
     stationOperatorRepository.deleteAll();
+    evDriverRepository.deleteAll();
     userRepository.deleteAll();
   }
 
@@ -65,7 +66,7 @@ public class DataLoaderDev implements CommandLineRunner {
     System.out.println("DataLoader is running...");
 
     System.out.println("Test password");
-    System.out.println("Encoded password: " + passwordEncoder.encode("password123"));
+    System.out.println("Encoded password: " + passwordEncoder.encode("StrongPassword!"));
 
     // Clear the database
     dropDatabase();
@@ -73,7 +74,7 @@ public class DataLoaderDev implements CommandLineRunner {
     // Create Station Operator
     StationOperator stationOperator =
         new StationOperator(
-            "John Doe", "johndoe@example.com", passwordEncoder.encode("password123"));
+            "John Doe", "johndoe@example.com", passwordEncoder.encode("StrongPassword!"));
 
     stationOperatorRepository.saveAndFlush(stationOperator);
     System.out.printf(

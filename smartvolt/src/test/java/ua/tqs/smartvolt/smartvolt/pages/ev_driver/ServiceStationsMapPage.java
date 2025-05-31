@@ -18,7 +18,7 @@ public class ServiceStationsMapPage extends Website {
 
   // --- Web Elements for the Map and Filters ---
 
-  @FindBy(css = "[data-testid='station-map-container']")
+  @FindBy(css = "[data-testid='map-component-container']")
   private WebElement mapContainer;
 
   @FindBy(css = "[data-testid='filter-expand-collapse-button']")
@@ -51,15 +51,15 @@ public class ServiceStationsMapPage extends Website {
     System.out.println("DEBUG: ServiceStationsMapPage.isMapDisplayed() - Entering method.");
     try {
       System.out.println(
-          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - Waiting for visibility of mapContainer ([data-testid='station-map-container'])...");
+          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - Waiting for visibility of mapContainer ([data-testid='map-component-container'])...");
       wait.until(ExpectedConditions.visibilityOf(mapContainer));
       System.out.println(
-          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - mapContainer is visible. Now waiting for a Leaflet map tile ([data-testid='station-map-container'] img.leaflet-tile)...");
+          "DEBUG: ServiceStationsMapPage.isMapDisplayed() - mapContainer is visible. Now waiting for a Leaflet map tile ([data-testid='map-component-container'] img.leaflet-tile)...");
 
       // This wait ensures the actual map content (tiles) has loaded
       wait.until(
           ExpectedConditions.visibilityOfElementLocated(
-              By.cssSelector("[data-testid='station-map-container'] img.leaflet-tile")));
+              By.cssSelector("[data-testid='map-component-container'] img.leaflet-tile")));
       System.out.println(
           "DEBUG: ServiceStationsMapPage.isMapDisplayed() - Map tiles are visible. Map is considered displayed.");
 
@@ -96,25 +96,38 @@ public class ServiceStationsMapPage extends Website {
   }
 
   public int getNumberOfStationMarkers() {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - Entering method.");
     try {
-      // Wait for at least one marker or a message indicating no markers
-      // If the application shows a "no stations" message, add its data-testid here.
-      // For now, assume if no markers appear, count is 0.
+      // Corrected selector to use .leaflet-marker-icon as provided by user
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - Waiting for presence of station markers (.leaflet-marker-icon).");
       wait.until(
           ExpectedConditions.presenceOfAllElementsLocatedBy(
-              By.cssSelector("[data-testid^='station-marker-']")));
-      List<WebElement> markers =
-          driver.findElements(By.cssSelector("[data-testid^='station-marker-']"));
-      return markers.size();
+              By.cssSelector(".leaflet-marker-icon")));
+      List<WebElement> markers = driver.findElements(By.cssSelector(".leaflet-marker-icon"));
+      int numberOfMarkers = markers.size();
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - Found "
+              + numberOfMarkers
+              + " markers.");
+      return numberOfMarkers;
     } catch (TimeoutException e) {
       // No markers found within the timeout
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - TimeoutException: No markers found within the timeout. Returning 0.");
+      return 0;
+    } catch (Exception e) {
+      System.err.println(
+          "ERROR: ServiceStationsMapPage.getNumberOfStationMarkers() - An unexpected error occurred: "
+              + e.getMessage());
       return 0;
     }
   }
 
   public void clickStationMarkerByIndex(int index) {
-    List<WebElement> stationMarkers =
-        driver.findElements(By.cssSelector("[data-testid^='station-marker-']"));
+    // Corrected selector to use .leaflet-marker-icon as provided by user
+    List<WebElement> stationMarkers = driver.findElements(By.cssSelector(".leaflet-marker-icon"));
     wait.until(ExpectedConditions.visibilityOfAllElements(stationMarkers));
     if (index >= 0 && index < stationMarkers.size()) {
       wait.until(ExpectedConditions.elementToBeClickable(stationMarkers.get(index)));

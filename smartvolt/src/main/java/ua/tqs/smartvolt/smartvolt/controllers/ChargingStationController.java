@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
@@ -48,7 +49,7 @@ public class ChargingStationController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
-  public List<ChargingStation> getAllChargingStations() throws ResourceNotFoundException {
+  public List<ChargingStationWithSlots> getAllChargingStations() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long operatorId = Long.parseLong(authentication.getName());
     return chargingStationService.getAllChargingStations(operatorId);

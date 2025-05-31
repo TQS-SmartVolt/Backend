@@ -25,38 +25,39 @@ public class DataLoaderUAT implements CommandLineRunner {
   private final StationOperatorRepository stationOperatorRepository;
   private final ChargingStationRepository chargingStationRepository;
   private final ChargingSlotRepository chargingSlotRepository;
+  private final UserRepository userRepository;
   private final EvDriverRepository evDriverRepository;
   private final BookingRepository bookingRepository;
-  private final UserRepository userRepository;
-
-  public static StationOperator stationOperator;
 
   public DataLoaderUAT(
       StationOperatorRepository sor,
       ChargingStationRepository csr,
       ChargingSlotRepository cslr,
+      UserRepository ur,
       EvDriverRepository evr,
       BookingRepository bR,
-      UserRepository ur,
       PasswordEncoder passwordEncoder) {
     this.stationOperatorRepository = sor;
     this.chargingStationRepository = csr;
     this.chargingSlotRepository = cslr;
+    this.userRepository = ur;
     this.evDriverRepository = evr;
     this.bookingRepository = bR;
-    this.userRepository = ur;
     this.passwordEncoder = passwordEncoder;
   }
 
   private void dropDatabase() {
-    // Order matters due to foreign key constraints
-    bookingRepository.deleteAll(); // Delete bookings first
-    chargingSlotRepository.deleteAll(); // Then slots
+    // First, delete all bookings referencing ChargingSlots
+    bookingRepository.deleteAll();
+
+    // Now, delete charging slots
+    chargingSlotRepository.deleteAll();
+
+    // Proceed with other deletions
     chargingStationRepository.deleteAll();
     stationOperatorRepository.deleteAll();
-    evDriverRepository.deleteAll(); // Also delete EvDrivers
+    evDriverRepository.deleteAll();
     userRepository.deleteAll();
-    System.out.println("Database cleared.");
   }
 
   @Override
@@ -70,64 +71,52 @@ public class DataLoaderUAT implements CommandLineRunner {
     // Clear the database
     dropDatabase();
 
-    // Create Station Operator
-    stationOperator =
+    StationOperator stationOperator =
         new StationOperator(
             "John Doe", "johndoe@example.com", passwordEncoder.encode("StrongPassword!"));
-
     stationOperatorRepository.saveAndFlush(stationOperator);
     System.out.printf(
         "Station Operator created: %s with ID %s%n",
         stationOperator.getName(), stationOperator.getUserId());
 
-    // Create EV Driver
-    EvDriver testEvDriver =
-        new EvDriver("Jane Smith", "jane@example.com", passwordEncoder.encode("password123"));
-    evDriverRepository.saveAndFlush(testEvDriver);
+    // Create a EVDriver
+    EvDriver testEVDriver =
+        new EvDriver("Jane Smith", "test@example.com", passwordEncoder.encode("password123"));
+    evDriverRepository.saveAndFlush(testEVDriver);
+
     System.out.printf(
-        "EV Driver created: %s with ID %s%n", testEvDriver.getName(), testEvDriver.getUserId());
+        "EV Driver created: %s with ID %s%n", testEVDriver.getName(), testEVDriver.getUserId());
 
     // Create Charging Stations
-    ChargingStation testChargingStationA =
-        new ChargingStation(
-            "Station A",
-            37.7749,
-            -122.4194,
-            "123 Main St, San Francisco, CA",
-            true,
-            stationOperator);
-    ChargingStation testChargingStationB =
-        new ChargingStation(
-            "Station B", 34.0522, -118.2437, "456 Elm St, Los Angeles, CA", true, stationOperator);
-    ChargingStation testChargingStationC =
-        new ChargingStation(
-            "Station C", 40.7128, -74.0060, "789 Oak St, New York, NY", false, stationOperator);
+    ChargingStation testChargingStation1 =
+        new ChargingStation("Station 1", 40.6343605, -8.647361, "Rua 1", true, stationOperator);
+    ChargingStation testChargingStation2 =
+        new ChargingStation("Station 2", 40.613605, -8.647361, "Rua 2", true, stationOperator);
+    ChargingStation testChargingStation3 =
+        new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", false, stationOperator);
 
-    chargingStationRepository.saveAndFlush(testChargingStationA);
-    chargingStationRepository.saveAndFlush(testChargingStationB);
-    chargingStationRepository.saveAndFlush(testChargingStationC);
-    System.out.printf(
-        "Charging Station created: %s with ID %s%n",
-        testChargingStationA.getName(), testChargingStationA.getStationId());
-    System.out.printf(
-        "Charging Station created: %s with ID %s%n",
-        testChargingStationB.getName(), testChargingStationB.getStationId());
-    System.out.printf(
-        "Charging Station created: %s with ID %s%n",
-        testChargingStationC.getName(), testChargingStationC.getStationId());
+    chargingStationRepository.saveAll(
+        List.of(testChargingStation1, testChargingStation2, testChargingStation3));
 
-    // Create Charging Slots for the stations with different speeds
+    System.out.printf(
+        "Charging Station created: %s with ID %s%n",
+        testChargingStation1.getName(), testChargingStation1.getStationId());
+    System.out.printf(
+        "Charging Station created: %s with ID %s%n",
+        testChargingStation2.getName(), testChargingStation2.getStationId());
+    System.out.printf(
+        "Charging Station created: %s with ID %s%n",
+        testChargingStation3.getName(), testChargingStation3.getStationId());
+
     chargingSlotRepository.saveAll(
         List.of(
-            // Station A: 1 Slow, 1 Medium
-            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStationA),
-            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStationA),
+            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1),
+            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1),
+            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation1),
+            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation2),
+            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3),
+            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3)));
 
-            // Station B: 1 Fast
-            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStationB),
-
-            // Station C: 1 Slow (initially inactive)
-            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStationC)));
     System.out.println("Charging slots created.");
 
     System.out.println("DataLoader finished.");

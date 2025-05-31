@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
@@ -96,7 +97,8 @@ public class ChargingStationServiceTest {
     when(chargingStationRepository.findByOperator(stationOperator)).thenReturn(chargingStations);
 
     // Act
-    List<ChargingStation> result = chargingStationService.getAllChargingStations(operatorId);
+    List<ChargingStationWithSlots> result =
+        chargingStationService.getAllChargingStations(operatorId);
 
     // Assert
     assertThat(result)

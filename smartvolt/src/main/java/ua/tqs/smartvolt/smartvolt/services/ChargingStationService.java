@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationResponse;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
@@ -52,14 +53,37 @@ public class ChargingStationService {
     return chargingStationRepository.save(chargingStation);
   }
 
-  public List<ChargingStation> getAllChargingStations(Long operatorId)
+  public List<ChargingStationWithSlots> getAllChargingStations(Long operatorId)
       throws ResourceNotFoundException {
     StationOperator operator =
         stationOperatorRepository
             .findById(operatorId)
             .orElseThrow(
                 () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
-    return chargingStationRepository.findByOperator(operator);
+
+    List<ChargingStation> stations = chargingStationRepository.findByOperator(operator);
+    if (stations.isEmpty()) {
+      throw new ResourceNotFoundException("No charging stations found for the operator");
+    }
+
+    List<ChargingStationWithSlots> stationWithSlotsList = new ArrayList<>();
+
+    for (ChargingStation station : stations) {
+      List<ChargingSlot> slots = chargingSlotRepository.findByStation(station);
+      ChargingStationWithSlots stationWithSlots =
+          new ChargingStationWithSlots(
+              station.getStationId(),
+              station.getName(),
+              station.getLatitude(),
+              station.getLongitude(),
+              station.getAddress(),
+              station.isAvailability(),
+              operator);
+      stationWithSlots.setSlots(slots);
+      stationWithSlotsList.add(stationWithSlots);
+    }
+
+    return stationWithSlotsList;
   }
 
   public ChargingStationsResponse getChargingStationsByChargingSpeed(String[] chargingSpeeds)
