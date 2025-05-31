@@ -26,6 +26,8 @@ public class WebConfig {
   @Value("${FRONTEND_PROTOCOL:http}")
   private String frontendprotocol;
 
+  private String testContainersHost = "host.testcontainers.internal";
+
   @Bean
   public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
@@ -33,7 +35,9 @@ public class WebConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
             .addMapping("/api/**")
-            .allowedOrigins(frontendprotocol + "://" + frontendIp + ":" + frontendPort)
+            .allowedOrigins(
+                frontendprotocol + "://" + frontendIp + ":" + frontendPort,
+                frontendprotocol + "://" + testContainersHost + ":" + frontendPort)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
             .allowCredentials(true);
@@ -64,7 +68,9 @@ public class WebConfig {
   UrlBasedCorsConfigurationSource apiConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(
-        Arrays.asList(frontendprotocol + "://" + frontendIp + ":" + frontendPort));
+        Arrays.asList(
+            frontendprotocol + "://" + frontendIp + ":" + frontendPort,
+            frontendprotocol + "://" + testContainersHost + ":" + frontendPort));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
@@ -77,7 +83,9 @@ public class WebConfig {
   UrlBasedCorsConfigurationSource myWebsiteConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(
-        Arrays.asList(frontendprotocol + "://" + frontendIp + ":" + frontendPort));
+        Arrays.asList(
+            frontendprotocol + "://" + frontendIp + ":" + frontendPort,
+            frontendprotocol + "://" + testContainersHost + ":" + frontendPort));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
