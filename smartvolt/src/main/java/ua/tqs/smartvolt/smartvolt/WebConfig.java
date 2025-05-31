@@ -30,6 +30,10 @@ public class WebConfig {
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {
+    System.out.println("Testcontainers host: " + testContainersHost);
+    System.out.println("Frontend IP: " + frontendIp);
+    System.out.println("Frontend Port: " + frontendPort);
+    System.out.println("Frontend Protocol: " + frontendprotocol);
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
