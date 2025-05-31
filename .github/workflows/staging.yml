@@ -35,8 +35,40 @@ jobs:
       - name: Run Slow Integration Tests
         run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
+  build-stage:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push Backend Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
+
+
   uat-stage:
     runs-on: ubuntu-latest
+    needs: [build-stage, integration-stage]
+
     strategy:
       matrix:
         java: [17]
@@ -97,7 +129,7 @@ jobs:
 
   capacity-stage:
     runs-on: self-hosted
-    # needs: uat-stage
+    needs: uat-stage
 
     permissions:
       contents: read
@@ -115,15 +147,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build & push Backend Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
-            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
 
       - name: Checkout AppConfig repository
         uses: actions/checkout@v2
