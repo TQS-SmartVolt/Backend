@@ -1,12 +1,21 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationResponse;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 
@@ -14,12 +23,15 @@ import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 public class ChargingStationService {
   private final ChargingStationRepository chargingStationRepository;
   private final StationOperatorRepository stationOperatorRepository;
+  private final ChargingSlotRepository chargingSlotRepository;
 
   public ChargingStationService(
       ChargingStationRepository chargingStationRepository,
-      StationOperatorRepository stationOperatorRepository) {
+      StationOperatorRepository stationOperatorRepository,
+      ChargingSlotRepository chargingSlotRepository) {
     this.chargingStationRepository = chargingStationRepository;
     this.stationOperatorRepository = stationOperatorRepository;
+    this.chargingSlotRepository = chargingSlotRepository;
   }
 
   public ChargingStation createChargingStation(ChargingStationRequest request, Long operatorId)
@@ -39,18 +51,94 @@ public class ChargingStationService {
 
     chargingStation.setOperator(stationOperator);
     chargingStation.setAvailability(true);
-    chargingStation.setSlots(new ArrayList<>());
     return chargingStationRepository.save(chargingStation);
   }
 
-  public List<ChargingStation> getAllChargingStations(Long operatorId)
+  public List<ChargingStationWithSlots> getAllChargingStations(Long operatorId)
       throws ResourceNotFoundException {
     StationOperator operator =
         stationOperatorRepository
             .findById(operatorId)
             .orElseThrow(
                 () -> new ResourceNotFoundException("Operator not found with id: " + operatorId));
-    return chargingStationRepository.findByOperator(operator);
+
+    List<ChargingStation> stations = chargingStationRepository.findByOperator(operator);
+    if (stations.isEmpty()) {
+      throw new ResourceNotFoundException("No charging stations found for the operator");
+    }
+
+    List<ChargingStationWithSlots> stationWithSlotsList = new ArrayList<>();
+
+    for (ChargingStation station : stations) {
+      List<ChargingSlot> slots = chargingSlotRepository.findByStation(station);
+      ChargingStationWithSlots stationWithSlots =
+          new ChargingStationWithSlots(
+              station.getStationId(),
+              station.getName(),
+              station.getLatitude(),
+              station.getLongitude(),
+              station.getAddress(),
+              station.isAvailability(),
+              operator);
+      stationWithSlots.setSlots(slots);
+      stationWithSlotsList.add(stationWithSlots);
+    }
+
+    return stationWithSlotsList;
+  }
+
+  public ChargingStationsResponse getChargingStationsByChargingSpeed(String[] chargingSpeeds)
+      throws ResourceNotFoundException {
+
+    if (chargingSpeeds == null || chargingSpeeds.length == 0) {
+      throw new ResourceNotFoundException("No charging speeds provided");
+    }
+
+    // Use a Set to avoid duplicate stations
+    Set<ChargingStation> stationsSet = new HashSet<>();
+
+    for (String speed : chargingSpeeds) {
+      List<ChargingStation> matchingStations =
+          chargingSlotRepository.findStationsByChargingSpeed(speed);
+      stationsSet.addAll(matchingStations);
+    }
+
+    // Filter out stations that are not available
+    List<ChargingStation> availableStations =
+        stationsSet.stream()
+            .filter(ChargingStation::isAvailability) // Filter for available stations
+            .collect(Collectors.toList());
+
+    if (availableStations.isEmpty()) {
+      throw new ResourceNotFoundException(
+          "No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
+    }
+
+    List<ChargingStationResponse> stationResponses = new ArrayList<>();
+
+    for (ChargingStation station : availableStations) {
+      // Collect distinct charging speeds at this station
+      Set<String> speedSet = new HashSet<>();
+      List<ChargingSlot> slots = chargingSlotRepository.findByStation(station);
+      for (ChargingSlot slot : slots) {
+        speedSet.add(slot.getChargingSpeed());
+      }
+
+      List<String> distinctSpeeds = new ArrayList<>(speedSet);
+
+      ChargingStationResponse response =
+          new ChargingStationResponse(
+              station.getStationId(),
+              station.getName(),
+              station.getAddress(),
+              station.getLatitude(),
+              station.getLongitude(),
+              distinctSpeeds);
+
+      stationResponses.add(response);
+    }
+
+    return new ChargingStationsResponse(stationResponses);
   }
 
   public ChargingStation updateChargingStationStatus(Long stationId, boolean activate)

@@ -1,4 +1,4 @@
-package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
+package ua.tqs.smartvolt.smartvolt.data_loaders.dev;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -18,8 +18,8 @@ import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.UserRepository;
 
 @Component
-@Profile("uat")
-public class DataLoaderUAT implements CommandLineRunner {
+@Profile("dev")
+public class DataLoaderDev implements CommandLineRunner {
 
   private final PasswordEncoder passwordEncoder;
   private final StationOperatorRepository stationOperatorRepository;
@@ -29,7 +29,7 @@ public class DataLoaderUAT implements CommandLineRunner {
   private final EvDriverRepository evDriverRepository;
   private final BookingRepository bookingRepository;
 
-  public DataLoaderUAT(
+  public DataLoaderDev(
       StationOperatorRepository sor,
       ChargingStationRepository csr,
       ChargingSlotRepository cslr,
@@ -71,9 +71,11 @@ public class DataLoaderUAT implements CommandLineRunner {
     // Clear the database
     dropDatabase();
 
+    // Create Station Operator
     StationOperator stationOperator =
         new StationOperator(
             "John Doe", "johndoe@example.com", passwordEncoder.encode("StrongPassword!"));
+
     stationOperatorRepository.saveAndFlush(stationOperator);
     System.out.printf(
         "Station Operator created: %s with ID %s%n",
@@ -93,7 +95,7 @@ public class DataLoaderUAT implements CommandLineRunner {
     ChargingStation testChargingStation2 =
         new ChargingStation("Station 2", 40.613605, -8.647361, "Rua 2", true, stationOperator);
     ChargingStation testChargingStation3 =
-        new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", false, stationOperator);
+        new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", true, stationOperator);
 
     chargingStationRepository.saveAll(
         List.of(testChargingStation1, testChargingStation2, testChargingStation3));

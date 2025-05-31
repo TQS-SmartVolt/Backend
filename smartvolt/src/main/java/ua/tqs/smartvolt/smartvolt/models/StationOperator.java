@@ -1,16 +1,10 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class StationOperator extends User {
-
-  @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL)
-  private List<ChargingStation> stations;
 
   public StationOperator() {}
 
@@ -58,13 +52,11 @@ public class StationOperator extends User {
 
     StationOperator that = (StationOperator) o;
 
-    return stations != null ? stations.equals(that.stations) : that.stations == null;
+    return getUserId() != null && getUserId().equals(that.getUserId());
   }
 
   @Override
   public int hashCode() {
-    int result = super.hashCode();
-    result = 31 * result + (stations != null ? stations.hashCode() : 0);
-    return result;
+    return getUserId() != null ? getUserId().hashCode() : 0;
   }
 }

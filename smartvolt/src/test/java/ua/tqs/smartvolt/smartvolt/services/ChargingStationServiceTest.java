@@ -3,11 +3,16 @@ package ua.tqs.smartvolt.smartvolt.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +22,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 
@@ -28,6 +37,7 @@ public class ChargingStationServiceTest {
 
   @Mock private ChargingStationRepository chargingStationRepository;
   @Mock private StationOperatorRepository stationOperatorRepository;
+  @Mock private ChargingSlotRepository chargingSlotRepository;
 
   private ChargingStationService chargingStationService;
 
@@ -35,11 +45,19 @@ public class ChargingStationServiceTest {
   private List<ChargingStation> chargingStations;
   private Long OPERATOR_ID;
 
+  private ChargingStation stationA;
+  private ChargingStation stationB;
+  private ChargingSlot slotA_Slow;
+  private ChargingSlot slotA_Medium;
+  private ChargingSlot slotB_Fast;
+
   @BeforeEach
   void setUp() {
     chargingStationService =
-        new ChargingStationService(chargingStationRepository, stationOperatorRepository);
+        new ChargingStationService(
+            chargingStationRepository, stationOperatorRepository, chargingSlotRepository);
 
+    OPERATOR_ID = 1L;
     stationOperator = new StationOperator();
     stationOperator.setUserId(OPERATOR_ID);
 
@@ -47,6 +65,25 @@ public class ChargingStationServiceTest {
         List.of(
             new ChargingStation("Station 1", 12.34, 56.78, "Address 1", true, stationOperator),
             new ChargingStation("Station 2", 23.45, 67.89, "Address 2", true, stationOperator));
+
+    // Setup for getChargingStationsByChargingSpeed tests
+    stationA = new ChargingStation("Station A", 40.0, -8.0, "Address A", true, stationOperator);
+    stationB = new ChargingStation("Station B", 41.0, -9.0, "Address B", true, stationOperator);
+
+    stationA.setStationId(1L);
+    stationB.setStationId(2L);
+
+    slotA_Slow = new ChargingSlot();
+    slotA_Slow.setChargingSpeed("Slow");
+    slotA_Slow.setStation(stationA);
+
+    slotA_Medium = new ChargingSlot();
+    slotA_Medium.setChargingSpeed("Medium");
+    slotA_Medium.setStation(stationA);
+
+    slotB_Fast = new ChargingSlot();
+    slotB_Fast.setChargingSpeed("Fast");
+    slotB_Fast.setStation(stationB);
   }
 
   @Test
@@ -60,7 +97,8 @@ public class ChargingStationServiceTest {
     when(chargingStationRepository.findByOperator(stationOperator)).thenReturn(chargingStations);
 
     // Act
-    List<ChargingStation> result = chargingStationService.getAllChargingStations(operatorId);
+    List<ChargingStationWithSlots> result =
+        chargingStationService.getAllChargingStations(operatorId);
 
     // Assert
     assertThat(result)
@@ -175,5 +213,118 @@ public class ChargingStationServiceTest {
         .hasMessageContaining("Charging station not found with id: " + invalidStationId);
     verify(chargingStationRepository, times(1)).findById(invalidStationId);
     verify(chargingStationRepository, times(0)).save(new ChargingStation());
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-19") // Assign a new requirement ID
+  void getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse()
+      throws ResourceNotFoundException {
+    // Arrange
+    String[] speeds = {"Slow", "Fast"};
+
+    // Mock findStationsByChargingSpeed for each speed
+    when(chargingSlotRepository.findStationsByChargingSpeed("Slow"))
+        .thenReturn(Arrays.asList(stationA)); // StationA has Slow
+    when(chargingSlotRepository.findStationsByChargingSpeed("Fast"))
+        .thenReturn(Arrays.asList(stationB)); // StationB has Fast
+
+    // Mock findByStation for each found station to get their distinct speeds
+    when(chargingSlotRepository.findByStation(stationA))
+        .thenReturn(Arrays.asList(slotA_Slow, slotA_Medium));
+    when(chargingSlotRepository.findByStation(stationB)).thenReturn(Arrays.asList(slotB_Fast));
+
+    // Act
+    ChargingStationsResponse response =
+        chargingStationService.getChargingStationsByChargingSpeed(speeds);
+
+    // Assert
+    assertThat(response).isNotNull();
+    assertThat(response.getStations()).hasSize(2);
+
+    // Verify StationA details
+    assertThat(response.getStations().get(0).getStationId()).isEqualTo(stationA.getStationId());
+    assertThat(response.getStations().get(0).getName()).isEqualTo(stationA.getName());
+    assertThat(response.getStations().get(0).getStationSlotChargingSpeeds())
+        .containsExactlyInAnyOrder("Slow", "Medium");
+
+    // Verify StationB details
+    assertThat(response.getStations().get(1).getStationId()).isEqualTo(stationB.getStationId());
+    assertThat(response.getStations().get(1).getName()).isEqualTo(stationB.getName());
+    assertThat(response.getStations().get(1).getStationSlotChargingSpeeds())
+        .containsExactlyInAnyOrder("Fast");
+
+    // Verify repository calls
+    verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Slow");
+    verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Fast");
+    verify(chargingSlotRepository, times(1)).findByStation(stationA);
+    verify(chargingSlotRepository, times(1)).findByStation(stationB);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-19")
+  void getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    String[] speeds = {"Slow", "Fast"};
+    when(chargingSlotRepository.findStationsByChargingSpeed(anyString()))
+        .thenReturn(Collections.emptyList()); // Mock both calls to return empty list
+
+    // Act & Assert
+    ResourceNotFoundException exception =
+        assertThrows(
+            ResourceNotFoundException.class,
+            () -> chargingStationService.getChargingStationsByChargingSpeed(speeds));
+
+    String expectedMessage =
+        "No charging stations found for the given speeds: " + Arrays.toString(speeds);
+    assertThat(exception.getMessage()).isEqualTo(expectedMessage);
+
+    // Verify findStationsByChargingSpeed was called for each speed, but findByStation was never
+    // called
+    verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Slow");
+    verify(chargingSlotRepository, times(1)).findStationsByChargingSpeed("Fast");
+    verify(chargingSlotRepository, never()).findByStation(any(ChargingStation.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-19")
+  void getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException() {
+    // Arrange
+    String[] speeds = null;
+
+    // Act & Assert
+    ResourceNotFoundException exception =
+        assertThrows(
+            ResourceNotFoundException.class,
+            () -> chargingStationService.getChargingStationsByChargingSpeed(speeds));
+
+    assertThat(exception.getMessage()).isEqualTo("No charging speeds provided");
+
+    // Verify no repository methods were called as the check is done before
+    verify(chargingSlotRepository, never()).findStationsByChargingSpeed(anyString());
+    verify(chargingSlotRepository, never()).findByStation(any(ChargingStation.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-19")
+  void
+      getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException() {
+    // Arrange
+    String[] speeds = {};
+
+    // Act & Assert
+    ResourceNotFoundException exception =
+        assertThrows(
+            ResourceNotFoundException.class,
+            () -> chargingStationService.getChargingStationsByChargingSpeed(speeds));
+
+    assertThat(exception.getMessage()).isEqualTo("No charging speeds provided");
+
+    // Verify no repository methods were called as the check is done before
+    verify(chargingSlotRepository, never()).findStationsByChargingSpeed(anyString());
+    verify(chargingSlotRepository, never()).findByStation(any(ChargingStation.class));
   }
 }
