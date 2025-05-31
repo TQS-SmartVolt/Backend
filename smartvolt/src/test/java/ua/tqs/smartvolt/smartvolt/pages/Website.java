@@ -5,19 +5,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ua.tqs.smartvolt.smartvolt.steps.common.TestContext;
 
 public class Website {
 
   protected WebDriver driver;
   protected Wait<WebDriver> wait;
 
-  private String frontendprotocol = "http";
-  private String frontendIp = "localhost";
-  private String frontendPort = "80";
-
   private String websiteUrl;
 
-  private int UAT_WEB_DELAY_SECONDS = 30;
+  private int UAT_WEB_DELAY_SECONDS = 10;
 
   public Website(WebDriver driver) {
     this.driver = driver;
@@ -26,7 +23,11 @@ public class Website {
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(UAT_WEB_DELAY_SECONDS));
     PageFactory.initElements(driver, this);
 
-    this.websiteUrl = String.format("%s://%s:%s", frontendprotocol, frontendIp, frontendPort);
+    this.websiteUrl =
+        String.format(
+            "%s://%s:%s",
+            TestContext.FRONTEND_PROTOCOL, TestContext.FRONTEND_IP, TestContext.FRONTEND_PORT);
+    System.out.println("Website URL: " + this.websiteUrl);
   }
 
   public void quit() {
@@ -34,6 +35,7 @@ public class Website {
   }
 
   public void navigateTo(String page) {
+    System.out.println("Navigating to: " + websiteUrl + page);
     driver.get(websiteUrl + page);
   }
 

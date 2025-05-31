@@ -45,14 +45,6 @@ jobs:
 
     steps:
 
-      - name: Install Chrome
-        run: |
-          sudo apt update
-          sudo apt install -y wget
-          sudo apt-get install -y libxss1 libappindicator1 libindicator7
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome*.deb
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -103,11 +95,11 @@ jobs:
 
       - name: Run UAT Web Tests
         working-directory: smartvolt
-        run: mvn -B test -PUAT-Web --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+        run: mvn -B clean test -PUAT-Web -Dbrowser=chrome -Dhost=host.testcontainers.internal --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
   capacity-stage:
     runs-on: self-hosted
-    needs: uat-stage
+    # needs: uat-stage
 
     permissions:
       contents: read

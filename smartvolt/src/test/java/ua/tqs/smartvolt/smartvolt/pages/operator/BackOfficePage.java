@@ -32,6 +32,10 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-station']")
   private WebElement confirmAddStationButton;
 
+  public BackOfficePage(WebDriver driver) {
+    super(driver);
+  }
+
   @FindBy(css = "[data-testid='station-card-deactivate']")
   private WebElement stationCardDeactivateButton;
 
@@ -46,10 +50,6 @@ public class BackOfficePage extends Website {
 
   @FindBy(css = "[data-testid='confirm-activation-button']")
   private WebElement confirmActivationButton;
-
-  public BackOfficePage(WebDriver driver) {
-    super(driver);
-  }
 
   // Access methods for WebElements
 
