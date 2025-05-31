@@ -46,4 +46,8 @@ public class Website {
   public Wait<WebDriver> getWait() {
     return wait;
   }
+
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
 }

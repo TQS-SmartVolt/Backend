@@ -30,6 +30,9 @@ public class ServiceStationsMapPage extends Website {
   @FindBy(css = "[data-testid='filter-checkbox-fast']")
   private WebElement fastSpeedFilterCheckbox;
 
+  @FindBy(css = "[data-testid='filter-select-all-checkbox']")
+  private WebElement selectAllFilterCheckbox;
+
   @FindBy(css = "[data-testid='toggle-view-mode-button']")
   private WebElement toggleViewModeButton;
 
@@ -41,13 +44,11 @@ public class ServiceStationsMapPage extends Website {
   private WebElement zoomOutButton;
 
   // This is the main pane that handles drag interactions (panning)
-  // Its 'transform' style should change during zoom and pan
+  // Its 'transform' style should change during pan
   @FindBy(css = ".leaflet-map-pane")
-  private WebElement mapContainerPane; // Renamed from mapPane for clarity
+  private WebElement mapContainerPane;
 
-  // This is the canvas element whose 'transform' style actually changes during zoom/pan
-  // We found this was not reliably changing in automated tests, so we're focusing on
-  // mapContainerPane
+  // This is the canvas element whose 'transform' style actually changes during zoom
   @FindBy(css = "canvas.leaflet-layer.leaflet-zoom-animated")
   private WebElement mapCanvasLayer;
 
@@ -130,6 +131,37 @@ public class ServiceStationsMapPage extends Website {
     wait.until(ExpectedConditions.elementToBeClickable(checkboxToClick));
     if (!checkboxToClick.isSelected()) {
       checkboxToClick.click();
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.selectChargingSpeedFilter() - Selected '"
+              + speed
+              + "' filter.");
+    } else {
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.selectChargingSpeedFilter() - '"
+              + speed
+              + "' filter was already selected.");
+    }
+  }
+
+  public void unselectAllFilters() {
+    System.out.println("DEBUG: ServiceStationsMapPage.unselectAllFilters() - Entering method.");
+    wait.until(ExpectedConditions.elementToBeClickable(selectAllFilterCheckbox));
+    // If "Select All" is selected, click it to unselect all.
+    // If it's already unselected, clicking it might select all, so we need to be careful.
+    // Assuming clicking "Select All" checkbox when it's checked will uncheck it and thus unselect
+    // others.
+    if (selectAllFilterCheckbox.isSelected()) {
+      selectAllFilterCheckbox.click();
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.unselectAllFilters() - Clicked 'Select All' checkbox to unselect all filters.");
+    } else {
+      // If "Select All" is not selected, it means filters are already off or specific filters are
+      // selected.
+      // To guarantee "unselect all", we might need a more robust approach if clicking when
+      // unselected selects all.
+      // For now, assuming direct uncheck behavior of "Select All" checkbox.
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.unselectAllFilters() - 'Select All' checkbox is not selected. Proceeding without clicking.");
     }
   }
 
@@ -202,26 +234,33 @@ public class ServiceStationsMapPage extends Website {
     }
   }
 
-  // Methods for Map Interactions (Zoom and Pan)
+  public void clickViewDetailsButton() {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.clickViewDetailsButton() - Clicking 'View Details' button.");
+    wait.until(ExpectedConditions.elementToBeClickable(stationDetailsPopupViewDetailsButton));
+    stationDetailsPopupViewDetailsButton.click();
+  }
+
+  // --- Methods for Map Interactions (Zoom and Pan) ---
 
   public void zoomIn() {
     System.out.println("DEBUG: ServiceStationsMapPage.zoomIn() - Clicking zoom in button.");
     wait.until(ExpectedConditions.elementToBeClickable(zoomInButton));
     zoomInButton.click();
-    // Now checking mapContainerPane transform
+    // Check mapCanvasLayer transform for zoom
     System.out.println(
-        "DEBUG: ServiceStationsMapPage.zoomIn() - Map pane transform after click: "
-            + mapContainerPane.getCssValue("transform"));
+        "DEBUG: ServiceStationsMapPage.zoomIn() - Map canvas transform after click: "
+            + mapCanvasLayer.getCssValue("transform"));
   }
 
   public void zoomOut() {
     System.out.println("DEBUG: ServiceStationsMapPage.zoomOut() - Clicking zoom out button.");
     wait.until(ExpectedConditions.elementToBeClickable(zoomOutButton));
     zoomOutButton.click();
-    // Now checking mapContainerPane transform
+    // Check mapCanvasLayer transform for zoom
     System.out.println(
-        "DEBUG: ServiceStationsMapPage.zoomOut() - Map pane transform after click: "
-            + mapContainerPane.getCssValue("transform"));
+        "DEBUG: ServiceStationsMapPage.zoomOut() - Map canvas transform after click: "
+            + mapCanvasLayer.getCssValue("transform"));
   }
 
   public void panMap(int xOffset, int yOffset) {
@@ -236,39 +275,41 @@ public class ServiceStationsMapPage extends Website {
         .dragAndDropBy(mapContainerPane, xOffset, yOffset)
         .build()
         .perform();
-    // Now checking mapContainerPane transform
+    // mapContainerPane transform should change for pan
     System.out.println(
         "DEBUG: ServiceStationsMapPage.panMap() - Map pane transform after pan: "
             + mapContainerPane.getCssValue("transform"));
   }
 
+  // This method will now get the transform from the canvas layer for zoom verification
   public String getMapCurrentTransformStyle() {
     System.out.println(
-        "DEBUG: ServiceStationsMapPage.getMapCurrentTransformStyle() - Getting current map pane transform.");
+        "DEBUG: ServiceStationsMapPage.getMapCurrentTransformStyle() - Getting current map canvas transform.");
     wait.until(
         ExpectedConditions.visibilityOf(
-            mapContainerPane)); // Get transform from the map container pane
-    String transform = mapContainerPane.getCssValue("transform");
+            mapCanvasLayer)); // Get transform from the canvas layer for zoom
+    String transform = mapCanvasLayer.getCssValue("transform");
     System.out.println(
         "DEBUG: ServiceStationsMapPage.getMapCurrentTransformStyle() - Current transform: "
             + transform);
     return transform;
   }
 
+  // This method will now wait for the canvas layer transform to change for zoom verification
   public void waitForMapTransformToChange(String initialTransform) {
     System.out.println(
-        "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Waiting for map pane transform to change from: "
+        "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Waiting for map canvas transform to change from: "
             + initialTransform);
     try {
       wait.until(
           ExpectedConditions.not(
-              ExpectedConditions.attributeToBe(mapContainerPane, "transform", initialTransform)));
+              ExpectedConditions.attributeToBe(mapCanvasLayer, "transform", initialTransform)));
       System.out.println(
-          "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Map pane transform has changed!");
+          "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Map canvas transform has changed!");
     } catch (TimeoutException e) {
-      String currentTransform = mapContainerPane.getCssValue("transform");
+      String currentTransform = mapCanvasLayer.getCssValue("transform");
       System.err.println(
-          "ERROR: ServiceStationsMapPage.waitForMapTransformToChange() - Timeout: Map pane transform did not change from '"
+          "ERROR: ServiceStationsMapPage.waitForMapTransformToChange() - Timeout: Map canvas transform did not change from '"
               + initialTransform
               + "'. Current transform: '"
               + currentTransform

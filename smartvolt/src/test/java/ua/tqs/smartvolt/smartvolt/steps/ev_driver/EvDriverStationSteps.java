@@ -77,6 +77,39 @@ public class EvDriverStationSteps {
         "Popup address does not match."); // Pass expectedAddress
   }
 
+  // Step definition for unselecting all filters
+  @And("I click on Select All Filter to remove all the filters")
+  public void iClickOnSelectAllFilterToRemoveAllTheFilters() {
+    serviceStationsMapPage.unselectAllFilters();
+  }
+
+  // Step definition for selecting Slow Filter
+  @And("I click on Slow Filter")
+  public void iClickOnSlowFilter() {
+    serviceStationsMapPage.selectChargingSpeedFilter("Slow");
+  }
+
+  // Step definition for clicking the View Details button
+  @And("I click on the View Details button")
+  public void iClickOnTheViewDetailsButton() {
+    serviceStationsMapPage.clickViewDetailsButton();
+  }
+
+  @Then("I should be in the page {string}")
+  public void iShouldBeInThePage(String expectedPageUrl) {
+    String fullExpectedUrl = context.getWebsite().getWebsiteUrl() + expectedPageUrl;
+
+    // Normalize the expected URL by removing default ports if they are present
+    // Example: http://localhost:80/booking becomes http://localhost/booking
+    fullExpectedUrl = fullExpectedUrl.replace(":80", "");
+
+    String currentUrl = context.getDriver().getCurrentUrl();
+    System.out.println("DEBUG: Current URL: " + currentUrl);
+    System.out.println("DEBUG: Expected URL (normalized): " + fullExpectedUrl);
+
+    assertEquals(fullExpectedUrl, currentUrl, "The current URL does not match the expected page.");
+  }
+
   // Updated Step Definitions for Map Zoom and Pan
   @And("I zoom in on the map")
   public void iZoomInOnTheMap() {

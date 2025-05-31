@@ -29,3 +29,20 @@ Feature: EV Driver Station Discovery
     Then the map view should have changed its zoom level
     And I pan the map by 50 pixels horizontally and 50 pixels vertically
     Then the map position should have changed
+
+  Scenario: The user can apply a filter by charging speed.
+    Then I should see the map displayed
+    And I expand the filter section
+    And I click on Select All Filter to remove all the filters
+    And I click on Slow Filter
+    And I click the "Show Markers" button
+    Then I should see exactly 1 charging station markers on the map
+
+  Scenario: Navigate to booking page from station details
+    Then I should see the map displayed
+    And I expand the filter section
+    And I click the "Show Markers" button
+    And I click on the charging station marker at index 0
+    Then I should see a station details popup with title "Station 1" and address "Rua 1"
+    And I click on the View Details button
+    Then I should be in the page "/booking"
