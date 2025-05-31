@@ -33,34 +33,59 @@ jobs:
   #     - name: Run Slow Integration Tests
   #       run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
-  # build-stage:
-  #   runs-on: ubuntu-latest
+  build-stage:
+    runs-on: ubuntu-latest
 
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #     attestations: write
-  #     id-token: write
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Log in to GitHub Container Registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: ${{ env.REGISTRY }}
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Build & push Backend Docker image
-  #       uses: docker/build-push-action@v4
-  #       with:
-  #         context: .
-  #         push: true
-  #         tags: |
-  #           ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
-  #           ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
+      - name: Build & push Backend Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
+            ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
+      
+      - name: Checkout AppConfig repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          repository: TQS-SmartVolt/AppConfig
+          token: ${{ secrets.SMART_VOLT_SECRET }}
+
+      - name: Update .env.production and .env.staging with backend tag
+        run: |
+          for env_file in .env.production .env.staging; do
+            sed -i "s/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/" $env_file
+            if ! git diff --quiet $env_file; then
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+              git add $env_file
+              git commit -m "Update BACKEND_TAG in $env_file to ${{ github.sha }}"
+            else
+              echo "No changes to commit in $env_file"
+            fi
+          done
+          git push origin HEAD:main
+        env:
+          DOCKER_PORT: 8080
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   # uat-stage:
@@ -127,49 +152,11 @@ jobs:
 
   # capacity-stage:
   #   runs-on: self-hosted
-  #   needs: build-stage
-
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #     attestations: write
-  #     id-token: write
+  #   needs: uat-stage
 
   #   steps:
   #     - name: Checkout repository
   #       uses: actions/checkout@v4
-
-  #     - name: Log in to GitHub Container Registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: ${{ env.REGISTRY }}
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-
-  #     - name: Checkout AppConfig repository
-  #       uses: actions/checkout@v2
-  #       with:
-  #         submodules: true
-  #         repository: TQS-SmartVolt/AppConfig
-  #         token: ${{ secrets.SMART_VOLT_SECRET }}
-
-  #     - name: Update .env.production and .env.staging with backend tag
-  #       run: |
-  #         for env_file in .env.production .env.staging; do
-  #           sed -i "s/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/" $env_file
-  #           if ! git diff --quiet $env_file; then
-  #             git config --global user.name "github-actions[bot]"
-  #             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-  #             git add $env_file
-  #             git commit -m "Update BACKEND_TAG in $env_file to ${{ github.sha }}"
-  #           else
-  #             echo "No changes to commit in $env_file"
-  #           fi
-  #         done
-  #         git push origin HEAD:main
-  #       env:
-  #         DOCKER_PORT: 8080
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   #     - name: Run Performance Tests
   #       run: echo "TODO. Run the docker image and run the k6s performance tests"
