@@ -54,7 +54,7 @@ class ChargingStationControllerIT {
     validSvToken =
         given()
             .contentType("application/json")
-            .body("{\"email\":\"test@example.com\", \"password\":\"password123!\"}")
+            .body("{\"email\":\"test@example.com\", \"password\":\"password123\"}")
             .post(getLoginUrl())
             .then()
             .statusCode(HttpStatus.OK.value())

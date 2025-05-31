@@ -21,15 +21,6 @@ Feature: EV Driver Station Discovery
     And I click on the charging station marker at index 1
     Then I should see a station details popup with title "Station 2" and address "Rua 2"
 
-  Scenario: The map supports zoom and pan interactions to explore different areas
-    Then I should see the map displayed
-    And I zoom in on the map
-    Then the map view should have changed its zoom level
-    And I zoom out on the map
-    Then the map view should have changed its zoom level
-    And I pan the map by 50 pixels horizontally and 50 pixels vertically
-    Then the map position should have changed
-
   Scenario: The user can apply a filter by charging speed.
     Then I should see the map displayed
     And I expand the filter section

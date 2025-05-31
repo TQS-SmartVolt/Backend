@@ -57,7 +57,7 @@ class ServiceStationsMapControllerIT {
     driverSvToken =
         given()
             .contentType("application/json")
-            .body("{\"email\":\"evdriver@example.com\", \"password\":\"password123!\"}")
+            .body("{\"email\":\"evdriver@example.com\", \"password\":\"password123\"}")
             .post(getLoginUrl())
             .then()
             .statusCode(HttpStatus.OK.value())

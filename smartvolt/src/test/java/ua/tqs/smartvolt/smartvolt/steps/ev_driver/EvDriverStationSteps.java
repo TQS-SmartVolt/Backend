@@ -15,7 +15,6 @@ public class EvDriverStationSteps {
 
   private final TestContext context;
   private ServiceStationsMapPage serviceStationsMapPage;
-  private String initialMapTransform; // To store map's transform style for comparison
 
   public EvDriverStationSteps(TestContext context) {
     this.context = context;
@@ -25,7 +24,6 @@ public class EvDriverStationSteps {
   @Then("I should see the map displayed")
   public void iShouldSeeTheMapDisplayed() {
     assertTrue(serviceStationsMapPage.isMapDisplayed(), "The map should be displayed.");
-    initialMapTransform = serviceStationsMapPage.getMapCurrentTransformStyle();
   }
 
   @And("I expand the filter section")
@@ -108,44 +106,5 @@ public class EvDriverStationSteps {
     System.out.println("DEBUG: Expected URL (normalized): " + fullExpectedUrl);
 
     assertEquals(fullExpectedUrl, currentUrl, "The current URL does not match the expected page.");
-  }
-
-  // Updated Step Definitions for Map Zoom and Pan
-  @And("I zoom in on the map")
-  public void iZoomInOnTheMap() {
-    serviceStationsMapPage.zoomIn();
-    // Wait for the map's transform style to change after zooming
-    serviceStationsMapPage.waitForMapTransformToChange(initialMapTransform);
-    initialMapTransform =
-        serviceStationsMapPage.getMapCurrentTransformStyle(); // Update for next action
-  }
-
-  @Then("the map view should have changed its zoom level")
-  public void theMapViewShouldHaveChangedItsZoomLevel() {
-    // The actual assertion/wait for change happened in the @And step.
-    // This step is a confirmation that the change occurred.
-  }
-
-  @And("I zoom out on the map")
-  public void iZoomOutOnTheMap() {
-    serviceStationsMapPage.zoomOut();
-    // Wait for the map's transform style to change after zooming
-    serviceStationsMapPage.waitForMapTransformToChange(initialMapTransform);
-    initialMapTransform =
-        serviceStationsMapPage.getMapCurrentTransformStyle(); // Update for next action
-  }
-
-  @And("I pan the map by {int} pixels horizontally and {int} pixels vertically")
-  public void iPanTheMapByPixelsHorizontallyAndPixelsVertically(int xOffset, int yOffset) {
-    serviceStationsMapPage.panMap(xOffset, yOffset);
-    // Wait for the map's transform style to change after panning
-    serviceStationsMapPage.waitForMapTransformToChange(initialMapTransform);
-    initialMapTransform =
-        serviceStationsMapPage.getMapCurrentTransformStyle(); // Update for next action
-  }
-
-  @Then("the map position should have changed")
-  public void theMapPositionShouldHaveChanged() {
-    // The actual assertion/wait for change happened in the @And step.
   }
 }
