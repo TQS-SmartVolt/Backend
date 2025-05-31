@@ -8,30 +8,30 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  # integration-stage:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       java: [17]
-  #   defaults:
-  #     run:
-  #       working-directory: smartvolt
+  integration-stage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17]
+    defaults:
+      run:
+        working-directory: smartvolt
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: Set up JDK
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         java-version: 17
-  #         distribution: 'temurin'
-  #         cache: maven
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
 
-  #     - name: Run Slow Integration Tests
-  #       run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
+      - name: Run Slow Integration Tests
+        run: mvn -B integration-test verify -Dtests=IT-Slow --file pom.xml # @Tag("IT-Slow") -> JUnit 5
 
   build-stage:
     runs-on: ubuntu-latest
@@ -88,75 +88,75 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-  # uat-stage:
-  #   runs-on: ubuntu-latest
-  #   needs: [build-stage, integration-stage]
+  uat-stage:
+    runs-on: ubuntu-latest
+    needs: [build-stage, integration-stage]
 
-  #   strategy:
-  #     matrix:
-  #       java: [17]
-  #       browser: [chrome, firefox, edge]
-  #   permissions:
-  #     contents: read
+    strategy:
+      matrix:
+        java: [17]
+        browser: [chrome, firefox, edge]
+    permissions:
+      contents: read
 
-  #   steps:
+    steps:
 
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: Checkout AppConfig repository
-  #       uses: actions/checkout@v2
-  #       with:
-  #         submodules: true
-  #         repository: TQS-SmartVolt/AppConfig
-  #         token: ${{ secrets.SMART_VOLT_SECRET }}
+      - name: Checkout AppConfig repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          repository: TQS-SmartVolt/AppConfig
+          token: ${{ secrets.SMART_VOLT_SECRET }}
 
-  #     - name: Log in to GitHub Container Registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: ${{ env.REGISTRY }}
-  #         username: ${{ secrets.GHCR_USERNAME }}
-  #         password: ${{ secrets.GHCR_PAT }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_PAT }}
 
-  #     - name: Staging with Docker Compose
-  #       run: |
-  #         set -a
-  #         source .env.staging
-  #         docker compose --file compose.stag.yml down
-  #         docker compose --file compose.stag.yml up -d --build
-  #       env:
-  #         DOCKER_PORT: 8080
-  #         username: ${{ github.actor }}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Staging with Docker Compose
+        run: |
+          set -a
+          source .env.staging
+          docker compose --file compose.stag.yml down
+          docker compose --file compose.stag.yml up -d --build
+        env:
+          DOCKER_PORT: 8080
+          username: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Change working directory
-  #       run: cd ..
+      - name: Change working directory
+        run: cd ..
 
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: Set up JDK
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         java-version: ${{ matrix.java }}
-  #         distribution: 'temurin'
-  #         cache: maven
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: maven
 
-  #     - name: Run UAT Web Tests
-  #       working-directory: smartvolt
-  #       run: mvn -B clean test -PUAT-Web -Dbrowser=${{ matrix.browser }} -Dhost=host.testcontainers.internal --file pom.xml # @Tag("UAT-Web") -> JUnit 5
+      - name: Run UAT Web Tests
+        working-directory: smartvolt
+        run: mvn -B clean test -PUAT-Web -Dbrowser=${{ matrix.browser }} -Dhost=host.testcontainers.internal --file pom.xml # @Tag("UAT-Web") -> JUnit 5
 
-  # capacity-stage:
-  #   runs-on: self-hosted
-  #   needs: uat-stage
+  capacity-stage:
+    runs-on: self-hosted
+    needs: uat-stage
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Run Performance Tests
-  #       run: echo "TODO. Run the docker image and run the k6s performance tests"
+      - name: Run Performance Tests
+        run: echo "TODO. Run the docker image and run the k6s performance tests"
