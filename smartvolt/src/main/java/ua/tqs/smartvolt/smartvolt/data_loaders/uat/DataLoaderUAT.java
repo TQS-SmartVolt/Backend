@@ -3,13 +3,13 @@ package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.StationOperatorRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Component
 @Profile("uat")
