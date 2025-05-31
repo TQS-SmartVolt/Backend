@@ -50,8 +50,8 @@ public class SecurityConfig {
     return http.build();
   }
 
-    @Bean
-    JwtAuthenticationFilter jwtAuthenticationFilter() {
+  @Bean
+  JwtAuthenticationFilter jwtAuthenticationFilter() {
     return new JwtAuthenticationFilter();
   }
 
