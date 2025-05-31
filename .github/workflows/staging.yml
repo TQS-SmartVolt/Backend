@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-      java: [17]
+        java: [17]
       # browser: [chrome, firefox, edge]
     permissions:
       contents: read
