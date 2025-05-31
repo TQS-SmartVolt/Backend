@@ -27,6 +27,7 @@ public class WebConfig {
   private String frontendprotocol;
 
   private String testContainersHost = "host.testcontainers.internal";
+  private String deploymentHost = "deti-tqs-21.ua.pt";
 
   @Bean
   public WebMvcConfigurer corsConfigurer() {
@@ -41,7 +42,8 @@ public class WebConfig {
             .addMapping("/api/**")
             .allowedOrigins(
                 frontendprotocol + "://" + frontendIp + ":" + frontendPort,
-                frontendprotocol + "://" + testContainersHost + ":" + frontendPort)
+                frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
+                frontendprotocol + "://" + deploymentHost + ":" + frontendPort)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
             .allowCredentials(true);
@@ -74,7 +76,8 @@ public class WebConfig {
     configuration.setAllowedOrigins(
         Arrays.asList(
             frontendprotocol + "://" + frontendIp + ":" + frontendPort,
-            frontendprotocol + "://" + testContainersHost + ":" + frontendPort));
+            frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
+            frontendprotocol + "://" + deploymentHost + ":" + frontendPort));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
@@ -89,7 +92,8 @@ public class WebConfig {
     configuration.setAllowedOrigins(
         Arrays.asList(
             frontendprotocol + "://" + frontendIp + ":" + frontendPort,
-            frontendprotocol + "://" + testContainersHost + ":" + frontendPort));
+            frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
+            frontendprotocol + "://" + deploymentHost + ":" + frontendPort));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
