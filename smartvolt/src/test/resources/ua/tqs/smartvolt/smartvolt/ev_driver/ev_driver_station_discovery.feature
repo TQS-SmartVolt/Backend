@@ -3,7 +3,7 @@ Feature: EV Driver Station Discovery
   To allow EV drivers to find available charging stations on a map
 
   Background:
-    Given the EV driver is logged in with email "test@example.com" and password "password123"
+    Given the EV driver is logged in with email "test@example.com" and password "password123!"
     And the user is on page "/service/stations-map"
 
   Scenario: View all available charging stations on the map
@@ -20,3 +20,12 @@ Feature: EV Driver Station Discovery
     Then I should see a station details popup with title "Station 1" and address "Rua 1"
     And I click on the charging station marker at index 1
     Then I should see a station details popup with title "Station 2" and address "Rua 2"
+
+  Scenario: The map supports zoom and pan interactions to explore different areas
+    Then I should see the map displayed
+    And I zoom in on the map
+    Then the map view should have changed its zoom level
+    And I zoom out on the map
+    Then the map view should have changed its zoom level
+    And I pan the map by 50 pixels horizontally and 50 pixels vertically
+    Then the map position should have changed

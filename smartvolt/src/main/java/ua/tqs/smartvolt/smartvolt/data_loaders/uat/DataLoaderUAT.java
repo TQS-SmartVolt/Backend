@@ -81,7 +81,7 @@ public class DataLoaderUAT implements CommandLineRunner {
 
     // Create a EVDriver
     EvDriver testEVDriver =
-        new EvDriver("Jane Smith", "test@example.com", passwordEncoder.encode("password123"));
+        new EvDriver("Jane Smith", "test@example.com", passwordEncoder.encode("password123!"));
     evDriverRepository.saveAndFlush(testEVDriver);
 
     System.out.printf(

@@ -30,13 +30,29 @@ public class ServiceStationsMapPage extends Website {
   @FindBy(css = "[data-testid='filter-checkbox-fast']")
   private WebElement fastSpeedFilterCheckbox;
 
-  // New: Web Element for the toggle view mode button
   @FindBy(css = "[data-testid='toggle-view-mode-button']")
   private WebElement toggleViewModeButton;
 
+  // Web Elements for Map Controls
+  @FindBy(css = ".leaflet-control-zoom-in")
+  private WebElement zoomInButton;
+
+  @FindBy(css = ".leaflet-control-zoom-out")
+  private WebElement zoomOutButton;
+
+  // This is the main pane that handles drag interactions (panning)
+  // Its 'transform' style should change during zoom and pan
+  @FindBy(css = ".leaflet-map-pane")
+  private WebElement mapContainerPane; // Renamed from mapPane for clarity
+
+  // This is the canvas element whose 'transform' style actually changes during zoom/pan
+  // We found this was not reliably changing in automated tests, so we're focusing on
+  // mapContainerPane
+  @FindBy(css = "canvas.leaflet-layer.leaflet-zoom-animated")
+  private WebElement mapCanvasLayer;
+
   // --- Web Elements for Station Markers/Details ---
 
-  // Represents the currently open station popup
   @FindBy(css = "[data-testid^='station-popup-']")
   private WebElement stationDetailsPopup;
 
@@ -60,7 +76,6 @@ public class ServiceStationsMapPage extends Website {
       System.out.println(
           "DEBUG: ServiceStationsMapPage.isMapDisplayed() - mapContainer is visible. Now waiting for a Leaflet map tile ([data-testid='map-component-container'] img.leaflet-tile)...");
 
-      // This wait ensures the actual map content (tiles) has loaded
       wait.until(
           ExpectedConditions.visibilityOfElementLocated(
               By.cssSelector("[data-testid='map-component-container'] img.leaflet-tile")));
@@ -87,7 +102,6 @@ public class ServiceStationsMapPage extends Website {
     System.out.println(
         "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Entering method.");
     wait.until(ExpectedConditions.elementToBeClickable(toggleViewModeButton));
-    // Check if the button currently says "Show Markers" before clicking
     String buttonText = toggleViewModeButton.getText();
     System.out.println(
         "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Current button text: '"
@@ -97,12 +111,6 @@ public class ServiceStationsMapPage extends Website {
       toggleViewModeButton.click();
       System.out.println(
           "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Clicked 'Show Markers' button.");
-      // Add a small wait for the map to re-render with markers
-      try {
-        Thread.sleep(1000); // Wait for 1 second, adjust as needed
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
     } else {
       System.out.println(
           "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Button is not 'Show Markers'. Assuming markers are already visible or view is already toggled.");
@@ -110,7 +118,6 @@ public class ServiceStationsMapPage extends Website {
   }
 
   public void selectChargingSpeedFilter(String speed) {
-    // Assuming the filter modal/menu is open after clicking filterExpandCollapseButton
     WebElement checkboxToClick;
     if ("Slow".equalsIgnoreCase(speed)) {
       checkboxToClick = slowSpeedFilterCheckbox;
@@ -192,6 +199,81 @@ public class ServiceStationsMapPage extends Website {
       return stationDetailsPopupViewDetailsButton.isDisplayed();
     } catch (Exception e) {
       return false;
+    }
+  }
+
+  // Methods for Map Interactions (Zoom and Pan)
+
+  public void zoomIn() {
+    System.out.println("DEBUG: ServiceStationsMapPage.zoomIn() - Clicking zoom in button.");
+    wait.until(ExpectedConditions.elementToBeClickable(zoomInButton));
+    zoomInButton.click();
+    // Now checking mapContainerPane transform
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.zoomIn() - Map pane transform after click: "
+            + mapContainerPane.getCssValue("transform"));
+  }
+
+  public void zoomOut() {
+    System.out.println("DEBUG: ServiceStationsMapPage.zoomOut() - Clicking zoom out button.");
+    wait.until(ExpectedConditions.elementToBeClickable(zoomOutButton));
+    zoomOutButton.click();
+    // Now checking mapContainerPane transform
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.zoomOut() - Map pane transform after click: "
+            + mapContainerPane.getCssValue("transform"));
+  }
+
+  public void panMap(int xOffset, int yOffset) {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.panMap() - Panning map by x="
+            + xOffset
+            + ", y="
+            + yOffset
+            + ".");
+    wait.until(ExpectedConditions.visibilityOf(mapContainerPane)); // Drag on the container pane
+    new org.openqa.selenium.interactions.Actions(driver)
+        .dragAndDropBy(mapContainerPane, xOffset, yOffset)
+        .build()
+        .perform();
+    // Now checking mapContainerPane transform
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.panMap() - Map pane transform after pan: "
+            + mapContainerPane.getCssValue("transform"));
+  }
+
+  public String getMapCurrentTransformStyle() {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.getMapCurrentTransformStyle() - Getting current map pane transform.");
+    wait.until(
+        ExpectedConditions.visibilityOf(
+            mapContainerPane)); // Get transform from the map container pane
+    String transform = mapContainerPane.getCssValue("transform");
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.getMapCurrentTransformStyle() - Current transform: "
+            + transform);
+    return transform;
+  }
+
+  public void waitForMapTransformToChange(String initialTransform) {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Waiting for map pane transform to change from: "
+            + initialTransform);
+    try {
+      wait.until(
+          ExpectedConditions.not(
+              ExpectedConditions.attributeToBe(mapContainerPane, "transform", initialTransform)));
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.waitForMapTransformToChange() - Map pane transform has changed!");
+    } catch (TimeoutException e) {
+      String currentTransform = mapContainerPane.getCssValue("transform");
+      System.err.println(
+          "ERROR: ServiceStationsMapPage.waitForMapTransformToChange() - Timeout: Map pane transform did not change from '"
+              + initialTransform
+              + "'. Current transform: '"
+              + currentTransform
+              + "'");
+      throw e; // Re-throw to fail the test
     }
   }
 }
