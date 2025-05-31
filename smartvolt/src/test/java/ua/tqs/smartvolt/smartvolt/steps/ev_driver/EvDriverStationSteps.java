@@ -1,8 +1,11 @@
 package ua.tqs.smartvolt.smartvolt.steps.ev_driver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStationsMapPage;
 import ua.tqs.smartvolt.smartvolt.steps.common.TestContext;
@@ -23,10 +26,52 @@ public class EvDriverStationSteps {
     assertTrue(serviceStationsMapPage.isMapDisplayed(), "The map should be displayed.");
   }
 
-  @Then("I should see at least {int} charging station marker on the map")
-  public void iShouldSeeAtLeastChargingStationMarkerOnTheMap(int expectedMinMarkers) {
+  @And("I expand the filter section")
+  public void iExpandTheFilterSection() {
+    serviceStationsMapPage.clickFilterButton();
+  }
+
+  @And("I click the {string} button")
+  public void iClickTheButton(String buttonText) {
+    if ("Show Markers".equals(buttonText)) {
+      serviceStationsMapPage.clickToggleViewModeButton();
+    } else {
+      // Handle other buttons if you introduce more generic click steps
+      throw new IllegalArgumentException("Unknown button: " + buttonText);
+    }
+  }
+
+  @Then("I should see exactly {int} charging station markers on the map")
+  public void iShouldSeeExactlyChargingStationMarkersOnTheMap(int expectedCount) {
+    int actualMarkers = serviceStationsMapPage.getNumberOfStationMarkers();
+    assertEquals(
+        expectedCount,
+        actualMarkers,
+        "Expected to see exactly "
+            + expectedCount
+            + " charging station marker(s) on the map, but found "
+            + actualMarkers
+            + ".");
+  }
+
+  @When("I click on the charging station marker at index {int}")
+  public void iClickOnTheChargingStationMarkerAtIndex(int index) {
+    serviceStationsMapPage.clickStationMarkerByIndex(index);
+  }
+
+  @Then("I should see a station details popup with title {string} and address {string}")
+  public void iShouldSeeAStationDetailsPopupWithTitleAndAddress(
+      String expectedTitle, String expectedAddress) {
     assertTrue(
-        serviceStationsMapPage.getNumberOfStationMarkers() >= expectedMinMarkers,
-        "Should see at least " + expectedMinMarkers + " charging station marker(s) on the map.");
+        serviceStationsMapPage.isStationDetailsPopupDisplayed(),
+        "Station details popup should be displayed.");
+    assertEquals(
+        expectedTitle,
+        serviceStationsMapPage.getStationDetailsPopupTitle(expectedTitle),
+        "Popup title does not match."); // Pass expectedTitle
+    assertEquals(
+        expectedAddress,
+        serviceStationsMapPage.getStationDetailsPopupAddress(expectedAddress),
+        "Popup address does not match."); // Pass expectedAddress
   }
 }

@@ -30,6 +30,10 @@ public class ServiceStationsMapPage extends Website {
   @FindBy(css = "[data-testid='filter-checkbox-fast']")
   private WebElement fastSpeedFilterCheckbox;
 
+  // New: Web Element for the toggle view mode button
+  @FindBy(css = "[data-testid='toggle-view-mode-button']")
+  private WebElement toggleViewModeButton;
+
   // --- Web Elements for Station Markers/Details ---
 
   // Represents the currently open station popup
@@ -73,9 +77,36 @@ public class ServiceStationsMapPage extends Website {
   }
 
   public void clickFilterButton() {
-    // This button expands/collapses the filter section
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.clickFilterButton() - Clicking filter expand/collapse button.");
     wait.until(ExpectedConditions.elementToBeClickable(filterExpandCollapseButton));
     filterExpandCollapseButton.click();
+  }
+
+  public void clickToggleViewModeButton() {
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Entering method.");
+    wait.until(ExpectedConditions.elementToBeClickable(toggleViewModeButton));
+    // Check if the button currently says "Show Markers" before clicking
+    String buttonText = toggleViewModeButton.getText();
+    System.out.println(
+        "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Current button text: '"
+            + buttonText
+            + "'");
+    if (buttonText.equals("Show Markers")) {
+      toggleViewModeButton.click();
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Clicked 'Show Markers' button.");
+      // Add a small wait for the map to re-render with markers
+      try {
+        Thread.sleep(1000); // Wait for 1 second, adjust as needed
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    } else {
+      System.out.println(
+          "DEBUG: ServiceStationsMapPage.clickToggleViewModeButton() - Button is not 'Show Markers'. Assuming markers are already visible or view is already toggled.");
+    }
   }
 
   public void selectChargingSpeedFilter(String speed) {
@@ -99,7 +130,6 @@ public class ServiceStationsMapPage extends Website {
     System.out.println(
         "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - Entering method.");
     try {
-      // Corrected selector to use .leaflet-marker-icon as provided by user
       System.out.println(
           "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - Waiting for presence of station markers (.leaflet-marker-icon).");
       wait.until(
@@ -113,7 +143,6 @@ public class ServiceStationsMapPage extends Website {
               + " markers.");
       return numberOfMarkers;
     } catch (TimeoutException e) {
-      // No markers found within the timeout
       System.out.println(
           "DEBUG: ServiceStationsMapPage.getNumberOfStationMarkers() - TimeoutException: No markers found within the timeout. Returning 0.");
       return 0;
@@ -126,7 +155,6 @@ public class ServiceStationsMapPage extends Website {
   }
 
   public void clickStationMarkerByIndex(int index) {
-    // Corrected selector to use .leaflet-marker-icon as provided by user
     List<WebElement> stationMarkers = driver.findElements(By.cssSelector(".leaflet-marker-icon"));
     wait.until(ExpectedConditions.visibilityOfAllElements(stationMarkers));
     if (index >= 0 && index < stationMarkers.size()) {
@@ -146,13 +174,15 @@ public class ServiceStationsMapPage extends Website {
     }
   }
 
-  public String getStationDetailsPopupTitle() {
-    wait.until(ExpectedConditions.visibilityOf(stationDetailsPopupTitle));
+  public String getStationDetailsPopupTitle(String expectedTitle) {
+    wait.until(
+        ExpectedConditions.textToBePresentInElement(stationDetailsPopupTitle, expectedTitle));
     return stationDetailsPopupTitle.getText();
   }
 
-  public String getStationDetailsPopupAddress() {
-    wait.until(ExpectedConditions.visibilityOf(stationDetailsPopupAddress));
+  public String getStationDetailsPopupAddress(String expectedAddress) {
+    wait.until(
+        ExpectedConditions.textToBePresentInElement(stationDetailsPopupAddress, expectedAddress));
     return stationDetailsPopupAddress.getText();
   }
 

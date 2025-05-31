@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationResponse;
@@ -102,14 +103,20 @@ public class ChargingStationService {
       stationsSet.addAll(matchingStations);
     }
 
-    if (stationsSet.isEmpty()) {
+    // Filter out stations that are not available
+    List<ChargingStation> availableStations =
+        stationsSet.stream()
+            .filter(ChargingStation::isAvailability) // Filter for available stations
+            .collect(Collectors.toList());
+
+    if (availableStations.isEmpty()) {
       throw new ResourceNotFoundException(
           "No charging stations found for the given speeds: " + Arrays.toString(chargingSpeeds));
     }
 
     List<ChargingStationResponse> stationResponses = new ArrayList<>();
 
-    for (ChargingStation station : stationsSet) {
+    for (ChargingStation station : availableStations) {
       // Collect distinct charging speeds at this station
       Set<String> speedSet = new HashSet<>();
       List<ChargingSlot> slots = chargingSlotRepository.findByStation(station);
