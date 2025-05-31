@@ -66,8 +66,10 @@ public class ChargingSlotService {
         chargingSlotRepository.findByStationAndChargingSpeed(station, chargingSpeed);
 
     if (matchingSlots.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.NOT_FOUND, "No slots found for the given speed.");
+      ChargingSlotsResponse response = new ChargingSlotsResponse();
+      response.setAvailableSlotMapping(new ArrayList<>()); // Return an empty list
+      response.setPricePerKWh(0.0); // Set a default price, as no slots are available
+      return response;
     }
 
     Map<LocalDateTime, List<ChargingSlot>> slotAvailabilityMap = new HashMap<>();
