@@ -42,7 +42,7 @@ CREATE TABLE charging_slot (
     is_locked BOOLEAN,
     price_perkwh DOUBLE PRECISION,
     power DOUBLE PRECISION,
-    charging_speed DOUBLE PRECISION,
+    charging_speed VARCHAR(255),
     station_id BIGINT,
     CONSTRAINT fk_charging_slot_station FOREIGN KEY (station_id) REFERENCES charging_station(station_id) ON DELETE CASCADE
 );

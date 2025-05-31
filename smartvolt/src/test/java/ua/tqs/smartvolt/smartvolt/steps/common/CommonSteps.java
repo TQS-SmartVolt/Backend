@@ -15,8 +15,18 @@ public class CommonSteps {
     context.getBackOfficePage().navigateTo(page);
   }
 
+  @Given("the user is on page {string}")
+  public void theUserIsOnPage(String page) {
+    context.getWebsite().navigateTo(page); // This requires TestContext to have getWebsite()
+  }
+
   @Given("the operator is logged in with email {string} and password {string}")
   public void theOperatorIsLoggedInWithEmailAndPassword(String email, String password) {
     context.getLoginPage().login(email, password, true);
+  }
+
+  @Given("the EV driver is logged in with email {string} and password {string}")
+  public void theEvDriverIsLoggedInWithEmailAndPassword(String email, String password) {
+    context.getLoginPage().login(email, password, false);
   }
 }

@@ -1,6 +1,8 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,18 +16,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
+import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 
 @RestController
 @RequestMapping("/api/v1/stations")
 public class ChargingStationController {
   private final ChargingStationService chargingStationService;
+  private final ChargingSlotService chargingSlotService;
 
-  public ChargingStationController(ChargingStationService chargingStationService) {
+  public ChargingStationController(
+      ChargingStationService chargingStationService, ChargingSlotService chargingSlotService) {
     this.chargingStationService = chargingStationService;
+    this.chargingSlotService = chargingSlotService;
   }
 
   @PostMapping
@@ -40,10 +49,26 @@ public class ChargingStationController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
-  public List<ChargingStation> getAllChargingStations() throws ResourceNotFoundException {
+  public List<ChargingStationWithSlots> getAllChargingStations() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long operatorId = Long.parseLong(authentication.getName());
     return chargingStationService.getAllChargingStations(operatorId);
+  }
+
+  @GetMapping("{stationId}/slots")
+  public ChargingSlotsResponse getChargingSlotsByStationId(
+      @PathVariable Long stationId,
+      @RequestParam String chargingSpeed,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
+      throws ResourceNotFoundException {
+    return chargingSlotService.getAvailableSlots(stationId, chargingSpeed, date);
+  }
+
+  @GetMapping("/map")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  public ChargingStationsResponse getChargingStationsByChargingSpeed(
+      @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
+    return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
   }
 
   @PatchMapping("/{stationId}/status")

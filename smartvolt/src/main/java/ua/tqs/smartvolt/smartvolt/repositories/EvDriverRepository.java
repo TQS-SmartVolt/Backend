@@ -7,6 +7,7 @@ import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 
 @Repository
 public interface EvDriverRepository extends JpaRepository<EvDriver, Long> {
-
   Optional<EvDriver> findByEmail(String email);
+
+  Optional<EvDriver> findByUserId(Long id);
 }

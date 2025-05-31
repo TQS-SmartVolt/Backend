@@ -1,14 +1,11 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,9 +24,6 @@ public class ChargingStation {
   @ManyToOne
   @JoinColumn(name = "operator_id")
   private StationOperator operator;
-
-  @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-  private List<ChargingSlot> slots;
 
   public ChargingStation() {}
 
@@ -102,14 +96,6 @@ public class ChargingStation {
 
   public void setOperator(StationOperator operator) {
     this.operator = operator;
-  }
-
-  public List<ChargingSlot> getSlots() {
-    return slots;
-  }
-
-  public void setSlots(List<ChargingSlot> slots) {
-    this.slots = slots;
   }
 
   @Override
