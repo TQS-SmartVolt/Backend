@@ -90,7 +90,8 @@ class BookingControllerIT {
             .when()
             .post(getBaseUrl() + "/start-payment")
             .then()
-            // .log().all() // REMOVE OR COMMENT OUT THIS LINE - no longer needed for debugging
+            .log()
+            .all() // REMOVE OR COMMENT OUT THIS LINE - no longer needed for debugging
             .statusCode(HttpStatus.OK.value())
             .body("slot.slotId", equalTo(slotId.intValue()))
             .body(
@@ -123,15 +124,18 @@ class BookingControllerIT {
         .post(getBaseUrl() + "/start-payment")
         .then()
         .log()
-        .all() // Keep logging here if you want to see the 500 response details
-        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    System.out.println("DEBUG: Verified booking fails with missing start time, returning 500.");
+        .all() // Keep logging temporarily for debugging
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .body("error", equalTo("Bad Request"))
+        .body("message", containsString("Start time cannot be null"));
+    System.out.println(
+        "DEBUG: Verified booking fails with missing start time, returning 400 BAD REQUEST.");
   }
 
   @Test
   @Tag("IT-Fast")
   @Requirement("SV-242")
-  void createBooking_InvalidSlotId_ReturnsInternalServerError() {
+  void createBooking_InvalidSlotId_ReturnsNotFound() {
     Long invalidSlotId = 99999L;
     LocalDateTime startTime =
         LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0).withNano(0);
@@ -145,9 +149,13 @@ class BookingControllerIT {
         .post(getBaseUrl() + "/start-payment")
         .then()
         .log()
-        .all() // Keep logging here if you want to see the 500 response details
-        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    System.out.println("DEBUG: Verified booking fails with invalid slot ID, returning 500.");
+        .all() // Keep logging temporarily for debugging
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body("error", equalTo("Not Found"))
+        .body("message", containsString("Slot not found with id: " + invalidSlotId));
+
+    System.out.println(
+        "DEBUG: Verified booking fails with invalid slot ID, returning 404 NOT FOUND.");
   }
 
   @Test
@@ -166,8 +174,91 @@ class BookingControllerIT {
         .post(getBaseUrl() + "/start-payment")
         .then()
         .log()
-        .all() // Keep logging here for completeness
+        .all() // Keep logging temporarily for debugging
         .statusCode(HttpStatus.FORBIDDEN.value());
     System.out.println("DEBUG: Verified booking fails without authorization.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-242") // Assign a new requirement ID for this test
+  void createBooking_AlreadyOccupiedSlot_ReturnsConflict() {
+    Long slotId = 201L; // A valid slot ID from your V002__INSERT_DATA.sql
+
+    // e.g., 2 days from now at 11:00 AM
+    LocalDateTime startTime =
+        LocalDateTime.now().plusDays(2).withHour(11).withMinute(0).withSecond(0).withNano(0);
+
+    // Format for the expected message (consistent with the message in SlotAlreadyBookedException)
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    String formattedStartTime = startTime.format(formatter);
+
+    BookingRequest request = new BookingRequest(slotId, startTime);
+
+    // 1. Create the first booking successfully
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .body(request)
+        .when()
+        .post(getBaseUrl() + "/start-payment")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+
+    System.out.println(
+        "DEBUG: First booking created for slot " + slotId + " at " + formattedStartTime);
+
+    // 2. Attempt to create a second booking for the same slot and start time
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .body(request) // Same request
+        .when()
+        .post(getBaseUrl() + "/start-payment")
+        .then()
+        .log()
+        .all() // Log the response for debugging if it fails
+        .statusCode(HttpStatus.CONFLICT.value()) // Expect 409 Conflict
+        .body("error", equalTo("Conflict")) // Match the error field from GlobalExceptionHandler
+        .body(
+            "message",
+            containsString(
+                "Slot "
+                    + slotId
+                    + " is already booked at "
+                    + formattedStartTime)); // Match the message
+
+    System.out.println("DEBUG: Second booking attempt for occupied slot failed as expected.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-242") // Assign a new requirement ID for this validation
+  void createBooking_InvalidStartTimeInterval_ReturnsBadRequest() {
+    Long slotId = 201L;
+    // Choose a start time that is NOT on a 30-minute interval (e.g., 10:15, 10:40)
+    LocalDateTime invalidStartTime =
+        LocalDateTime.now().plusDays(1).withHour(10).withMinute(15).withSecond(0).withNano(0);
+
+    BookingRequest request = new BookingRequest(slotId, invalidStartTime);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .body(request)
+        .when()
+        .post(getBaseUrl() + "/start-payment")
+        .then()
+        .log()
+        .all() // Log the response for debugging if it fails
+        .statusCode(HttpStatus.BAD_REQUEST.value()) // Expect 400 Bad Request
+        .body("error", equalTo("Bad Request")) // Match the error field from GlobalExceptionHandler
+        .body(
+            "message",
+            containsString(
+                "Booking start time must be on a 30-minute interval (e.g., HH:00 or HH:30).")); // Match the specific message
+
+    System.out.println(
+        "DEBUG: Verified booking fails with invalid start time interval, returning 400 BAD REQUEST.");
   }
 }
