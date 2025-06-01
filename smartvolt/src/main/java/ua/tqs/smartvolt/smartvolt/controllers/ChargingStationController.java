@@ -56,6 +56,7 @@ public class ChargingStationController {
   }
 
   @GetMapping("{stationId}/slots")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public ChargingSlotsResponse getChargingSlotsByStationId(
       @PathVariable Long stationId,
       @RequestParam String chargingSpeed,
