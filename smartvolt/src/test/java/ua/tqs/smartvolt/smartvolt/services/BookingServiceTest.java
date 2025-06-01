@@ -17,18 +17,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks; // Use InjectMocks for the service under test
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.tqs.smartvolt.smartvolt.dtos.BookingRequest; // Assuming this DTO exists
+import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
-// Removed InvalidBookingTimeException as we decided to use IllegalArgumentException
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
-import ua.tqs.smartvolt.smartvolt.models.StationOperator; // Needed for ChargingStation
+import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
@@ -40,7 +38,6 @@ public class BookingServiceTest {
   @Mock private EvDriverRepository evDriverRepository;
   @Mock private ChargingSlotRepository chargingSlotRepository;
 
-  @InjectMocks // This will inject the mocks into BookingService automatically
   private BookingService bookingService;
 
   // Common test data
@@ -48,22 +45,20 @@ public class BookingServiceTest {
   private ChargingSlot testSlot;
   private BookingRequest validBookingRequest;
   private Booking expectedBooking;
+  private Booking preExistingBooking;
   private ChargingStation testStation;
 
   @BeforeEach
   void setUp() {
-    // Manually inject mocks if @InjectMocks isn't used or for complex scenarios
-    // bookingService = new BookingService(bookingRepository, evDriverRepository,
-    // chargingSlotRepository);
+    bookingService =
+        new BookingService(bookingRepository, evDriverRepository, chargingSlotRepository);
 
-    // Set up common mock entities
     testDriver = new EvDriver();
     testDriver.setUserId(101L);
     testDriver.setEmail("driver@example.com");
     testDriver.setName("Test Driver");
-    // Other driver properties as needed for your application
 
-    StationOperator operator = new StationOperator(); // Assuming operator is needed for station
+    StationOperator operator = new StationOperator();
     operator.setUserId(1L);
 
     testStation = new ChargingStation("Test Station", 40.0, -8.0, "Test Address", true, operator);
@@ -81,25 +76,28 @@ public class BookingServiceTest {
     validBookingRequest = new BookingRequest(testSlot.getSlotId(), now);
 
     expectedBooking = new Booking();
-    expectedBooking.setBookingId(1L); // Assuming ID is generated
+    expectedBooking.setBookingId(1L);
     expectedBooking.setSlot(testSlot);
     expectedBooking.setDriver(testDriver);
     expectedBooking.setStartTime(validBookingRequest.getStartTime());
     expectedBooking.setStatus("Not Used");
-    expectedBooking.setCost(1.5); // 10.0 power * 0.15 price = 1.5
+    expectedBooking.setCost(1.5);
 
-    // Lenient stubbing for common repository calls to avoid "unnecessary stubbing" errors
-    // Default: slot and driver exist, and slot is not booked
+    preExistingBooking = new Booking();
+    preExistingBooking.setBookingId(99L);
+    preExistingBooking.setSlot(testSlot);
+    preExistingBooking.setStartTime(validBookingRequest.getStartTime());
+    preExistingBooking.setStatus("Not Used");
+
+    // Lenient stubbing for common repository calls by default
     lenient().when(evDriverRepository.findById(anyLong())).thenReturn(Optional.of(testDriver));
     lenient().when(chargingSlotRepository.findById(anyLong())).thenReturn(Optional.of(testSlot));
     lenient()
         .when(
-            bookingRepository.existsBySlotAndStartTime(
+            bookingRepository.findBySlotAndStartTime(
                 any(ChargingSlot.class), any(LocalDateTime.class)))
-        .thenReturn(false);
+        .thenReturn(Optional.empty());
     lenient().when(bookingRepository.save(any(Booking.class))).thenReturn(expectedBooking);
-
-    // Mock specific methods used for cost calculation
     lenient()
         .when(chargingSlotRepository.getPowerBySlotId(anyLong()))
         .thenReturn(Optional.of(testSlot.getPower()));
@@ -110,7 +108,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-25") // Corresponds to the main booking creation requirement
+  @Requirement("SV-242")
   void createBooking_ValidRequest_ReturnsCreatedBooking()
       throws ResourceNotFoundException, SlotAlreadyBookedException {
     // Arrange: All mocks set up in @BeforeEach are valid for this scenario
@@ -125,14 +123,14 @@ public class BookingServiceTest {
     assertThat(createdBooking.getSlot()).isEqualTo(expectedBooking.getSlot());
     assertThat(createdBooking.getDriver()).isEqualTo(expectedBooking.getDriver());
     assertThat(createdBooking.getStartTime()).isEqualTo(expectedBooking.getStartTime());
-    assertThat(createdBooking.getStatus()).isEqualTo("Not Used"); // Default status for new booking
+    assertThat(createdBooking.getStatus()).isEqualTo("Not Used");
     assertThat(createdBooking.getCost()).isEqualTo(expectedBooking.getCost());
 
     // Verify repository interactions
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
     verify(chargingSlotRepository, times(1)).getPowerBySlotId(testSlot.getSlotId());
     verify(chargingSlotRepository, times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
     verify(bookingRepository, times(1)).save(any(Booking.class));
@@ -140,55 +138,59 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-25")
+  @Requirement("SV-242")
   void createBooking_InvalidSlotId_ThrowsResourceNotFoundException() {
     // Arrange
     Long invalidSlotId = 999L;
     BookingRequest requestWithInvalidSlot =
         new BookingRequest(invalidSlotId, validBookingRequest.getStartTime());
 
+    // Mock that slot is not found
     when(chargingSlotRepository.findById(invalidSlotId)).thenReturn(Optional.empty());
+    // Also mock that driver is found first, as per service order.
+    when(evDriverRepository.findById(testDriver.getUserId())).thenReturn(Optional.of(testDriver));
 
     // Act & Assert
     assertThatThrownBy(
             () -> bookingService.createBooking(requestWithInvalidSlot, testDriver.getUserId()))
         .isInstanceOf(ResourceNotFoundException.class)
-        .hasMessageContaining("Charging slot not found with id: " + invalidSlotId);
+        .hasMessageContaining("Slot not found with id: " + invalidSlotId);
 
-    // Verify that other methods were not called after the exception
-    verify(evDriverRepository, never()).findById(anyLong());
-    verify(bookingRepository, never()).existsBySlotAndStartTime(any(), any());
+    // Verify interactions
+    verify(evDriverRepository, times(1))
+        .findById(testDriver.getUserId()); // Driver is fetched first
+    verify(chargingSlotRepository, times(1)).findById(invalidSlotId);
+    verify(bookingRepository, never()).findBySlotAndStartTime(any(), any());
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-25")
+  @Requirement("SV-242")
   void createBooking_InvalidDriverId_ThrowsResourceNotFoundException() {
     // Arrange
     Long invalidDriverId = 998L;
-
     when(evDriverRepository.findById(invalidDriverId)).thenReturn(Optional.empty());
 
     // Act & Assert
     assertThatThrownBy(() -> bookingService.createBooking(validBookingRequest, invalidDriverId))
         .isInstanceOf(ResourceNotFoundException.class)
-        .hasMessageContaining("EV Driver not found with id: " + invalidDriverId);
+        .hasMessageContaining("Driver not found with id: " + invalidDriverId);
 
-    // Verify that other methods were not called after the exception
-    verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId()); // Slot is found first
-    verify(bookingRepository, never()).existsBySlotAndStartTime(any(), any());
+    // Verify interactions
+    verify(evDriverRepository, times(1)).findById(invalidDriverId);
+    verify(chargingSlotRepository, never()).findById(anyLong());
+    verify(bookingRepository, never()).findBySlotAndStartTime(any(), any());
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-26") // Slot already booked
+  @Requirement("SV-242")
   void createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException() {
     // Arrange
-    // Mock existsBySlotAndStartTime to return true, indicating a booking conflict
-    when(bookingRepository.existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime()))
-        .thenReturn(true);
+    when(bookingRepository.findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime()))
+        .thenReturn(Optional.of(preExistingBooking));
 
     // Act & Assert
     assertThatThrownBy(
@@ -206,23 +208,22 @@ public class BookingServiceTest {
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
-    verify(bookingRepository, never()).save(any()); // Booking should not be saved
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+    verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-27") // 30-minute interval validation
+  @Requirement("SV-242")
   void createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException() {
     // Arrange
+    // Use a time not on a 30-min interval, including seconds/nanos to be strict
     LocalDateTime invalidTime =
-        LocalDateTime.now()
-            .plusDays(1)
-            .withHour(10)
-            .withMinute(15)
-            .withSecond(10)
-            .withNano(100); // 10:15:10.100
+        LocalDateTime.now().plusDays(1).withHour(10).withMinute(15).withSecond(10).withNano(100);
     BookingRequest request = new BookingRequest(testSlot.getSlotId(), invalidTime);
+
+    when(evDriverRepository.findById(testDriver.getUserId())).thenReturn(Optional.of(testDriver));
+    when(chargingSlotRepository.findById(testSlot.getSlotId())).thenReturn(Optional.of(testSlot));
 
     // Act & Assert
     assertThatThrownBy(() -> bookingService.createBooking(request, testDriver.getUserId()))
@@ -230,21 +231,22 @@ public class BookingServiceTest {
         .hasMessageContaining(
             "Booking start time must be on a 30-minute interval (e.g., HH:00 or HH:30).");
 
-    // Verify that no further repository calls were made after validation
-    verify(evDriverRepository, never()).findById(anyLong()); // Driver not fetched yet
-    verify(chargingSlotRepository, never()).findById(anyLong()); // Slot not fetched yet
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
+    verify(bookingRepository, never()).findBySlotAndStartTime(any(), any());
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-XX") // Assign a suitable new Requirement ID
+  @Requirement("SV-242")
   void createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException() {
     // Arrange
     when(chargingSlotRepository.getPowerBySlotId(testSlot.getSlotId()))
         .thenReturn(Optional.empty());
-    when(chargingSlotRepository.getPricePerKWhBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.of(testSlot.getPricePerKWh())); // Price is found
+    lenient()
+        .when(chargingSlotRepository.getPricePerKWhBySlotId(testSlot.getSlotId()))
+        .thenReturn(Optional.of(testSlot.getPricePerKWh()));
 
     // Act & Assert
     assertThatThrownBy(
@@ -255,23 +257,20 @@ public class BookingServiceTest {
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
-    verify(chargingSlotRepository, times(1))
-        .getPowerBySlotId(testSlot.getSlotId()); // Should be called
-    verify(chargingSlotRepository, never())
-        .getPricePerKWhBySlotId(anyLong()); // This should not be called if power not found
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+    verify(chargingSlotRepository, times(1)).getPowerBySlotId(testSlot.getSlotId());
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-XX") // Assign a suitable new Requirement ID
+  @Requirement("SV-242")
   void createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException() {
     // Arrange
     when(chargingSlotRepository.getPowerBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.of(testSlot.getPower())); // Power is found
+        .thenReturn(Optional.of(testSlot.getPower()));
     when(chargingSlotRepository.getPricePerKWhBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.empty()); // Price is not found
+        .thenReturn(Optional.empty());
 
     // Act & Assert
     assertThatThrownBy(
@@ -282,21 +281,19 @@ public class BookingServiceTest {
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
-    verify(chargingSlotRepository, times(1))
-        .getPowerBySlotId(testSlot.getSlotId()); // Should be called
-    verify(chargingSlotRepository, times(1))
-        .getPricePerKWhBySlotId(testSlot.getSlotId()); // Should be called
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+    verify(chargingSlotRepository, times(1)).getPowerBySlotId(testSlot.getSlotId());
+    verify(chargingSlotRepository, times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-XX") // Assign a suitable new Requirement ID
+  @Requirement("SV-242")
   void createBooking_NegativePower_ThrowsIllegalArgumentException() {
     // Arrange
     when(chargingSlotRepository.getPowerBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.of(-5.0)); // Negative power
+        .thenReturn(Optional.of(-5.0));
 
     // Act & Assert
     assertThatThrownBy(
@@ -307,30 +304,23 @@ public class BookingServiceTest {
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
     verify(chargingSlotRepository, times(1)).getPowerBySlotId(testSlot.getSlotId());
-    // getPricePerKWhBySlotId might or might not be called depending on short-circuiting in the
-    // service
-    // if power is negative, it might throw before checking price.
-    // For robustness, we check it wasn't called if the logic throws immediately.
-    // If it short-circuits: verify(chargingSlotRepository,
-    // never()).getPricePerKWhBySlotId(anyLong());
-    // If it doesn't short-circuit before the check: verify(chargingSlotRepository,
-    // times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
-    // Let's assume it proceeds to calculate cost, so both are called for this test.
-    verify(chargingSlotRepository, times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
+    verify(chargingSlotRepository, times(1))
+        .getPricePerKWhBySlotId(
+            testSlot.getSlotId()); // Assuming both are fetched before validation
     verify(bookingRepository, never()).save(any());
   }
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-XX") // Assign a suitable new Requirement ID
+  @Requirement("SV-242")
   void createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException() {
     // Arrange
     when(chargingSlotRepository.getPowerBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.of(testSlot.getPower())); // Positive power
+        .thenReturn(Optional.of(testSlot.getPower()));
     when(chargingSlotRepository.getPricePerKWhBySlotId(testSlot.getSlotId()))
-        .thenReturn(Optional.of(-0.05)); // Negative price
+        .thenReturn(Optional.of(-0.05));
 
     // Act & Assert
     assertThatThrownBy(
@@ -341,15 +331,9 @@ public class BookingServiceTest {
     verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
     verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
     verify(bookingRepository, times(1))
-        .existsBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
+        .findBySlotAndStartTime(testSlot, validBookingRequest.getStartTime());
     verify(chargingSlotRepository, times(1)).getPowerBySlotId(testSlot.getSlotId());
     verify(chargingSlotRepository, times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
     verify(bookingRepository, never()).save(any());
   }
-
-  // Note: The `if (cost < 0)` check was determined to be redundant if power and price are >= 0.
-  // If your service code still contains `if (cost < 0)`, you might create a test for it
-  // but it would require mocking power or price to be negative (which is already covered).
-  // Thus, no separate test for `cost < 0` is added here as it's logically impossible with valid
-  // inputs.
 }
