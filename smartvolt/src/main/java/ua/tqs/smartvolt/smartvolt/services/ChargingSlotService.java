@@ -54,6 +54,15 @@ public class ChargingSlotService {
 
   public ChargingSlotsResponse getAvailableSlots(
       Long stationId, String chargingSpeed, LocalDate date) throws ResourceNotFoundException {
+
+    if (date.isBefore(LocalDate.now())) {
+      // Return an empty response for past dates
+      ChargingSlotsResponse response = new ChargingSlotsResponse();
+      response.setAvailableSlotMapping(new ArrayList<>()); // Empty list
+      response.setPricePerKWh(0.0); // Or perhaps a configurable default for non-bookable dates
+      return response;
+    }
+
     ChargingStation station =
         chargingStationRepository
             .findById(stationId)
