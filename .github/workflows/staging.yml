@@ -61,7 +61,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:latest
             ${{ env.REGISTRY }}/tqs-smartvolt/deploy-backend:${{ github.sha }}
-      
+
       - name: Checkout AppConfig repository
         uses: actions/checkout@v2
         with:
@@ -73,6 +73,8 @@ jobs:
         run: |
           for env_file in .env.production .env.staging; do
             sed -i "s/^BACKEND_TAG=.*/BACKEND_TAG=${{ github.sha }}/" $env_file
+
+            # Commit changes if any
             if ! git diff --quiet $env_file; then
               git config --global user.name "github-actions[bot]"
               git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -81,8 +83,9 @@ jobs:
             else
               echo "No changes to commit in $env_file"
             fi
+
           done
-          git push origin HEAD:main
+            git push origin HEAD:main
         env:
           DOCKER_PORT: 8080
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -95,7 +98,7 @@ jobs:
     strategy:
       matrix:
         java: [17]
-        browser: [chrome, firefox, edge]
+        browser: [chrome, edge, firefox]
     permissions:
       contents: read
 
@@ -126,6 +129,7 @@ jobs:
           source .env.staging
           docker compose --file compose.stag.yml down
           docker compose --file compose.stag.yml up -d --build
+          docker image prune -a -f
         env:
           DOCKER_PORT: 8080
           username: ${{ github.actor }}
