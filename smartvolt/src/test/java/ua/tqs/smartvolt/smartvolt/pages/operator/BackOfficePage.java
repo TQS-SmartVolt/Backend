@@ -32,10 +32,6 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-station']")
   private WebElement confirmAddStationButton;
 
-  public BackOfficePage(WebDriver driver) {
-    super(driver);
-  }
-
   @FindBy(css = "[data-testid='station-card-deactivate']")
   private WebElement stationCardDeactivateButton;
 
@@ -50,6 +46,22 @@ public class BackOfficePage extends Website {
 
   @FindBy(css = "[data-testid='confirm-activation-button']")
   private WebElement confirmActivationButton;
+
+  @FindBy(css = "[data-testid='station-card-add-slot']")
+  private WebElement stationCardAddSlotButton;
+
+  @FindBy(css = "[data-testid='add-slot-price-input']")
+  private WebElement addSlotPriceInput;
+
+  @FindBy(css = "[data-testid='add-slot-speed-select']")
+  private WebElement addSlotSpeedSelect;
+
+  @FindBy(css = "[data-testid='confirm-add-slot-button']")
+  private WebElement confirmAddSlotButton;
+
+  public BackOfficePage(WebDriver driver) {
+    super(driver);
+  }
 
   // Access methods for WebElements
 
@@ -163,9 +175,26 @@ public class BackOfficePage extends Website {
     activateButton.click();
   }
 
+  public void clickAddSlotButton(WebElement stationCard) {
+    WebElement addSlotButton =
+        stationCard.findElement(By.cssSelector("[data-testid='station-card-add-slot']"));
+    wait.until(ExpectedConditions.elementToBeClickable(addSlotButton));
+    addSlotButton.click();
+  }
+
   public void fillDeactivationReason(String reason) {
     wait.until(ExpectedConditions.elementToBeClickable(deactivationReasonSelect));
     deactivationReasonSelect.sendKeys(reason);
+  }
+
+  public void fillPriceForNewSlot(double price) {
+    wait.until(ExpectedConditions.elementToBeClickable(addSlotPriceInput));
+    addSlotPriceInput.sendKeys(String.valueOf(price));
+  }
+
+  public void fillChargingSpeedForNewSlot(String speed) {
+    wait.until(ExpectedConditions.elementToBeClickable(addSlotSpeedSelect));
+    addSlotSpeedSelect.sendKeys(speed);
   }
 
   public void confirmDeactivation() {
@@ -176,5 +205,10 @@ public class BackOfficePage extends Website {
   public void confirmActivation() {
     wait.until(ExpectedConditions.elementToBeClickable(confirmActivationButton));
     confirmActivationButton.click();
+  }
+
+  public void confirmAddSlot() {
+    wait.until(ExpectedConditions.elementToBeClickable(confirmAddSlotButton));
+    confirmAddSlotButton.click();
   }
 }

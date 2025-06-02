@@ -36,4 +36,9 @@ public class GlobalExceptionHandler {
     errorResponse.put("message", ex.getMessage());
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST); // 400 Bad Request
   }
+
+  @ExceptionHandler(InvalidRequestException.class)
+  public ResponseEntity<String> handleInvalidRequestException(InvalidRequestException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
 }
