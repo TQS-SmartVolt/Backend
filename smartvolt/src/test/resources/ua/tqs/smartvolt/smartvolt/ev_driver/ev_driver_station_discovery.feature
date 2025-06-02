@@ -1,4 +1,4 @@
-@UAT-Webaaa
+@UAT-Web
 Feature: EV Driver Station Discovery
   To allow EV drivers to find available charging stations on a map
 
@@ -9,13 +9,13 @@ Feature: EV Driver Station Discovery
   Scenario: View all available charging stations on the map
     Then I should see the map displayed
     And I expand the filter section
-    And I click the "Show Markers" button
+    And I click the "Show Markers" button on the station map
     Then I should see exactly 2 charging station markers on the map
 
   Scenario: Verify charging station marker details
     Then I should see the map displayed
     And I expand the filter section
-    And I click the "Show Markers" button
+    And I click the "Show Markers" button on the station map
     And I click on the charging station marker at index 0
     Then I should see a station details popup with title "Station 1" and address "Rua 1"
     And I click on the charging station marker at index 1
@@ -26,13 +26,13 @@ Feature: EV Driver Station Discovery
     And I expand the filter section
     And I click on Select All Filter to remove all the filters
     And I click on Slow Filter
-    And I click the "Show Markers" button
+    And I click the "Show Markers" button on the station map
     Then I should see exactly 1 charging station markers on the map
 
   Scenario: Navigate to booking page from station details
     Then I should see the map displayed
     And I expand the filter section
-    And I click the "Show Markers" button
+    And I click the "Show Markers" button on the station map
     And I click on the charging station marker at index 0
     Then I should see a station details popup with title "Station 1" and address "Rua 1"
     And I click on the View Details button

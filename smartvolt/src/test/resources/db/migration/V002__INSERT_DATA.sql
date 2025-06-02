@@ -33,19 +33,19 @@ INSERT INTO charging_station (station_id, name, latitude, longitude, address, av
 
 -- Charging Slots for newly added stations
 -- Station Slow (102) - only Slow slots
-INSERT INTO charging_slot (is_locked, price_perkwh, power, charging_speed, station_id) VALUES
-(TRUE, 0.15, 10, 'Slow', 102),
-(TRUE, 0.15, 10, 'Slow', 102);
+INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
+(201, TRUE, 0.15, 10, 'Slow', 102),
+(202, TRUE, 0.15, 10, 'Slow', 102);
 
 -- Station Medium (103) - only Medium slots
-INSERT INTO charging_slot (is_locked, price_perkwh, power, charging_speed, station_id) VALUES
-(TRUE, 0.25, 20, 'Medium', 103);
+INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
+(203, TRUE, 0.25, 20, 'Medium', 103);
 
 -- Station Fast (104) - only Fast slots
-INSERT INTO charging_slot (is_locked, price_perkwh, power, charging_speed, station_id) VALUES
-(TRUE, 0.40, 30, 'Fast', 104);
+INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
+(204, TRUE, 0.40, 30, 'Fast', 104);
 
 -- Station Mixed (105) - Slow and Medium slots
-INSERT INTO charging_slot (is_locked, price_perkwh, power, charging_speed, station_id) VALUES
-(TRUE, 0.18, 10, 'Slow', 105),
-(TRUE, 0.28, 20, 'Medium', 105);
+INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
+(205, TRUE, 0.18, 10, 'Slow', 105),
+(206, TRUE, 0.28, 20, 'Medium', 105);

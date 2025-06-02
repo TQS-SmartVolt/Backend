@@ -58,7 +58,7 @@ public class ChargingStationController {
     return chargingStationService.getAllChargingStations(operatorId);
   }
 
-  @GetMapping("{stationId}/slots")
+  @GetMapping("/{stationId}/slots")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public ChargingSlotsResponse getChargingSlotsByStationId(
       @PathVariable Long stationId,

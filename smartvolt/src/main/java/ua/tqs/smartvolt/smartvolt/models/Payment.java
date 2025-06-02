@@ -19,7 +19,9 @@ public class Payment {
   @JoinColumn(name = "driver_id")
   private EvDriver driver;
 
-  @OneToOne private Booking booking;
+  @OneToOne
+  @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
+  private Booking booking;
 
   public Payment() {}
 

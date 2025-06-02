@@ -45,6 +45,7 @@ public class ChargingSlotServiceTest {
 
   private ChargingSlotService chargingSlotService;
 
+  // Common test data
   private ChargingStation stationSlow;
   private ChargingStation stationMedium;
   private ChargingSlot slot1_Slow;

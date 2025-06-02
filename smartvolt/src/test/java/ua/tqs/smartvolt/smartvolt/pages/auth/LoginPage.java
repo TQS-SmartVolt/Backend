@@ -37,7 +37,7 @@ public class LoginPage extends Website {
 
     // Submit
     System.out.println("Clicking submit button");
-    wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
+    wait.until(ExpectedConditions.elementToBeClickable(loginSubmitButton));
     loginSubmitButton.click();
 
     System.out.println("Waiting for redirection after login...");
