@@ -51,4 +51,20 @@ public class EvDriverBookTimeSlotSteps {
         bookingPage.isWarningMessageDisplayed(expectedMessage),
         "Warning message '" + expectedMessage + "' should be displayed.");
   }
+
+  @And("I select the time slot {string}")
+  public void iSelectTheTimeSlot(String timeText) {
+    System.out.println(
+        "DEBUG: EvDriverBookTimeSlotSteps.iSelectTheTimeSlot() - Selecting time slot: " + timeText);
+    bookingPage.selectTimeSlot(timeText);
+  }
+
+  @Then("I should see the booking confirmation dialog")
+  public void iShouldSeeTheBookingConfirmationDialog() {
+    System.out.println(
+        "DEBUG: EvDriverBookTimeSlotSteps.iShouldSeeTheBookingConfirmationDialog() - Verifying booking confirmation dialog.");
+    assertTrue(
+        bookingPage.isBookingConfirmationDialogDisplayed(),
+        "Booking confirmation dialog should be displayed.");
+  }
 }
