@@ -25,7 +25,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
+import ua.tqs.smartvolt.smartvolt.exceptions.InvalidRequestException;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
@@ -79,7 +81,6 @@ public class ChargingSlotServiceTest {
 
     slot1_Slow = new ChargingSlot();
     slot1_Slow.setSlotId(1L); // Unique ID for the first physical slot
-    slot1_Slow.setChargingSpeed("Slow");
     slot1_Slow.setPricePerKWh(0.15F);
     slot1_Slow.setPower(10);
     slot1_Slow.setChargingSpeed("Slow");
@@ -87,7 +88,6 @@ public class ChargingSlotServiceTest {
 
     slot2_Slow = new ChargingSlot();
     slot2_Slow.setSlotId(2L); // Unique ID for the second physical slot
-    slot2_Slow.setChargingSpeed("Slow");
     slot2_Slow.setPricePerKWh(0.15F); // Matching price from V002
     slot2_Slow.setPower(10);
     slot2_Slow.setChargingSpeed("Slow");
@@ -336,5 +336,86 @@ public class ChargingSlotServiceTest {
     // Booking repository still checked for all potential slots
     verify(bookingRepository, times(96))
         .existsBySlotAndStartTime(any(ChargingSlot.class), any(LocalDateTime.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()
+      throws ResourceNotFoundException, InvalidRequestException {
+    // Arrange
+    Long stationId = stationSlow.getStationId();
+    ChargingSlotRequest request = new ChargingSlotRequest();
+    request.setChargingSpeed("Slow");
+    request.setPricePerKWh(0.20F);
+
+    // Mock the station repository to return the station
+    when(chargingStationRepository.findById(stationId)).thenReturn(Optional.of(stationSlow));
+
+    // Mock the save method to return the slot being saved
+    when(chargingSlotRepository.save(any(ChargingSlot.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0)); // Return the saved slot
+
+    // Act
+    ChargingSlot createdSlot = chargingSlotService.addChargingSlotToStation(stationId, request);
+
+    // Assert
+    assertThat(createdSlot).isNotNull();
+    assertThat(createdSlot.getChargingSpeed()).isEqualTo("Slow");
+    assertThat(createdSlot.getPricePerKWh()).isEqualTo(0.20F);
+    assertThat(createdSlot.getPower()).isEqualTo(10);
+    assertThat(createdSlot.getStation()).isEqualTo(stationSlow);
+
+    // Verify interactions
+    verify(chargingStationRepository, times(1)).findById(stationId);
+    verify(chargingSlotRepository, times(1)).save(any(ChargingSlot.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException() {
+    // Arrange
+    Long stationId = stationSlow.getStationId();
+    ChargingSlotRequest request = new ChargingSlotRequest();
+    request.setChargingSpeed("UltraFast"); // Invalid speed
+    request.setPricePerKWh(0.20F);
+
+    // Mock the station repository to return the station
+    when(chargingStationRepository.findById(stationId)).thenReturn(Optional.of(stationSlow));
+
+    // Act & Assert
+    assertThatThrownBy(() -> chargingSlotService.addChargingSlotToStation(stationId, request))
+        .isInstanceOf(InvalidRequestException.class)
+        .hasMessageContaining(
+            "Invalid charging speed: UltraFast. Valid options are Slow, Medium, Fast.");
+
+    // Verify interactions
+    verify(chargingStationRepository, times(1)).findById(stationId);
+    verify(chargingSlotRepository, never()).save(any(ChargingSlot.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long invalidStationId = 9999L; // Non-existent station ID
+    ChargingSlotRequest request = new ChargingSlotRequest();
+    request.setChargingSpeed("Slow");
+    request.setPricePerKWh(0.20F);
+
+    // Mock the station repository to return empty
+    when(chargingStationRepository.findById(invalidStationId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(
+            () -> chargingSlotService.addChargingSlotToStation(invalidStationId, request))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Charging station not found with id: " + invalidStationId);
+
+    // Verify interactions
+    verify(chargingStationRepository, times(1)).findById(invalidStationId);
+    verify(chargingSlotRepository, never()).save(any(ChargingSlot.class));
   }
 }

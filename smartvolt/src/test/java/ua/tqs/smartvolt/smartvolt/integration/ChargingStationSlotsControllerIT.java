@@ -8,6 +8,7 @@ import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +57,7 @@ class ChargingStationSlotsControllerIT {
   }
 
   String driverSvToken;
+  String operatorSvToken;
 
   @BeforeEach
   public void setUp() {
@@ -70,7 +72,18 @@ class ChargingStationSlotsControllerIT {
             .extract()
             .path("token");
 
+    operatorSvToken =
+        given()
+            .contentType("application/json")
+            .body("{\"email\":\"test@example.com\", \"password\":\"password123\"}")
+            .post(getLoginUrl())
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .path("token");
+
     System.out.println("> EV Driver SV Token for Slots IT: " + driverSvToken);
+    System.out.println("> Operator SV Token for Slots IT: " + operatorSvToken);
   }
 
   @Test
@@ -284,5 +297,91 @@ class ChargingStationSlotsControllerIT {
         .body("availableSlotMapping", empty()) // Expect an empty list of slots
         .body("pricePerKWh", equalTo(0.0F)); // Expect price to be 0.0F
     System.out.println("DEBUG: Verified scenario with past date for Station 102.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenValidRequest_ReturnsCreatedSlot() {
+    Long stationId = 102L;
+    String chargingSpeed = "Slow";
+    double pricePerKWh = 50;
+
+    String requestBody =
+        String.format(
+            Locale.US,
+            "{\"pricePerKWh\": %.2f, \"chargingSpeed\": \"%s\"}",
+            pricePerKWh,
+            chargingSpeed);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + operatorSvToken)
+        .body(requestBody)
+        .when()
+        .post(getBaseUrl() + "/" + stationId + "/slots")
+        .then()
+        .statusCode(HttpStatus.CREATED.value())
+        .body("chargingSpeed", equalTo(chargingSpeed))
+        .body("pricePerKWh", equalTo((float) pricePerKWh))
+        .body("power", equalTo(10.0F));
+
+    System.out.println("DEBUG: Successfully created a new charging slot.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenInvalidChargingSpeed_ReturnsBadRequest() {
+    Long stationId = 102L; // Use a valid station ID
+    String invalidChargingSpeed = "UltraFast"; // Invalid speed not defined in the system
+    double pricePerKWh = 50;
+
+    String requestBody =
+        String.format(
+            Locale.US,
+            "{\"pricePerKWh\": %.2f, \"chargingSpeed\": \"%s\"}",
+            pricePerKWh,
+            invalidChargingSpeed);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + operatorSvToken)
+        .body(requestBody)
+        .when()
+        .post(getBaseUrl() + "/" + stationId + "/slots")
+        .then()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .body(containsString("Invalid charging speed: " + invalidChargingSpeed));
+
+    System.out.println("DEBUG: Verified error for invalid charging speed.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenStationNotFound_ReturnsNotFound() {
+    Long invalidStationId = 9999L; // An ID that definitely does not exist
+    String chargingSpeed = "Slow";
+    double pricePerKWh = 50;
+
+    String requestBody =
+        String.format(
+            Locale.US,
+            "{\"pricePerKWh\": %.2f, \"chargingSpeed\": \"%s\"}",
+            pricePerKWh,
+            chargingSpeed);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + operatorSvToken)
+        .body(requestBody)
+        .when()
+        .post(getBaseUrl() + "/" + invalidStationId + "/slots")
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(containsString("Charging station not found with id: " + invalidStationId));
+
+    System.out.println("DEBUG: Verified error for non-existent station ID.");
   }
 }
