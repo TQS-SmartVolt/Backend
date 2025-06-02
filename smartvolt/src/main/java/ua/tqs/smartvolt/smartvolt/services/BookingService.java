@@ -57,6 +57,12 @@ public class BookingService {
           "Booking start time must be on a 30-minute interval (e.g., HH:00 or HH:30).");
     }
 
+    // Check if the booking is in the past
+    LocalDateTime now = LocalDateTime.now();
+    if (startTime.isBefore(now)) {
+      throw new IllegalArgumentException("Cannot create a booking in the past.");
+    }
+
     Optional<Booking> existingBooking = bookingRepository.findBySlotAndStartTime(slot, startTime);
     if (existingBooking.isPresent()) {
       throw new SlotAlreadyBookedException(

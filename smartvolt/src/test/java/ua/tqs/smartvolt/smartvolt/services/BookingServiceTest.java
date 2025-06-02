@@ -336,4 +336,133 @@ public class BookingServiceTest {
     verify(chargingSlotRepository, times(1)).getPricePerKWhBySlotId(testSlot.getSlotId());
     verify(bookingRepository, never()).save(any());
   }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-242") // Assign a new requirement ID
+  void createBooking_StartTimeInPast_ThrowsIllegalArgumentException() {
+    // Arrange
+    // Create a start time that is definitively in the past
+    LocalDateTime pastTime = LocalDateTime.now().minusHours(1).withSecond(0).withNano(0);
+    if (pastTime.getMinute() % 30 != 0) {
+      // Ensure it's on a 30-minute interval, even if in the past
+      pastTime = pastTime.minusMinutes(pastTime.getMinute() % 30);
+    }
+
+    BookingRequest requestWithPastTime = new BookingRequest(testSlot.getSlotId(), pastTime);
+
+    // Mocks for driver and slot should still return valid objects as these checks come first
+    when(evDriverRepository.findById(testDriver.getUserId())).thenReturn(Optional.of(testDriver));
+    when(chargingSlotRepository.findById(testSlot.getSlotId())).thenReturn(Optional.of(testSlot));
+
+    // Act & Assert
+    assertThatThrownBy(
+            () -> bookingService.createBooking(requestWithPastTime, testDriver.getUserId()))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Cannot create a booking in the past.");
+
+    // Verify that no further repository interactions happen (like checking existing bookings or
+    // saving)
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(chargingSlotRepository, times(1)).findById(testSlot.getSlotId());
+    verify(bookingRepository, never()).findBySlotAndStartTime(any(), any());
+    verify(bookingRepository, never()).save(any());
+    verify(chargingSlotRepository, never()).getPowerBySlotId(anyLong());
+    verify(chargingSlotRepository, never()).getPricePerKWhBySlotId(anyLong());
+  }
+
+  // --- Tests for finalizeBookingPayment (User Story 3.1) ---
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-26")
+  void finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid() throws Exception {
+    // Arrange
+    Long bookingId = 123L;
+    Booking bookingToFinalize = new Booking();
+    bookingToFinalize.setBookingId(bookingId);
+    bookingToFinalize.setStatus("Not Used");
+    // Ensure createdAt is recent enough to not be expired
+    bookingToFinalize.setCreatedAt(LocalDateTime.now());
+
+    when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(bookingToFinalize));
+    when(bookingRepository.save(any(Booking.class))).thenReturn(bookingToFinalize);
+
+    // Act
+    bookingService.finalizeBookingPayment(bookingId);
+
+    // Assert
+    assertThat(bookingToFinalize.getStatus()).isEqualTo("Paid");
+    verify(bookingRepository, times(1)).findById(bookingId);
+    verify(bookingRepository, times(1)).save(bookingToFinalize);
+    verify(bookingRepository, never()).delete(any(Booking.class)); // Ensure not deleted
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-243")
+  void finalizeBookingPayment_BookingNotFound_ThrowsException() {
+    // Arrange
+    Long nonExistentBookingId = 999L;
+    when(bookingRepository.findById(nonExistentBookingId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.finalizeBookingPayment(nonExistentBookingId))
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining("Booking not found");
+
+    // Verify
+    verify(bookingRepository, times(1)).findById(nonExistentBookingId);
+    verify(bookingRepository, never()).save(any(Booking.class));
+    verify(bookingRepository, never()).delete(any(Booking.class));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-243")
+  void finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking() {
+    // Arrange
+    Long bookingId = 456L;
+    Booking expiredBooking = new Booking();
+    expiredBooking.setBookingId(bookingId);
+    expiredBooking.setStatus("Not Used");
+    // Set createdAt to be more than 5 minutes ago
+    expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(6));
+
+    when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(expiredBooking));
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.finalizeBookingPayment(bookingId))
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining("Booking expired");
+
+    // Verify
+    verify(bookingRepository, times(1)).findById(bookingId);
+    verify(bookingRepository, times(1)).delete(expiredBooking); // Booking should be deleted
+    verify(bookingRepository, never()).save(any(Booking.class)); // Should not save
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-243")
+  void finalizeBookingPayment_BookingAlreadyPaid_ThrowsException() {
+    // Arrange
+    Long bookingId = 789L;
+    Booking paidBooking = new Booking();
+    paidBooking.setBookingId(bookingId);
+    paidBooking.setStatus("Paid"); // Already paid
+    paidBooking.setCreatedAt(LocalDateTime.now().minusMinutes(1)); // Not expired
+
+    when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(paidBooking));
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.finalizeBookingPayment(bookingId))
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining("Booking already paid");
+
+    // Verify
+    verify(bookingRepository, times(1)).findById(bookingId);
+    verify(bookingRepository, never()).save(any(Booking.class)); // Should not save
+    verify(bookingRepository, never()).delete(any(Booking.class)); // Should not delete
+  }
 }
