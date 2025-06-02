@@ -25,7 +25,7 @@ jobs:
         with:
           submodules: true
           repository: TQS-SmartVolt/AppConfig
-          token: ${{ secrets.SMART_VOLT_SECRET }} 
+          token: ${{ secrets.SMART_VOLT_SECRET }}
 
       - name: Deploy using Docker Compose
         run: |
@@ -33,6 +33,7 @@ jobs:
           source .env.production
           docker compose --file compose.prod.yml down
           docker compose --file compose.prod.yml up -d --build
+          docker image prune -a -f
         env:
           DOCKER_PORT: 8080
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

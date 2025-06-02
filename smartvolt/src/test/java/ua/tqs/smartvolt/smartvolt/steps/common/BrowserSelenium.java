@@ -8,6 +8,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.AbstractDriverOptions;
 import org.testcontainers.containers.BrowserWebDriverContainer;
+import org.testcontainers.utility.DockerImageName;
 import ua.tqs.smartvolt.smartvolt.MyTestConfiguration;
 
 public class BrowserSelenium {
@@ -47,7 +48,9 @@ public class BrowserSelenium {
   @SuppressWarnings("resource")
   private static BrowserSelenium getFirefox() {
     return new BrowserSelenium(
-        new BrowserWebDriverContainer<>().withCapabilities(new FirefoxOptions()),
+        new BrowserWebDriverContainer<>(
+                DockerImageName.parse("selenium/standalone-firefox:4.33.0-20250525"))
+            .withCapabilities(new FirefoxOptions()),
         new FirefoxOptions());
   }
 
