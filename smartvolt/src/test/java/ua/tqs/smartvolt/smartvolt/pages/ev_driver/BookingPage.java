@@ -59,8 +59,8 @@ public class BookingPage extends Website {
   @FindBy(css = "[data-testid='booking-confirmation-dialog']")
   private WebElement bookingConfirmationDialog;
 
-  @FindBy(css = "[data-testid='confirm-payment-button']")
-  private WebElement confirmPaymentButton;
+  @FindBy(css = "[data-testid='confirm-booking-button']")
+  private WebElement confirmConfirmationBookingButton;
 
   @FindBy(css = "[data-testid='cancel-booking-button']")
   private WebElement cancelBookingButton;
@@ -433,11 +433,11 @@ public class BookingPage extends Website {
   }
 
   /** Clicks the "Confirm Payment" button inside the confirmation dialog. */
-  public void clickConfirmPaymentButton() {
+  public void clickConfirmConfirmationBookingButton() {
     System.out.println(
-        "DEBUG: BookingPage.clickConfirmPaymentButton() - Clicking Confirm Payment button.");
-    wait.until(ExpectedConditions.elementToBeClickable(confirmPaymentButton));
-    confirmPaymentButton.click();
+        "DEBUG: BookingPage.clickConfirmConfirmationBookingButton() - Clicking Confirm Booking button.");
+    wait.until(ExpectedConditions.elementToBeClickable(confirmConfirmationBookingButton));
+    confirmConfirmationBookingButton.click();
   }
 
   /** Clicks the "Cancel Booking" button inside the confirmation dialog. */
