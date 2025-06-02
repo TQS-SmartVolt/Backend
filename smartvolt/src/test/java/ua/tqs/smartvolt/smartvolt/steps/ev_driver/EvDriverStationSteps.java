@@ -31,8 +31,8 @@ public class EvDriverStationSteps {
     serviceStationsMapPage.clickFilterButton();
   }
 
-  @And("I click the {string} button")
-  public void iClickTheButton(String buttonText) {
+  @And("I click the {string} button on the station map")
+  public void iClickTheButtonOnStationMap(String buttonText) {
     if ("Show Markers".equals(buttonText)) {
       serviceStationsMapPage.clickToggleViewModeButton();
     } else {

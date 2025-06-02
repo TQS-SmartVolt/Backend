@@ -55,6 +55,7 @@ CREATE TABLE booking (
     start_time TIMESTAMP,
     status VARCHAR(255),
     cost DOUBLE PRECISION,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_booking_driver FOREIGN KEY (driver_id) REFERENCES ev_driver(user_id) ON DELETE CASCADE,
     CONSTRAINT fk_booking_slot FOREIGN KEY (slot_id) REFERENCES charging_slot(slot_id) ON DELETE CASCADE
 );

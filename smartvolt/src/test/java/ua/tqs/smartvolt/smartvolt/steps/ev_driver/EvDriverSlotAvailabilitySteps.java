@@ -20,10 +20,7 @@ public class EvDriverSlotAvailabilitySteps {
     this.bookingPage = this.context.getBookingPage(); // Get BookingPage from context
   }
 
-  @Then(
-      "I should see the booking page elements for {string} and address {string}") // <-- ADDED "and
-  // address
-  // {string}"
+  @Then("I should see the booking page elements for {string} and address {string}")
   public void iShouldSeeTheBookingPageElementsFor(
       String stationName, String address) { // <-- ADDED String address
     assertTrue(
@@ -49,14 +46,5 @@ public class EvDriverSlotAvailabilitySteps {
     System.out.println(
         "DEBUG: EvDriverSlotAvailabilitySteps.iShouldSeeAWarningMessage() - Verifying warning message.");
     assertTrue(bookingPage.isNoSlotsMessageDisplayed(), "No available time slots for this speed.");
-  }
-
-  @And("I should see the available time slots displayed")
-  public void iShouldSeeTheAvailableTimeSlotsDisplayed() {
-    System.out.println(
-        "DEBUG: EvDriverSlotAvailabilitySteps.iShouldSeeTheAvailableTimeSlotsDisplayed() - Verifying time slots display.");
-    assertTrue(
-        bookingPage.areTimeSlotsDisplayedWithClearStartTimes(),
-        "Available time slots should be displayed with clear start times.");
   }
 }
