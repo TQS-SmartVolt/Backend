@@ -304,7 +304,7 @@ class ChargingStationSlotsControllerIT {
   @Requirement("SV-68")
   void createChargingSlot_WhenValidRequest_ReturnsCreatedSlot() {
     Long stationId = 102L;
-    String chargingSpeed = "Slow";
+    String chargingSpeed = "Medium";
     double pricePerKWh = 50;
 
     String requestBody =
@@ -324,7 +324,37 @@ class ChargingStationSlotsControllerIT {
         .statusCode(HttpStatus.CREATED.value())
         .body("chargingSpeed", equalTo(chargingSpeed))
         .body("pricePerKWh", equalTo((float) pricePerKWh))
-        .body("power", equalTo(10.0F));
+        .body("power", equalTo(20.0F));
+
+    System.out.println("DEBUG: Successfully created a new charging slot.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-68")
+  void createChargingSlot_WhenValidRequestFastSpeed_ReturnsCreatedSlot() {
+    Long stationId = 102L;
+    String chargingSpeed = "Fast";
+    double pricePerKWh = 50;
+
+    String requestBody =
+        String.format(
+            Locale.US,
+            "{\"pricePerKWh\": %.2f, \"chargingSpeed\": \"%s\"}",
+            pricePerKWh,
+            chargingSpeed);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + operatorSvToken)
+        .body(requestBody)
+        .when()
+        .post(getBaseUrl() + "/" + stationId + "/slots")
+        .then()
+        .statusCode(HttpStatus.CREATED.value())
+        .body("chargingSpeed", equalTo(chargingSpeed))
+        .body("pricePerKWh", equalTo((float) pricePerKWh))
+        .body("power", equalTo(30.0F));
 
     System.out.println("DEBUG: Successfully created a new charging slot.");
   }
