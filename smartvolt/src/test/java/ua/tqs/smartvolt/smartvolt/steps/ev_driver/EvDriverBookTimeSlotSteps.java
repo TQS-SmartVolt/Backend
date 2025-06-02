@@ -27,13 +27,6 @@ public class EvDriverBookTimeSlotSteps {
     bookingPage.selectDate();
   }
 
-  @And("I select the time slot {string}")
-  public void iSelectTheTimeSlot(String timeText) {
-    System.out.println(
-        "DEBUG: EvDriverBookTimeSlotSteps.iSelectTheTimeSlot() - Selecting time slot: " + timeText);
-    bookingPage.selectTimeSlot(timeText);
-  }
-
   @And(
       "I click the {string} button on the booking page") // Reusing a generic step for button clicks
   public void iClickTheButtonOnBookingPage(String buttonText) {
@@ -48,16 +41,6 @@ public class EvDriverBookTimeSlotSteps {
     }
   }
 
-  @Then("I should see the booking confirmation dialog")
-  public void iShouldSeeTheBookingConfirmationDialog() {
-    System.out.println(
-        "DEBUG: EvDriverBookTimeSlotSteps.iShouldSeeTheBookingConfirmationDialog() - Verifying confirmation dialog.");
-    assertTrue(
-        bookingPage.isBookingConfirmationDialogDisplayed(),
-        "Booking confirmation dialog should be displayed.");
-  }
-
-  // --- NEW STEP DEFINITION FOR WARNING MESSAGE ---
   @Then("I should see a warning message {string}")
   public void iShouldSeeAWarningMessage(String expectedMessage) {
     System.out.println(

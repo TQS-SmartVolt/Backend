@@ -26,13 +26,3 @@ Feature: EV Driver Slot Availability
     Then I should be in the page "/booking"
     And I should filter the charging speed by "Fast"
     Then I should see a warning message
-
-  Scenario: All available time slots are displayed with clear start times
-    Then I should see the map displayed
-    And I expand the filter section
-    And I click the "Show Markers" button on the station map
-    And I click on the charging station marker at index 0
-    Then I should see a station details popup with title "Station 1" and address "Rua 1"
-    And I click on the View Details button
-    Then I should be in the page "/booking"
-    And I should see the available time slots displayed

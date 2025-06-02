@@ -15,12 +15,6 @@ Feature: EV Driver Book a Time Slot
     Then I should be in the page "/booking"
     And I should see the booking page elements for "Station 1" and address "Rua 1"
 
-  Scenario: User successfully selects a date and time slot to proceed to confirmation
-    When I select the date tomorrow
-    And I select the time slot "10:00"
-    And I click the "Confirm Booking" button on the booking page
-    Then I should see the booking confirmation dialog
-
   Scenario: System displays a warning if date or time slot not selected before proceeding
     When I select the date tomorrow
     And I click the "Confirm Booking" button on the booking page

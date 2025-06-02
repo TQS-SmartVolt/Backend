@@ -32,12 +32,12 @@ public class LoginPage extends Website {
 
     // Password
     System.out.println("Entering password: " + password);
-    wait.until(ExpectedConditions.visibilityOf(loginPasswordInput));
+    // wait.until(ExpectedConditions.visibilityOf(loginPasswordInput));
     loginPasswordInput.sendKeys(password);
 
     // Submit
     System.out.println("Clicking submit button");
-    wait.until(ExpectedConditions.visibilityOf(loginSubmitButton));
+    // wait.until(ExpectedConditions.elementToBeClickable(loginSubmitButton));
     loginSubmitButton.click();
 
     System.out.println("Waiting for redirection after login...");

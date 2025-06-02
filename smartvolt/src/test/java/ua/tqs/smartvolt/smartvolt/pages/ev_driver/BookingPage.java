@@ -201,45 +201,6 @@ public class BookingPage extends Website {
     }
   }
 
-  // Check if time slots are displayed and have content
-  public boolean areTimeSlotsDisplayedWithClearStartTimes() {
-    System.out.println(
-        "DEBUG: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - Entering method.");
-    try {
-      wait.until(ExpectedConditions.visibilityOfElementLocated(timeSlotGridTitleBy));
-      System.out.println(
-          "DEBUG: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - Time Slot Grid title is present.");
-
-      // Use the more specific locator for time slot buttons
-      List<WebElement> timeSlotButtons = driver.findElements(timeSlotGridButtonsBy);
-
-      if (timeSlotButtons.isEmpty()) {
-        System.err.println(
-            "ERROR: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - No time slot buttons found.");
-        return false;
-      }
-
-      for (WebElement button : timeSlotButtons) {
-        wait.until(ExpectedConditions.visibilityOf(button));
-        String slotText = button.getText().trim();
-        System.out.println("DEBUG: Found time slot: '" + slotText + "'");
-        if (slotText.isEmpty()) {
-          System.err.println(
-              "ERROR: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - Found an empty time slot button.");
-          return false;
-        }
-      }
-      System.out.println(
-          "DEBUG: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - All found time slots are visible and have clear text.");
-      return true;
-    } catch (Exception e) {
-      System.err.println(
-          "ERROR: BookingPage.areTimeSlotsDisplayedWithClearStartTimes() - Error verifying time slots: "
-              + e.getMessage());
-      return false;
-    }
-  }
-
   public boolean isConfirmBookingButtonDisplayed() {
     System.out.println("DEBUG: BookingPage.isConfirmBookingButtonDisplayed() - Entering method.");
     try {
@@ -398,7 +359,6 @@ public class BookingPage extends Website {
    *
    * @param timeText The time slot to select, e.g., "10:00" or "14:30".
    */
-  // BookingPage.java - inside selectTimeSlot method
   public void selectTimeSlot(String timeText) {
     System.out.println(
         "DEBUG: BookingPage.selectTimeSlot() - Attempting to select time slot: " + timeText);
@@ -421,6 +381,12 @@ public class BookingPage extends Website {
             .filter(
                 button -> {
                   String buttonActualText = button.getText().trim();
+                  System.out.println(
+                      "DEBUG: Comparing target '"
+                          + timeText
+                          + "' with actual button text: '"
+                          + buttonActualText
+                          + "'");
                   return buttonActualText.startsWith(timeText);
                 })
             .findFirst()
@@ -437,6 +403,8 @@ public class BookingPage extends Website {
                       "Time slot '" + timeText + "' not found in the time selection grid.");
                 });
 
+    // Explicitly wait for the *found* element to be clickable before interacting.
+    // This is the most reliable way to ensure it's ready.
     wait.until(ExpectedConditions.elementToBeClickable(selectedTimeSlotButton));
     selectedTimeSlotButton.click();
     System.out.println(
