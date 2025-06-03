@@ -24,7 +24,7 @@ public class ChargingSessionService {
     List<ChargingSession> sessions = chargingSessionRepository.findAll();
     Map<String, Integer> monthSessions = new LinkedHashMap<>();
     LocalDateTime today = LocalDateTime.now();
-    LocalDateTime oneYearAgo = today.minusYears(1);
+    LocalDateTime oneYearAgo = today.minusYears(1).plusMonths(1);
 
     YearMonth startMonth = YearMonth.from(oneYearAgo).plusMonths(1);
     YearMonth endMonth = YearMonth.from(today);
@@ -37,7 +37,7 @@ public class ChargingSessionService {
 
     for (ChargingSession session : sessions) {
       Booking booking = session.getBooking();
-      if (booking != null && "used".equals(booking.getStatus())) {
+      if (booking != null) {
         LocalDateTime startTime = booking.getStartTime();
         if (startTime.isAfter(oneYearAgo) && startTime.isBefore(today)) {
           String month = startTime.getMonth().toString().substring(0, 3).toLowerCase();
