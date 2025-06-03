@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationWithSlots;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingStationsResponse;
+import ua.tqs.smartvolt.smartvolt.exceptions.InvalidRequestException;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
@@ -63,6 +66,15 @@ public class ChargingStationController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
       throws ResourceNotFoundException {
     return chargingSlotService.getAvailableSlots(stationId, chargingSpeed, date);
+  }
+
+  @PostMapping("/{stationId}/slots")
+  @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  public ChargingSlot addChargingSlotToStation(
+      @PathVariable Long stationId, @RequestBody ChargingSlotRequest request)
+      throws ResourceNotFoundException, InvalidRequestException {
+    return chargingSlotService.addChargingSlotToStation(stationId, request);
   }
 
   @GetMapping("/map")
