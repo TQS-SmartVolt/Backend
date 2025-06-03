@@ -11,4 +11,3 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/smartvolt-0.0.1-SNAPSHOT.jar /app/smartvolt.jar
 CMD ["java", "-jar", "smartvolt.jar"]
- 

@@ -9,8 +9,10 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotRequest;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingSlotsResponse;
+import ua.tqs.smartvolt.smartvolt.exceptions.InvalidRequestException;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
@@ -31,6 +33,43 @@ public class ChargingSlotService {
     this.chargingSlotRepository = chargingSlotRepository;
     this.chargingStationRepository = chargingStationRepository;
     this.bookingRepository = bookingRepository;
+  }
+
+  public ChargingSlot addChargingSlotToStation(Long stationId, ChargingSlotRequest slotRequest)
+      throws ResourceNotFoundException, InvalidRequestException {
+
+    ChargingStation station =
+        chargingStationRepository
+            .findById(stationId)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Charging station not found with id: " + stationId));
+
+    String chargingSpeed = slotRequest.getChargingSpeed();
+    double power;
+    switch (chargingSpeed) {
+      case "Slow":
+        power = 10.0;
+        break;
+      case "Medium":
+        power = 20.0;
+        break;
+      case "Fast":
+        power = 30.0;
+        break;
+      default:
+        throw new InvalidRequestException(
+            "Invalid charging speed: " + chargingSpeed + ". Valid options are Slow, Medium, Fast.");
+    }
+
+    ChargingSlot newSlot = new ChargingSlot();
+    newSlot.setLocked(false);
+    newSlot.setPricePerKWh(slotRequest.getPricePerKWh());
+    newSlot.setPower(power);
+    newSlot.setChargingSpeed(slotRequest.getChargingSpeed());
+    newSlot.setStation(station);
+    return chargingSlotRepository.save(newSlot);
   }
 
   public ChargingSlotResponse getSlotDetailsById(Long slotId) {
@@ -54,6 +93,15 @@ public class ChargingSlotService {
 
   public ChargingSlotsResponse getAvailableSlots(
       Long stationId, String chargingSpeed, LocalDate date) throws ResourceNotFoundException {
+
+    if (date.isBefore(LocalDate.now())) {
+      // Return an empty response for past dates
+      ChargingSlotsResponse response = new ChargingSlotsResponse();
+      response.setAvailableSlotMapping(new ArrayList<>()); // Empty list
+      response.setPricePerKWh(0.0); // Or perhaps a configurable default for non-bookable dates
+      return response;
+    }
+
     ChargingStation station =
         chargingStationRepository
             .findById(stationId)

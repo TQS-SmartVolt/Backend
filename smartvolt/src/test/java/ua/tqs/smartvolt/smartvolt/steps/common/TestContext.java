@@ -5,6 +5,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import ua.tqs.smartvolt.smartvolt.MyTestConfiguration;
 import ua.tqs.smartvolt.smartvolt.pages.Website;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.BookingPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.PaymentPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStationsMapPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 
@@ -14,6 +16,8 @@ public class TestContext {
   private BackOfficePage backOfficePage;
   private Website website;
   private ServiceStationsMapPage serviceStationsMapPage;
+  private BookingPage bookingPage;
+  private PaymentPage paymentPage;
 
   public static String FRONTEND_PROTOCOL = "http";
   public static String FRONTEND_IP = MyTestConfiguration.getHost();
@@ -39,6 +43,8 @@ public class TestContext {
     this.loginPage = new LoginPage(driver);
     this.backOfficePage = new BackOfficePage(driver);
     this.serviceStationsMapPage = new ServiceStationsMapPage(driver);
+    this.bookingPage = new BookingPage(driver);
+    this.paymentPage = new PaymentPage(driver);
     this.website = new Website(driver);
   }
 
@@ -60,6 +66,14 @@ public class TestContext {
 
   public ServiceStationsMapPage getServiceStationsMapPage() {
     return serviceStationsMapPage;
+  }
+
+  public BookingPage getBookingPage() {
+    return bookingPage;
+  }
+
+  public PaymentPage getPaymentPage() {
+    return paymentPage;
   }
 
   public void quit() {

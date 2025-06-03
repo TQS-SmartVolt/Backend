@@ -17,6 +17,7 @@ public class Booking {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "booking_id")
   private Long bookingId;
 
   @ManyToOne
@@ -123,5 +124,9 @@ public class Booking {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 }

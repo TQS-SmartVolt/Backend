@@ -43,6 +43,10 @@ public class ChargingSlot {
     return slotId;
   }
 
+  public void setSlotId(Long slotId) {
+    this.slotId = slotId;
+  }
+
   public boolean isLocked() {
     return isLocked;
   }
