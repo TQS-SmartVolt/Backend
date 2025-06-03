@@ -1,6 +1,7 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
@@ -10,9 +11,13 @@ import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 
 @Service
 public class BookingService {
+
+  private static final String DRIVER_NOT_FOUND_MSG = "Driver not found with id: ";
+
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
@@ -34,7 +39,7 @@ public class BookingService {
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
-            .orElseThrow(() -> new Exception("Driver not found with id: " + driverId));
+            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
 
     final Long slotId = request.getSlotId();
     ChargingSlot slot =
@@ -78,6 +83,61 @@ public class BookingService {
 
     return bookingRepository.save(booking);
   }
+
+  public List<Booking> getBookingsToUnlock(Long driverId) throws Exception {
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
+
+    List<Booking> bookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
+
+    deleteNotUsedBookings(bookings);
+
+    // Filter bookings to only include those that are paid
+    return bookings.stream()
+        .filter(booking -> booking.getStatus().equals("Paid"))
+        .toList();
+  }
+
+  public void deleteNotUsedBookings(List<Booking> bookings) {
+    LocalDateTime now = LocalDateTime.now();
+    List<Booking> notUsedBookings = bookings.stream()
+        .filter(booking -> booking.getStatus().equals("Not Used"))
+        .toList();
+
+    for (Booking booking : notUsedBookings) {
+      LocalDateTime createdAt = booking.getCreatedAt();
+      if (createdAt.plusMinutes(5).isBefore(now)) {
+        bookingRepository.delete(booking);
+      }
+    }
+  }
+
+  public void unlockChargingSlot(Long bookingId, Long driverId) throws Exception {
+    Booking booking =
+        bookingRepository.findById(bookingId).
+            orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
+
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+
+    if (!booking.getDriver().equals(evDriver)) {
+      throw new Exception("Driver does not match booking driver");
+    }
+
+    if (booking.getStatus().equals("Paid")) {
+      booking.setStatus("Used");
+      ChargingSlot slot = booking.getSlot();
+      slot.setLocked(false);
+      chargingSlotRepository.save(slot);
+    } else {
+      throw new Exception("Booking is not paid or already used");
+    }
+  }
+
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
     Booking booking =
