@@ -58,8 +58,8 @@ public class BrowserSelenium {
   private static BrowserSelenium getChrome() {
     return new BrowserSelenium(
         new BrowserWebDriverContainer<>(
-                DockerImageName.parse("selenium/standalone-chrome:4.33.0-20250525")
-        ).withCapabilities(new ChromeOptions()),
+                DockerImageName.parse("selenium/standalone-chrome:4.33.0-20250525"))
+            .withCapabilities(new ChromeOptions()),
         new ChromeOptions());
   }
 
@@ -67,8 +67,8 @@ public class BrowserSelenium {
   private static BrowserSelenium getEdge() {
     return new BrowserSelenium(
         new BrowserWebDriverContainer<>(
-                DockerImageName.parse("selenium/standalone-edge:4.33.0-20250525")
-        ).withCapabilities(new EdgeOptions()),
+                DockerImageName.parse("selenium/standalone-edge:4.33.0-20250525"))
+            .withCapabilities(new EdgeOptions()),
         new EdgeOptions()); // Edge options can be set similarly
   }
 }
