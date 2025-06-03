@@ -1,11 +1,13 @@
 package ua.tqs.smartvolt.smartvolt.repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
+import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -16,4 +18,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
   // For example, find bookings by user ID, date range, etc.
 
   Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
+
+  List<Booking> findByDriver(EvDriver evDriver);
 }
