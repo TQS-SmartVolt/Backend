@@ -1,4 +1,4 @@
-@UAT-Web
+@UAT-Weba
 Feature: Register Station
   To allow operators to register new stations.
 
