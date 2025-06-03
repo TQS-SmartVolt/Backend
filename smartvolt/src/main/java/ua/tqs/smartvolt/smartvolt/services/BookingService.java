@@ -14,12 +14,12 @@ import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
-import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 
 @Service
 public class BookingService {
 
   private static final String DRIVER_NOT_FOUND_MSG = "Driver not found with id: ";
+  private static final String NOT_USED_STATUS = "Not Used";
 
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
@@ -40,7 +40,7 @@ public class BookingService {
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
-            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     final Long slotId = request.getSlotId();
     ChargingSlot slot =
@@ -104,7 +104,7 @@ public class BookingService {
     booking.setDriver(evDriver);
     booking.setSlot(slot);
     booking.setStartTime(startTime);
-    booking.setStatus("Not Used");
+    booking.setStatus(NOT_USED_STATUS);
     booking.setCost(cost);
 
     return bookingRepository.save(booking);
@@ -117,19 +117,28 @@ public class BookingService {
             .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     List<Booking> bookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
-
     deleteNotUsedBookings(bookings);
-
-    // Filter bookings to only include those that are paid
+    // Filter bookings to only include those that are: "Paid" and from now on and "Used" AND within 30 minutes of the current time, ""
     return bookings.stream()
-        .filter(booking -> booking.getStatus().equals("Paid"))
-        .toList();
+      .filter(booking -> {
+        if (booking.getStatus().equals("Used")) {
+          // "Used" bookings: only include if within 30 minutes from now
+          LocalDateTime now = LocalDateTime.now();
+          return !booking.getStartTime().isBefore(now) &&
+               booking.getStartTime().isBefore(now.plusMinutes(30));
+        } else if (booking.getStatus().equals("Paid")) {
+          // "Paid" bookings: include all from now on
+          return !booking.getStartTime().isBefore(LocalDateTime.now());
+        }
+        return false;
+      })
+      .toList();
   }
 
   public void deleteNotUsedBookings(List<Booking> bookings) {
     LocalDateTime now = LocalDateTime.now();
     List<Booking> notUsedBookings = bookings.stream()
-        .filter(booking -> booking.getStatus().equals("Not Used"))
+        .filter(booking -> booking.getStatus().equals(NOT_USED_STATUS))
         .toList();
 
     for (Booking booking : notUsedBookings) {
@@ -176,7 +185,7 @@ public class BookingService {
       throw new Exception("Booking expired");
     }
 
-    if (booking.getStatus().equals("Not Used")) {
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
       booking.setStatus("Paid");
       bookingRepository.save(booking);
     } else {
@@ -187,7 +196,7 @@ public class BookingService {
   public void cancelBooking(Long bookingId) throws Exception {
     Booking booking =
         bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
-    if (booking.getStatus().equals("Not Used")) {
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {
       throw new Exception("Booking cannot be cancelled");
