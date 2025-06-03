@@ -71,11 +71,9 @@ public class DataLoaderDev implements CommandLineRunner {
     // Clear the database
     dropDatabase();
 
-    // Create Station Operator
     StationOperator stationOperator =
         new StationOperator(
             "John Doe", "johndoe@example.com", passwordEncoder.encode("StrongPassword!"));
-
     stationOperatorRepository.saveAndFlush(stationOperator);
     System.out.printf(
         "Station Operator created: %s with ID %s%n",
@@ -95,7 +93,7 @@ public class DataLoaderDev implements CommandLineRunner {
     ChargingStation testChargingStation2 =
         new ChargingStation("Station 2", 40.613605, -8.647361, "Rua 2", true, stationOperator);
     ChargingStation testChargingStation3 =
-        new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", true, stationOperator);
+        new ChargingStation("Station 3", 40.623605, -8.647361, "Rua 3", false, stationOperator);
 
     chargingStationRepository.saveAll(
         List.of(testChargingStation1, testChargingStation2, testChargingStation3));

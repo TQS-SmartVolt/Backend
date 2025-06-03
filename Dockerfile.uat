@@ -1,7 +1,13 @@
-FROM eclipse-temurin:17
-
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY ./smartvolt/pom.xml .
+RUN mvn dependency:go-offline
+COPY ./smartvolt/src src
+RUN mvn clean package -DskipTests
 
-EXPOSE 8080
-
-CMD ["./mvnw", "spring-boot:run"]
+# Stage 2: Start the application
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar smartvolt.jar
+CMD ["java", "-jar", "smartvolt.jar"]

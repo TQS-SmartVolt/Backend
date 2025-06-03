@@ -2,14 +2,17 @@ package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
+import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
-import ua.tqs.smartvolt.smartvolt.repositories.ChargingStationRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 
@@ -21,20 +24,18 @@ public class BookingService {
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
-  private final ChargingStationRepository chargingStationRepository;
 
   public BookingService(
       BookingRepository bookingRepository,
       EvDriverRepository evDriverRepository,
-      ChargingSlotRepository chargingSlotRepository,
-      ChargingStationRepository chargingStationRepository) {
+      ChargingSlotRepository chargingSlotRepository) {
     this.bookingRepository = bookingRepository;
     this.evDriverRepository = evDriverRepository;
     this.chargingSlotRepository = chargingSlotRepository;
-    this.chargingStationRepository = chargingStationRepository;
   }
 
-  public Booking createBooking(BookingRequest request, Long driverId) throws Exception {
+  public Booking createBooking(BookingRequest request, Long driverId)
+      throws ResourceNotFoundException, SlotAlreadyBookedException {
     // Get the driver, slot and start time from the request
     EvDriver evDriver =
         evDriverRepository
@@ -45,11 +46,28 @@ public class BookingService {
     ChargingSlot slot =
         chargingSlotRepository
             .findById(slotId)
-            .orElseThrow(() -> new Exception("Slot not found with id: " + slotId));
+            .orElseThrow(() -> new ResourceNotFoundException("Slot not found with id: " + slotId));
 
+    // Check if the start time is exactly on the hour or half-hour mark
     LocalDateTime startTime = request.getStartTime();
     if (startTime == null) {
-      throw new Exception("Start time cannot be null");
+      throw new IllegalArgumentException("Start time cannot be null");
+    }
+
+    if (startTime.getSecond() != 0
+        || startTime.getNano() != 0
+        || (startTime.getMinute() % 30 != 0)) {
+      throw new IllegalArgumentException(
+          "Booking start time must be on a 30-minute interval (e.g., HH:00 or HH:30).");
+    }
+
+    Optional<Booking> existingBooking = bookingRepository.findBySlotAndStartTime(slot, startTime);
+    if (existingBooking.isPresent()) {
+      throw new SlotAlreadyBookedException(
+          "Slot "
+              + slotId
+              + " is already booked at "
+              + startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 
     // Create a new booking
@@ -58,20 +76,22 @@ public class BookingService {
     final double power =
         chargingSlotRepository
             .getPowerBySlotId(slotId)
-            .orElseThrow(() -> new Exception("Power not found for slotId: " + slotId));
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Power not found for slotId: " + slotId));
 
     final double pricePerKWh =
         chargingSlotRepository
             .getPricePerKWhBySlotId(slotId)
-            .orElseThrow(() -> new Exception("Price not found for slotId: " + slotId));
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Price not found for slotId: " + slotId));
 
     if (power < 0 || pricePerKWh < 0) {
-      throw new Exception("Invalid power or price");
+      throw new IllegalArgumentException("Invalid power or price");
     }
     double cost = power * pricePerKWh;
 
     if (cost < 0) {
-      throw new Exception("Invalid cost");
+      throw new IllegalArgumentException("Invalid cost");
     }
 
     // Set booking details

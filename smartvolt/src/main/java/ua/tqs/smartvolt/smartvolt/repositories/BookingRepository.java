@@ -1,6 +1,7 @@
 package ua.tqs.smartvolt.smartvolt.repositories;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
@@ -13,10 +14,12 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
   boolean existsBySlotAndStartTime(ChargingSlot slot, LocalDateTime slotTime);
+
   // Custom query methods can be defined here if needed
   // For example, find bookings by user ID, date range, etc.
 
   Optional<List<Booking>> findByDriver(EvDriver driver);
   List<Booking> findByStatus(String status);
 
+  Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
 }
