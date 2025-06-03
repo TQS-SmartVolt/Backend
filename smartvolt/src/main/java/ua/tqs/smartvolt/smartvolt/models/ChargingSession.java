@@ -27,5 +27,39 @@ public class ChargingSession {
     this.booking = booking;
   }
 
-  // Getters and setters...
+  public Long getSessionId() {
+    return sessionId;
+  }
+
+  public void setSessionId(Long sessionId) {
+    this.sessionId = sessionId;
+  }
+
+  public double getEnergyDelivered() {
+    return energyDelivered;
+  }
+
+  public void setEnergyDelivered(double energyDelivered) {
+    this.energyDelivered = energyDelivered;
+  }
+
+  public Booking getBooking() {
+    return booking;
+  }
+
+  public void setBooking(Booking booking) {
+    this.booking = booking;
+  }
+
+  @Override
+  public String toString() {
+    return "ChargingSession{"
+        + "sessionId="
+        + sessionId
+        + ", energyDelivered="
+        + energyDelivered
+        + ", booking="
+        + booking
+        + '}';
+  }
 }
