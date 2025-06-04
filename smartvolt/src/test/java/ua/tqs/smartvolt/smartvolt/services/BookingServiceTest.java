@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -464,5 +465,97 @@ public class BookingServiceTest {
     verify(bookingRepository, times(1)).findById(bookingId);
     verify(bookingRepository, never()).save(any(Booking.class)); // Should not save
     verify(bookingRepository, never()).delete(any(Booking.class)); // Should not delete
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void getBookingsToUnlock_InvalidDriver_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long invalidDriverId = 999L;
+    when(evDriverRepository.findById(invalidDriverId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.getBookingsToUnlock(invalidDriverId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Driver not found with id: " + invalidDriverId);
+
+    verify(evDriverRepository, times(1)).findById(invalidDriverId);
+    verify(bookingRepository, never()).findByDriver(any());
+
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void deleteNotUsedBookings_DeletesExpiredNotUsedBookings() {
+      // Arrange
+      Booking expiredBooking = new Booking();
+      expiredBooking.setBookingId(1L);
+      expiredBooking.setStatus("Not Used");
+      expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(10));
+
+      Booking freshBooking = new Booking();
+      freshBooking.setBookingId(2L);
+      freshBooking.setStatus("Not Used");
+      freshBooking.setCreatedAt(LocalDateTime.now());
+
+      List<Booking> bookings = List.of(expiredBooking, freshBooking);
+
+      // Act
+      bookingService.deleteNotUsedBookings(bookings);
+
+      // Assert
+      verify(bookingRepository, times(1)).delete(expiredBooking);
+      verify(bookingRepository, never()).delete(freshBooking);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void unlockChargingSlot_DriverDoesNotMatch_ThrowsException() {
+      // Arrange
+      Long bookingId = 1L;
+      Long driverId = 2L;
+
+      Booking booking = new Booking();
+      booking.setBookingId(bookingId);
+      EvDriver bookingDriver = new EvDriver();
+      bookingDriver.setUserId(3L);
+      booking.setDriver(bookingDriver);
+
+      EvDriver evDriver = new EvDriver();
+      evDriver.setUserId(driverId);
+
+      when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+      when(evDriverRepository.findById(driverId)).thenReturn(Optional.of(evDriver));
+
+      // Act & Assert
+      assertThatThrownBy(() -> bookingService.unlockChargingSlot(bookingId, driverId))
+          .isInstanceOf(Exception.class)
+          .hasMessageContaining("Driver does not match booking driver");
+  }
+
+  @Test
+  @Tag("UnitTest")
+  void unlockChargingSlot_BookingNotPaidOrAlreadyUsed_ThrowsException() {
+      // Arrange
+      Long bookingId = 1L;
+      Long driverId = 2L;
+
+      Booking booking = new Booking();
+      booking.setBookingId(bookingId);
+      booking.setStatus("Not Used"); // Not "Paid"
+      EvDriver evDriver = new EvDriver();
+      evDriver.setUserId(driverId);
+      booking.setDriver(evDriver);
+
+      when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+      when(evDriverRepository.findById(driverId)).thenReturn(Optional.of(evDriver));
+
+      // Act & Assert
+      assertThatThrownBy(() -> bookingService.unlockChargingSlot(bookingId, driverId))
+          .isInstanceOf(Exception.class)
+          .hasMessageContaining("Booking is not paid or already used");
   }
 }
