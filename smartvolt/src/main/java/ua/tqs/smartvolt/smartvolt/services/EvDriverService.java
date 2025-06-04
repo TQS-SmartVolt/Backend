@@ -143,17 +143,6 @@ public class EvDriverService {
       return new SpendingResponse(Collections.nCopies(12, 0.0)); // Return empty spending
     }
 
-    // If bookings are expired, delete them from the repository
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime createdAt;
-    for (Booking booking : driverBookings) {
-      createdAt = booking.getCreatedAt();
-      if (createdAt.plusMinutes(5).isBefore(now)) {
-        bookingRepository.delete(booking);
-        driverBookings.remove(booking);
-      }
-    }
-
     // Group bookings by month and sum their costs
     java.util.Map<Integer, Double> monthlySpendingMap =
         driverBookings.stream()
