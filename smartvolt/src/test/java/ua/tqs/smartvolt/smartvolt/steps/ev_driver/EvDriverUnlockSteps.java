@@ -26,15 +26,15 @@ public class EvDriverUnlockSteps {
     assertTrue(unlockPage.isUnlockPageDisplayed(), "Should be on the unlock slot page.");
   } 
 
-  // @And("I should see an entry for {string} in the slot list")
-  // public void iShouldSeeAnEntryForInTheSlotList(String time) {
-  //   System.out.println(
-  //       "DEBUG: EvDriverUnlockSteps.iShouldSeeAnEntryForInTheSlotList() - Verifying slot entry for time: "
-  //           + time);
-  //   assertTrue(
-  //       unlockPage.isSlotEntryDisplayed(time),
-  //       "Slot entry for time " + time + " should be displayed.");
-  // }
+  @And("I should see an entry for {string} in the slot list")
+  public void iShouldSeeAnEntryForInTheSlotList(String time) {
+    System.out.println(
+        "DEBUG: EvDriverUnlockSteps.iShouldSeeAnEntryForInTheSlotList() - Verifying slot entry for time: "
+            + time);
+    assertTrue(
+        unlockPage.isSlotEntryDisplayed(time),
+        "Slot entry for time " + time + " should be displayed.");
+  }
 
 
 }

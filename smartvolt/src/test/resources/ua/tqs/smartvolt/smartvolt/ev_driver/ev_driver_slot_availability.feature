@@ -1,4 +1,4 @@
-@UAT-Web
+# @UAT-Web
 Feature: EV Driver Slot Availability
   To allow EV drivers to view available charging slots for a selected station
 

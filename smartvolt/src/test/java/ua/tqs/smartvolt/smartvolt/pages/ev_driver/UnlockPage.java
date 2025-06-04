@@ -2,6 +2,7 @@ package ua.tqs.smartvolt.smartvolt.pages.ev_driver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ua.tqs.smartvolt.smartvolt.pages.Website;
@@ -38,4 +39,25 @@ public class UnlockPage extends Website {
       return false;
     }
   }
+
+  /**
+   * Checks if the slot entry for the given time is displayed.
+   *
+   * @param time The time to check for in the slot list.
+   * @return true if the slot entry is displayed, false otherwise.
+   */
+public boolean isSlotEntryDisplayed(String time) {
+    System.out.println(
+        "DEBUG: UnlockPage.isSlotEntryDisplayed() - Checking slot entry for time: " + time);
+    try {
+        WebElement slotEntry = driver.findElement(
+            By.cssSelector("[data-testid^='station-card-" + time + "']"));
+        return slotEntry.isDisplayed();
+    } catch (Exception e) {
+        System.err.println("ERROR: UnlockPage.isSlotEntryDisplayed() - Slot entry not found: "
+            + e.getMessage());
+        return false;
+    }
 }
+}
+
