@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="JUnit Jupiter" tests="99" skipped="0" failures="0" errors="0" time="38" hostname="NULL.Home" timestamp="2025-06-04T16:33:02">
+<testsuite name="JUnit Jupiter" tests="69" skipped="0" failures="0" errors="0" time="1" hostname="NULL.Home" timestamp="2025-06-04T17:29:01">
 <properties>
-<property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
-<property name="FILE_LOG_CHARSET" value="UTF-8"/>
-<property name="LOGGED_APPLICATION_NAME" value="[smartvolt] "/>
-<property name="PID" value="33877"/>
 <property name="basedir" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt"/>
-<property name="catalina.base" value="/tmp/tomcat.0.1102709414168319397"/>
-<property name="catalina.home" value="/tmp/tomcat.0.14025761128220725055"/>
-<property name="catalina.useNaming" value="false"/>
-<property name="com.zaxxer.hikari.pool_number" value="6"/>
 <property name="file.encoding" value="UTF-8"/>
 <property name="file.separator" value="/"/>
-<property name="java.awt.headless" value="true"/>
 <property name="java.class.path" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/test-classes:/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/classes:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter/3.2.0/spring-boot-starter-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot/3.2.0/spring-boot-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-context/6.1.1/spring-context-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.2.0/spring-boot-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-core/6.1.1/spring-core-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-jcl/6.1.1/spring-jcl-6.1.1.jar:/home/joao/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-test/3.2.0/spring-boot-starter-test-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-test/3.2.0/spring-boot-test-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/3.2.0/spring-boot-test-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/com/jayway/jsonpath/json-path/2.8.0/json-path-2.8.0.jar:/home/joao/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.1/jakarta.xml.bind-api-4.0.1.jar:/home/joao/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.2/jakarta.activation-api-2.1.2.jar:/home/joao/.m2/repository/net/minidev/json-smart/2.5.0/json-smart-2.5.0.jar:/home/joao/.m2/repository/net/minidev/accessors-smart/2.5.0/accessors-smart-2.5.0.jar:/home/joao/.m2/repository/org/ow2/asm/asm/9.3/asm-9.3.jar:/home/joao/.m2/repository/org/awaitility/awaitility/4.2.0/awaitility-4.2.0.jar:/home/joao/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/home/joao/.m2/repository/org/mockito/mockito-core/5.7.0/mockito-core-5.7.0.jar:/home/joao/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.10/byte-buddy-agent-1.14.10.jar:/home/joao/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/joao/.m2/repository/org/mockito/mockito-junit-jupiter/5.7.0/mockito-junit-jupiter-5.7.0.jar:/home/joao/.m2/repository/org/skyscreamer/jsonassert/1.5.1/jsonassert-1.5.1.jar:/home/joao/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/home/joao/.m2/repository/org/springframework/spring-test/6.1.1/spring-test-6.1.1.jar:/home/joao/.m2/repository/org/xmlunit/xmlunit-core/2.9.1/xmlunit-core-2.9.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/3.2.0/spring-boot-starter-data-jpa-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-aop/3.2.0/spring-boot-starter-aop-3.2.0.jar:/home/joao/.m2/repository/org/aspectj/aspectjweaver/1.9.20.1/aspectjweaver-1.9.20.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.2.0/spring-boot-starter-jdbc-3.2.0.jar:/home/joao/.m2/repository/com/zaxxer/HikariCP/5.0.1/HikariCP-5.0.1.jar:/home/joao/.m2/repository/org/springframework/spring-jdbc/6.1.1/spring-jdbc-6.1.1.jar:/home/joao/.m2/repository/org/hibernate/orm/hibernate-core/6.3.1.Final/hibernate-core-6.3.1.Final.jar:/home/joao/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar:/home/joao/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/home/joao/.m2/repository/org/jboss/logging/jboss-logging/3.5.3.Final/jboss-logging-3.5.3.Final.jar:/home/joao/.m2/repository/org/hibernate/common/hibernate-commons-annotations/6.0.6.Final/hibernate-commons-annotations-6.0.6.Final.jar:/home/joao/.m2/repository/io/smallrye/jandex/3.1.2/jandex-3.1.2.jar:/home/joao/.m2/repository/com/fasterxml/classmate/1.6.0/classmate-1.6.0.jar:/home/joao/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.4/jaxb-runtime-4.0.4.jar:/home/joao/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.4/jaxb-core-4.0.4.jar:/home/joao/.m2/repository/org/eclipse/angus/angus-activation/2.0.1/angus-activation-2.0.1.jar:/home/joao/.m2/repository/org/glassfish/jaxb/txw2/4.0.4/txw2-4.0.4.jar:/home/joao/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/home/joao/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/home/joao/.m2/repository/org/antlr/antlr4-runtime/4.10.1/antlr4-runtime-4.10.1.jar:/home/joao/.m2/repository/org/springframework/data/spring-data-jpa/3.2.0/spring-data-jpa-3.2.0.jar:/home/joao/.m2/repository/org/springframework/data/spring-data-commons/3.2.0/spring-data-commons-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-orm/6.1.1/spring-orm-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-tx/6.1.1/spring-tx-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-beans/6.1.1/spring-beans-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-aspects/6.1.1/spring-aspects-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.2.0/spring-boot-starter-web-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.2.0/spring-boot-starter-json-3.2.0.jar:/home/joao/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.15.3/jackson-datatype-jdk8-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.15.3/jackson-module-parameter-names-2.15.3.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.2.0/spring-boot-starter-tomcat-3.2.0.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.16/tomcat-embed-core-10.1.16.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.16/tomcat-embed-websocket-10.1.16.jar:/home/joao/.m2/repository/org/springframework/spring-web/6.1.1/spring-web-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-webmvc/6.1.1/spring-webmvc-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-expression/6.1.1/spring-expression-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-log4j2/3.2.0/spring-boot-starter-log4j2-3.2.0.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-slf4j2-impl/2.21.1/log4j-slf4j2-impl-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-jul/2.21.1/log4j-jul-2.21.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/3.2.0/spring-boot-starter-actuator-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/3.2.0/spring-boot-actuator-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-actuator/3.2.0/spring-boot-actuator-3.2.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-observation/1.12.0/micrometer-observation-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-commons/1.12.0/micrometer-commons-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-jakarta9/1.12.0/micrometer-jakarta9-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-registry-prometheus/1.12.0/micrometer-registry-prometheus-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-core/1.12.0/micrometer-core-1.12.0.jar:/home/joao/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar:/home/joao/.m2/repository/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_common/0.16.0/simpleclient_common-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient/0.16.0/simpleclient-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_otel/0.16.0/simpleclient_tracer_otel-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_common/0.16.0/simpleclient_tracer_common-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_otel_agent/0.16.0/simpleclient_tracer_otel_agent-0.16.0.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-layout-template-json/2.21.1/log4j-layout-template-json-2.21.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-validation/3.2.0/spring-boot-starter-validation-3.2.0.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.16/tomcat-embed-el-10.1.16.jar:/home/joao/.m2/repository/org/hibernate/validator/hibernate-validator/8.0.1.Final/hibernate-validator-8.0.1.Final.jar:/home/joao/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-security/3.2.0/spring-boot-starter-security-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-aop/6.1.1/spring-aop-6.1.1.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-config/6.2.0/spring-security-config-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-core/6.2.0/spring-security-core-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-crypto/6.2.0/spring-security-crypto-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-web/6.2.0/spring-security-web-6.2.0.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-api/0.11.2/jjwt-api-0.11.2.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-impl/0.11.2/jjwt-impl-0.11.2.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-jackson/0.11.2/jjwt-jackson-0.11.2.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.3/jackson-databind-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.3/jackson-annotations-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.3/jackson-core-2.15.3.jar:/home/joao/.m2/repository/io/cucumber/cucumber-picocontainer/7.22.2/cucumber-picocontainer-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-core/7.22.2/cucumber-core-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-gherkin/7.22.2/cucumber-gherkin-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-gherkin-messages/7.22.2/cucumber-gherkin-messages-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/gherkin/32.1.1/gherkin-32.1.1.jar:/home/joao/.m2/repository/io/cucumber/messages/27.2.0/messages-27.2.0.jar:/home/joao/.m2/repository/io/cucumber/testng-xml-formatter/0.3.1/testng-xml-formatter-0.3.1.jar:/home/joao/.m2/repository/io/cucumber/query/13.2.0/query-13.2.0.jar:/home/joao/.m2/repository/io/cucumber/tag-expressions/6.1.2/tag-expressions-6.1.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-expressions/18.0.1/cucumber-expressions-18.0.1.jar:/home/joao/.m2/repository/io/cucumber/datatable/7.22.2/datatable-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-plugin/7.22.2/cucumber-plugin-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/docstring/7.22.2/docstring-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/html-formatter/21.10.1/html-formatter-21.10.1.jar:/home/joao/.m2/repository/io/cucumber/junit-xml-formatter/0.7.1/junit-xml-formatter-0.7.1.jar:/home/joao/.m2/repository/io/cucumber/ci-environment/10.0.1/ci-environment-10.0.1.jar:/home/joao/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/joao/.m2/repository/org/picocontainer/picocontainer/2.15.2/picocontainer-2.15.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-devtools/3.2.0/spring-boot-devtools-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-thymeleaf/3.2.0/spring-boot-starter-thymeleaf-3.2.0.jar:/home/joao/.m2/repository/org/thymeleaf/thymeleaf-spring6/3.1.2.RELEASE/thymeleaf-spring6-3.1.2.RELEASE.jar:/home/joao/.m2/repository/org/thymeleaf/thymeleaf/3.1.2.RELEASE/thymeleaf-3.1.2.RELEASE.jar:/home/joao/.m2/repository/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE.jar:/home/joao/.m2/repository/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar:/home/joao/.m2/repository/app/getxray/xray-junit-extensions/0.7.3/xray-junit-extensions-0.7.3.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.4/junit-jupiter-api-5.11.4.jar:/home/joao/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-reporting/1.11.4/junit-platform-reporting-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-launcher/1.11.4/junit-platform-launcher-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-engine/1.11.4/junit-platform-engine-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-commons/1.11.4/junit-platform-commons-1.11.4.jar:/home/joao/.m2/repository/app/getxray/xray-maven-plugin/0.8.0/xray-maven-plugin-0.8.0.jar:/home/joao/.m2/repository/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.jar:/home/joao/.m2/repository/com/squareup/okio/okio/3.6.0/okio-3.6.0.jar:/home/joao/.m2/repository/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.20/kotlin-stdlib-common-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.20/kotlin-stdlib-jdk8-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/1.9.20/kotlin-stdlib-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.9.20/kotlin-stdlib-jdk7-1.9.20.jar:/home/joao/.m2/repository/org/json/json/20231013/json-20231013.jar:/home/joao/.m2/repository/org/codehaus/plexus/plexus-utils/3.4.1/plexus-utils-3.4.1.jar:/home/joao/.m2/repository/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar:/home/joao/.m2/repository/org/checkerframework/checker-qual/3.31.0/checker-qual-3.31.0.jar:/home/joao/.m2/repository/org/testcontainers/postgresql/1.19.3/postgresql-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/jdbc/1.19.3/jdbc-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/database-commons/1.19.3/database-commons-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/junit-jupiter/1.21.1/junit-jupiter-1.21.1.jar:/home/joao/.m2/repository/org/testcontainers/testcontainers/1.19.3/testcontainers-1.19.3.jar:/home/joao/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/joao/.m2/repository/org/hamcrest/hamcrest-core/2.2/hamcrest-core-2.2.jar:/home/joao/.m2/repository/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8.jar:/home/joao/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-api/3.3.4/docker-java-api-3.3.4.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport-zerodep/3.3.4/docker-java-transport-zerodep-3.3.4.jar:/home/joao/.m2/repository/org/testcontainers/selenium/1.21.1/selenium-1.21.1.jar:/home/joao/.m2/repository/org/flywaydb/flyway-core/9.22.3/flyway-core-9.22.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.15.3/jackson-dataformat-toml-2.15.3.jar:/home/joao/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-webmvc-ui/2.6.0/springdoc-openapi-starter-webmvc-ui-2.6.0.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-webmvc-api/2.6.0/springdoc-openapi-starter-webmvc-api-2.6.0.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-common/2.6.0/springdoc-openapi-starter-common-2.6.0.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-core-jakarta/2.2.22/swagger-core-jakarta-2.2.22.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-annotations-jakarta/2.2.22/swagger-annotations-jakarta-2.2.22.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-models-jakarta/2.2.22/swagger-models-jakarta-2.2.22.jar:/home/joao/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.15.3/jackson-dataformat-yaml-2.15.3.jar:/home/joao/.m2/repository/org/webjars/swagger-ui/5.17.14/swagger-ui-5.17.14.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter/5.11.4/junit-jupiter-5.11.4.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.4/junit-jupiter-params-5.11.4.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.11.4/junit-jupiter-engine-5.11.4.jar:/home/joao/.m2/repository/org/assertj/assertj-core/3.26.0/assertj-core-3.26.0.jar:/home/joao/.m2/repository/net/bytebuddy/byte-buddy/1.14.10/byte-buddy-1.14.10.jar:/home/joao/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-testcontainers/3.2.0/spring-boot-testcontainers-3.2.0.jar:/home/joao/.m2/repository/io/rest-assured/rest-assured/5.5.1/rest-assured-5.5.1.jar:/home/joao/.m2/repository/org/apache/groovy/groovy/4.0.15/groovy-4.0.15.jar:/home/joao/.m2/repository/org/apache/groovy/groovy-xml/4.0.15/groovy-xml-4.0.15.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/home/joao/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/joao/.m2/repository/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpmime/4.5.13/httpmime-4.5.13.jar:/home/joao/.m2/repository/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar:/home/joao/.m2/repository/io/rest-assured/json-path/5.5.1/json-path-5.5.1.jar:/home/joao/.m2/repository/org/apache/groovy/groovy-json/4.0.15/groovy-json-4.0.15.jar:/home/joao/.m2/repository/io/rest-assured/rest-assured-common/5.5.1/rest-assured-common-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/xml-path/5.5.1/xml-path-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/spring-mock-mvc/5.5.1/spring-mock-mvc-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/spring-commons/5.5.1/spring-commons-5.5.1.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite/1.10.1/junit-platform-suite-1.10.1.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-api/1.11.4/junit-platform-suite-api-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.11.4/junit-platform-suite-engine-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.11.4/junit-platform-suite-commons-1.11.4.jar:/home/joao/.m2/repository/io/cucumber/cucumber-java/7.15.0/cucumber-java-7.15.0.jar:/home/joao/.m2/repository/io/cucumber/cucumber-junit-platform-engine/7.15.0/cucumber-junit-platform-engine-7.15.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-java/4.29.0/selenium-java-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-api/4.14.1/selenium-api-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/4.14.1/selenium-chrome-driver-4.14.1.jar:/home/joao/.m2/repository/com/google/auto/service/auto-service-annotations/1.1.1/auto-service-annotations-1.1.1.jar:/home/joao/.m2/repository/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/home/joao/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/joao/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/joao/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/joao/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/joao/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-chromium-driver/4.14.1/selenium-chromium-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-json/4.14.1/selenium-json-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-manager/4.14.1/selenium-manager-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v131/4.29.0/selenium-devtools-v131-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v132/4.29.0/selenium-devtools-v132-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v133/4.29.0/selenium-devtools-v133-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v85/4.14.1/selenium-devtools-v85-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/4.14.1/selenium-edge-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/4.14.1/selenium-firefox-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-http/4.14.1/selenium-http-4.14.1.jar:/home/joao/.m2/repository/dev/failsafe/failsafe/3.3.2/failsafe-3.3.2.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/4.14.1/selenium-ie-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/4.14.1/selenium-remote-driver-4.14.1.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-api/1.31.0/opentelemetry-api-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-context/1.31.0/opentelemetry-context-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging/1.31.0/opentelemetry-exporter-logging-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.31.0/opentelemetry-sdk-common-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi/1.31.0/opentelemetry-sdk-extension-autoconfigure-spi-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.31.0/opentelemetry-sdk-extension-autoconfigure-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-api-events/1.31.0-alpha/opentelemetry-api-events-1.31.0-alpha.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.31.0/opentelemetry-sdk-trace-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.31.0/opentelemetry-sdk-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.31.0/opentelemetry-sdk-metrics-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-extension-incubator/1.31.0-alpha/opentelemetry-extension-incubator-1.31.0-alpha.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.31.0/opentelemetry-sdk-logs-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-semconv/1.28.0-alpha/opentelemetry-semconv-1.28.0-alpha.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-os/4.14.1/selenium-os-4.14.1.jar:/home/joao/.m2/repository/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/4.14.1/selenium-safari-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-support/4.14.1/selenium-support-4.14.1.jar:/home/joao/.m2/repository/io/github/bonigarcia/webdrivermanager/5.9.2/webdrivermanager-5.9.2.jar:/home/joao/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java/3.4.0/docker-java-3.4.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-core/3.4.0/docker-java-core-3.4.0.jar:/home/joao/.m2/repository/org/slf4j/jcl-over-slf4j/2.0.9/jcl-over-slf4j-2.0.9.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport-httpclient5/3.4.0/docker-java-transport-httpclient5-3.4.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport/3.4.0/docker-java-transport-3.4.0.jar:/home/joao/.m2/repository/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/home/joao/.m2/repository/org/brotli/dec/0.1.2/dec-0.1.2.jar:/home/joao/.m2/repository/org/apache/commons/commons-lang3/3.13.0/commons-lang3-3.13.0.jar:/home/joao/.m2/repository/org/apache/commons/commons-compress/1.26.2/commons-compress-1.26.2.jar:/home/joao/.m2/repository/commons-io/commons-io/2.16.1/commons-io-2.16.1.jar:/home/joao/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.2.1/httpclient5-5.2.1.jar:/home/joao/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.2.3/httpcore5-5.2.3.jar:/home/joao/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.2.3/httpcore5-h2-5.2.3.jar:/home/joao/.m2/repository/io/github/bonigarcia/selenium-jupiter/5.1.1/selenium-jupiter-5.1.1.jar:/home/joao/.m2/repository/javax/persistence/javax.persistence-api/2.2/javax.persistence-api-2.2.jar:"/>
 <property name="java.class.version" value="65.0"/>
 <property name="java.home" value="/usr/lib/jvm/java-21-openjdk"/>
@@ -38,9 +29,6 @@
 <property name="java.vm.vendor" value="Red Hat, Inc."/>
 <property name="java.vm.version" value="21.0.7+6"/>
 <property name="jdk.debug" value="release"/>
-<property name="jna.loaded" value="true"/>
-<property name="jna.platform.library.path" value="/usr/lib64:/lib64:/usr/lib:/lib:/usr/lib64/pipewire-0.3/jack:/usr/lib64/iscsi"/>
-<property name="jnidispatch.path" value="/home/joao/.cache/JNA/temp/jna8220017250558591906.tmp"/>
 <property name="line.separator" value="
 "/>
 <property name="localRepository" value="/home/joao/.m2/repository"/>
@@ -55,12 +43,13 @@
 <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk/lib"/>
 <property name="sun.cpu.endian" value="little"/>
 <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
-<property name="sun.java.command" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire/surefirebooter-20250604163224182_3.jar /home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire 2025-06-04T16-32-24_136-jvmRun1 surefire-20250604163224182_1tmp surefire_0-20250604163224182_2tmp"/>
+<property name="sun.java.command" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire/surefirebooter-20250604172858854_3.jar /home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire 2025-06-04T17-28-58_805-jvmRun1 surefire-20250604172858854_1tmp surefire_0-20250604172858854_2tmp"/>
 <property name="sun.java.launcher" value="SUN_STANDARD"/>
 <property name="sun.jnu.encoding" value="UTF-8"/>
 <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-<property name="surefire.real.class.path" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire/surefirebooter-20250604163224182_3.jar"/>
+<property name="surefire.real.class.path" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/surefire/surefirebooter-20250604172858854_3.jar"/>
 <property name="surefire.test.class.path" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/test-classes:/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt/target/classes:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter/3.2.0/spring-boot-starter-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot/3.2.0/spring-boot-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-context/6.1.1/spring-context-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.2.0/spring-boot-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-core/6.1.1/spring-core-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-jcl/6.1.1/spring-jcl-6.1.1.jar:/home/joao/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-test/3.2.0/spring-boot-starter-test-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-test/3.2.0/spring-boot-test-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/3.2.0/spring-boot-test-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/com/jayway/jsonpath/json-path/2.8.0/json-path-2.8.0.jar:/home/joao/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.1/jakarta.xml.bind-api-4.0.1.jar:/home/joao/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.2/jakarta.activation-api-2.1.2.jar:/home/joao/.m2/repository/net/minidev/json-smart/2.5.0/json-smart-2.5.0.jar:/home/joao/.m2/repository/net/minidev/accessors-smart/2.5.0/accessors-smart-2.5.0.jar:/home/joao/.m2/repository/org/ow2/asm/asm/9.3/asm-9.3.jar:/home/joao/.m2/repository/org/awaitility/awaitility/4.2.0/awaitility-4.2.0.jar:/home/joao/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/home/joao/.m2/repository/org/mockito/mockito-core/5.7.0/mockito-core-5.7.0.jar:/home/joao/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.10/byte-buddy-agent-1.14.10.jar:/home/joao/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/joao/.m2/repository/org/mockito/mockito-junit-jupiter/5.7.0/mockito-junit-jupiter-5.7.0.jar:/home/joao/.m2/repository/org/skyscreamer/jsonassert/1.5.1/jsonassert-1.5.1.jar:/home/joao/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/home/joao/.m2/repository/org/springframework/spring-test/6.1.1/spring-test-6.1.1.jar:/home/joao/.m2/repository/org/xmlunit/xmlunit-core/2.9.1/xmlunit-core-2.9.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/3.2.0/spring-boot-starter-data-jpa-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-aop/3.2.0/spring-boot-starter-aop-3.2.0.jar:/home/joao/.m2/repository/org/aspectj/aspectjweaver/1.9.20.1/aspectjweaver-1.9.20.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.2.0/spring-boot-starter-jdbc-3.2.0.jar:/home/joao/.m2/repository/com/zaxxer/HikariCP/5.0.1/HikariCP-5.0.1.jar:/home/joao/.m2/repository/org/springframework/spring-jdbc/6.1.1/spring-jdbc-6.1.1.jar:/home/joao/.m2/repository/org/hibernate/orm/hibernate-core/6.3.1.Final/hibernate-core-6.3.1.Final.jar:/home/joao/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar:/home/joao/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/home/joao/.m2/repository/org/jboss/logging/jboss-logging/3.5.3.Final/jboss-logging-3.5.3.Final.jar:/home/joao/.m2/repository/org/hibernate/common/hibernate-commons-annotations/6.0.6.Final/hibernate-commons-annotations-6.0.6.Final.jar:/home/joao/.m2/repository/io/smallrye/jandex/3.1.2/jandex-3.1.2.jar:/home/joao/.m2/repository/com/fasterxml/classmate/1.6.0/classmate-1.6.0.jar:/home/joao/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.4/jaxb-runtime-4.0.4.jar:/home/joao/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.4/jaxb-core-4.0.4.jar:/home/joao/.m2/repository/org/eclipse/angus/angus-activation/2.0.1/angus-activation-2.0.1.jar:/home/joao/.m2/repository/org/glassfish/jaxb/txw2/4.0.4/txw2-4.0.4.jar:/home/joao/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/home/joao/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/home/joao/.m2/repository/org/antlr/antlr4-runtime/4.10.1/antlr4-runtime-4.10.1.jar:/home/joao/.m2/repository/org/springframework/data/spring-data-jpa/3.2.0/spring-data-jpa-3.2.0.jar:/home/joao/.m2/repository/org/springframework/data/spring-data-commons/3.2.0/spring-data-commons-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-orm/6.1.1/spring-orm-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-tx/6.1.1/spring-tx-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-beans/6.1.1/spring-beans-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-aspects/6.1.1/spring-aspects-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.2.0/spring-boot-starter-web-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.2.0/spring-boot-starter-json-3.2.0.jar:/home/joao/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.15.3/jackson-datatype-jdk8-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.15.3/jackson-module-parameter-names-2.15.3.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.2.0/spring-boot-starter-tomcat-3.2.0.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.16/tomcat-embed-core-10.1.16.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.16/tomcat-embed-websocket-10.1.16.jar:/home/joao/.m2/repository/org/springframework/spring-web/6.1.1/spring-web-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-webmvc/6.1.1/spring-webmvc-6.1.1.jar:/home/joao/.m2/repository/org/springframework/spring-expression/6.1.1/spring-expression-6.1.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-log4j2/3.2.0/spring-boot-starter-log4j2-3.2.0.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-slf4j2-impl/2.21.1/log4j-slf4j2-impl-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-jul/2.21.1/log4j-jul-2.21.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/3.2.0/spring-boot-starter-actuator-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/3.2.0/spring-boot-actuator-autoconfigure-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-actuator/3.2.0/spring-boot-actuator-3.2.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-observation/1.12.0/micrometer-observation-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-commons/1.12.0/micrometer-commons-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-jakarta9/1.12.0/micrometer-jakarta9-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-registry-prometheus/1.12.0/micrometer-registry-prometheus-1.12.0.jar:/home/joao/.m2/repository/io/micrometer/micrometer-core/1.12.0/micrometer-core-1.12.0.jar:/home/joao/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar:/home/joao/.m2/repository/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_common/0.16.0/simpleclient_common-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient/0.16.0/simpleclient-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_otel/0.16.0/simpleclient_tracer_otel-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_common/0.16.0/simpleclient_tracer_common-0.16.0.jar:/home/joao/.m2/repository/io/prometheus/simpleclient_tracer_otel_agent/0.16.0/simpleclient_tracer_otel_agent-0.16.0.jar:/home/joao/.m2/repository/org/apache/logging/log4j/log4j-layout-template-json/2.21.1/log4j-layout-template-json-2.21.1.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-validation/3.2.0/spring-boot-starter-validation-3.2.0.jar:/home/joao/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.16/tomcat-embed-el-10.1.16.jar:/home/joao/.m2/repository/org/hibernate/validator/hibernate-validator/8.0.1.Final/hibernate-validator-8.0.1.Final.jar:/home/joao/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-security/3.2.0/spring-boot-starter-security-3.2.0.jar:/home/joao/.m2/repository/org/springframework/spring-aop/6.1.1/spring-aop-6.1.1.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-config/6.2.0/spring-security-config-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-core/6.2.0/spring-security-core-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-crypto/6.2.0/spring-security-crypto-6.2.0.jar:/home/joao/.m2/repository/org/springframework/security/spring-security-web/6.2.0/spring-security-web-6.2.0.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-api/0.11.2/jjwt-api-0.11.2.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-impl/0.11.2/jjwt-impl-0.11.2.jar:/home/joao/.m2/repository/io/jsonwebtoken/jjwt-jackson/0.11.2/jjwt-jackson-0.11.2.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.3/jackson-databind-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.3/jackson-annotations-2.15.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.3/jackson-core-2.15.3.jar:/home/joao/.m2/repository/io/cucumber/cucumber-picocontainer/7.22.2/cucumber-picocontainer-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-core/7.22.2/cucumber-core-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-gherkin/7.22.2/cucumber-gherkin-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-gherkin-messages/7.22.2/cucumber-gherkin-messages-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/gherkin/32.1.1/gherkin-32.1.1.jar:/home/joao/.m2/repository/io/cucumber/messages/27.2.0/messages-27.2.0.jar:/home/joao/.m2/repository/io/cucumber/testng-xml-formatter/0.3.1/testng-xml-formatter-0.3.1.jar:/home/joao/.m2/repository/io/cucumber/query/13.2.0/query-13.2.0.jar:/home/joao/.m2/repository/io/cucumber/tag-expressions/6.1.2/tag-expressions-6.1.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-expressions/18.0.1/cucumber-expressions-18.0.1.jar:/home/joao/.m2/repository/io/cucumber/datatable/7.22.2/datatable-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/cucumber-plugin/7.22.2/cucumber-plugin-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/docstring/7.22.2/docstring-7.22.2.jar:/home/joao/.m2/repository/io/cucumber/html-formatter/21.10.1/html-formatter-21.10.1.jar:/home/joao/.m2/repository/io/cucumber/junit-xml-formatter/0.7.1/junit-xml-formatter-0.7.1.jar:/home/joao/.m2/repository/io/cucumber/ci-environment/10.0.1/ci-environment-10.0.1.jar:/home/joao/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/joao/.m2/repository/org/picocontainer/picocontainer/2.15.2/picocontainer-2.15.2.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-devtools/3.2.0/spring-boot-devtools-3.2.0.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-starter-thymeleaf/3.2.0/spring-boot-starter-thymeleaf-3.2.0.jar:/home/joao/.m2/repository/org/thymeleaf/thymeleaf-spring6/3.1.2.RELEASE/thymeleaf-spring6-3.1.2.RELEASE.jar:/home/joao/.m2/repository/org/thymeleaf/thymeleaf/3.1.2.RELEASE/thymeleaf-3.1.2.RELEASE.jar:/home/joao/.m2/repository/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE.jar:/home/joao/.m2/repository/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar:/home/joao/.m2/repository/app/getxray/xray-junit-extensions/0.7.3/xray-junit-extensions-0.7.3.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.4/junit-jupiter-api-5.11.4.jar:/home/joao/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-reporting/1.11.4/junit-platform-reporting-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-launcher/1.11.4/junit-platform-launcher-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-engine/1.11.4/junit-platform-engine-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-commons/1.11.4/junit-platform-commons-1.11.4.jar:/home/joao/.m2/repository/app/getxray/xray-maven-plugin/0.8.0/xray-maven-plugin-0.8.0.jar:/home/joao/.m2/repository/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.jar:/home/joao/.m2/repository/com/squareup/okio/okio/3.6.0/okio-3.6.0.jar:/home/joao/.m2/repository/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.20/kotlin-stdlib-common-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.20/kotlin-stdlib-jdk8-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/1.9.20/kotlin-stdlib-1.9.20.jar:/home/joao/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.9.20/kotlin-stdlib-jdk7-1.9.20.jar:/home/joao/.m2/repository/org/json/json/20231013/json-20231013.jar:/home/joao/.m2/repository/org/codehaus/plexus/plexus-utils/3.4.1/plexus-utils-3.4.1.jar:/home/joao/.m2/repository/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar:/home/joao/.m2/repository/org/checkerframework/checker-qual/3.31.0/checker-qual-3.31.0.jar:/home/joao/.m2/repository/org/testcontainers/postgresql/1.19.3/postgresql-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/jdbc/1.19.3/jdbc-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/database-commons/1.19.3/database-commons-1.19.3.jar:/home/joao/.m2/repository/org/testcontainers/junit-jupiter/1.21.1/junit-jupiter-1.21.1.jar:/home/joao/.m2/repository/org/testcontainers/testcontainers/1.19.3/testcontainers-1.19.3.jar:/home/joao/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/joao/.m2/repository/org/hamcrest/hamcrest-core/2.2/hamcrest-core-2.2.jar:/home/joao/.m2/repository/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8.jar:/home/joao/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-api/3.3.4/docker-java-api-3.3.4.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport-zerodep/3.3.4/docker-java-transport-zerodep-3.3.4.jar:/home/joao/.m2/repository/org/testcontainers/selenium/1.21.1/selenium-1.21.1.jar:/home/joao/.m2/repository/org/flywaydb/flyway-core/9.22.3/flyway-core-9.22.3.jar:/home/joao/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.15.3/jackson-dataformat-toml-2.15.3.jar:/home/joao/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-webmvc-ui/2.6.0/springdoc-openapi-starter-webmvc-ui-2.6.0.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-webmvc-api/2.6.0/springdoc-openapi-starter-webmvc-api-2.6.0.jar:/home/joao/.m2/repository/org/springdoc/springdoc-openapi-starter-common/2.6.0/springdoc-openapi-starter-common-2.6.0.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-core-jakarta/2.2.22/swagger-core-jakarta-2.2.22.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-annotations-jakarta/2.2.22/swagger-annotations-jakarta-2.2.22.jar:/home/joao/.m2/repository/io/swagger/core/v3/swagger-models-jakarta/2.2.22/swagger-models-jakarta-2.2.22.jar:/home/joao/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.15.3/jackson-dataformat-yaml-2.15.3.jar:/home/joao/.m2/repository/org/webjars/swagger-ui/5.17.14/swagger-ui-5.17.14.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter/5.11.4/junit-jupiter-5.11.4.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.4/junit-jupiter-params-5.11.4.jar:/home/joao/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.11.4/junit-jupiter-engine-5.11.4.jar:/home/joao/.m2/repository/org/assertj/assertj-core/3.26.0/assertj-core-3.26.0.jar:/home/joao/.m2/repository/net/bytebuddy/byte-buddy/1.14.10/byte-buddy-1.14.10.jar:/home/joao/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar:/home/joao/.m2/repository/org/springframework/boot/spring-boot-testcontainers/3.2.0/spring-boot-testcontainers-3.2.0.jar:/home/joao/.m2/repository/io/rest-assured/rest-assured/5.5.1/rest-assured-5.5.1.jar:/home/joao/.m2/repository/org/apache/groovy/groovy/4.0.15/groovy-4.0.15.jar:/home/joao/.m2/repository/org/apache/groovy/groovy-xml/4.0.15/groovy-xml-4.0.15.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/home/joao/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/joao/.m2/repository/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/home/joao/.m2/repository/org/apache/httpcomponents/httpmime/4.5.13/httpmime-4.5.13.jar:/home/joao/.m2/repository/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar:/home/joao/.m2/repository/io/rest-assured/json-path/5.5.1/json-path-5.5.1.jar:/home/joao/.m2/repository/org/apache/groovy/groovy-json/4.0.15/groovy-json-4.0.15.jar:/home/joao/.m2/repository/io/rest-assured/rest-assured-common/5.5.1/rest-assured-common-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/xml-path/5.5.1/xml-path-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/spring-mock-mvc/5.5.1/spring-mock-mvc-5.5.1.jar:/home/joao/.m2/repository/io/rest-assured/spring-commons/5.5.1/spring-commons-5.5.1.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite/1.10.1/junit-platform-suite-1.10.1.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-api/1.11.4/junit-platform-suite-api-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.11.4/junit-platform-suite-engine-1.11.4.jar:/home/joao/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.11.4/junit-platform-suite-commons-1.11.4.jar:/home/joao/.m2/repository/io/cucumber/cucumber-java/7.15.0/cucumber-java-7.15.0.jar:/home/joao/.m2/repository/io/cucumber/cucumber-junit-platform-engine/7.15.0/cucumber-junit-platform-engine-7.15.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-java/4.29.0/selenium-java-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-api/4.14.1/selenium-api-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/4.14.1/selenium-chrome-driver-4.14.1.jar:/home/joao/.m2/repository/com/google/auto/service/auto-service-annotations/1.1.1/auto-service-annotations-1.1.1.jar:/home/joao/.m2/repository/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/home/joao/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/joao/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/joao/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/joao/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/joao/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-chromium-driver/4.14.1/selenium-chromium-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-json/4.14.1/selenium-json-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-manager/4.14.1/selenium-manager-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v131/4.29.0/selenium-devtools-v131-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v132/4.29.0/selenium-devtools-v132-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v133/4.29.0/selenium-devtools-v133-4.29.0.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v85/4.14.1/selenium-devtools-v85-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/4.14.1/selenium-edge-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/4.14.1/selenium-firefox-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-http/4.14.1/selenium-http-4.14.1.jar:/home/joao/.m2/repository/dev/failsafe/failsafe/3.3.2/failsafe-3.3.2.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/4.14.1/selenium-ie-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/4.14.1/selenium-remote-driver-4.14.1.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-api/1.31.0/opentelemetry-api-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-context/1.31.0/opentelemetry-context-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging/1.31.0/opentelemetry-exporter-logging-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.31.0/opentelemetry-sdk-common-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi/1.31.0/opentelemetry-sdk-extension-autoconfigure-spi-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.31.0/opentelemetry-sdk-extension-autoconfigure-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-api-events/1.31.0-alpha/opentelemetry-api-events-1.31.0-alpha.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.31.0/opentelemetry-sdk-trace-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.31.0/opentelemetry-sdk-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.31.0/opentelemetry-sdk-metrics-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-extension-incubator/1.31.0-alpha/opentelemetry-extension-incubator-1.31.0-alpha.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.31.0/opentelemetry-sdk-logs-1.31.0.jar:/home/joao/.m2/repository/io/opentelemetry/opentelemetry-semconv/1.28.0-alpha/opentelemetry-semconv-1.28.0-alpha.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-os/4.14.1/selenium-os-4.14.1.jar:/home/joao/.m2/repository/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/4.14.1/selenium-safari-driver-4.14.1.jar:/home/joao/.m2/repository/org/seleniumhq/selenium/selenium-support/4.14.1/selenium-support-4.14.1.jar:/home/joao/.m2/repository/io/github/bonigarcia/webdrivermanager/5.9.2/webdrivermanager-5.9.2.jar:/home/joao/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java/3.4.0/docker-java-3.4.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-core/3.4.0/docker-java-core-3.4.0.jar:/home/joao/.m2/repository/org/slf4j/jcl-over-slf4j/2.0.9/jcl-over-slf4j-2.0.9.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport-httpclient5/3.4.0/docker-java-transport-httpclient5-3.4.0.jar:/home/joao/.m2/repository/com/github/docker-java/docker-java-transport/3.4.0/docker-java-transport-3.4.0.jar:/home/joao/.m2/repository/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/home/joao/.m2/repository/org/brotli/dec/0.1.2/dec-0.1.2.jar:/home/joao/.m2/repository/org/apache/commons/commons-lang3/3.13.0/commons-lang3-3.13.0.jar:/home/joao/.m2/repository/org/apache/commons/commons-compress/1.26.2/commons-compress-1.26.2.jar:/home/joao/.m2/repository/commons-io/commons-io/2.16.1/commons-io-2.16.1.jar:/home/joao/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.2.1/httpclient5-5.2.1.jar:/home/joao/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.2.3/httpcore5-5.2.3.jar:/home/joao/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.2.3/httpcore5-h2-5.2.3.jar:/home/joao/.m2/repository/io/github/bonigarcia/selenium-jupiter/5.1.1/selenium-jupiter-5.1.1.jar:/home/joao/.m2/repository/javax/persistence/javax.persistence-api/2.2/javax.persistence-api-2.2.jar:"/>
+<property name="tests" value="UnitTest"/>
 <property name="user.country" value="GB"/>
 <property name="user.dir" value="/home/joao/Documents/Universidade/3ano/2semestre/TQS/TQS-SmartVolt/SmartVolt/backend/smartvolt"/>
 <property name="user.home" value="/home/joao"/>
@@ -68,570 +57,7 @@
 <property name="user.name" value="joao"/>
 <property name="user.timezone" value="Europe/Lisbon"/>
 </properties>
-<testcase name="activateChargingStation_WhenChargingStationExists_ThenActivatesChargingStation" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="0" started-at="2025-06-04T15:32:37.937575147" finished-at="2025-06-04T15:32:38.043913874">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:activateChargingStation_WhenChargingStationExists_ThenActivatesChargingStation()]
-display-name: activateChargingStation_WhenChargingStationExists_ThenActivatesChargingStation()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-35"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.345108464" finished-at="2025-06-04T15:32:26.349080556">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException()]
-display-name: getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_Unauthorized_ReturnsForbidden" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.690059665" finished-at="2025-06-04T15:32:51.774480499">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_Unauthorized_ReturnsForbidden()]
-display-name: getChargingStationsByChargingSpeed_Unauthorized_ReturnsForbidden()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_AlreadyOccupiedSlot_ReturnsConflict" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:47.58845252" finished-at="2025-06-04T15:32:47.795987357">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_AlreadyOccupiedSlot_ReturnsConflict()]
-display-name: createBooking_AlreadyOccupiedSlot_ReturnsConflict()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_StartTimeInPast_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.542142454" finished-at="2025-06-04T15:32:26.545874519">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_StartTimeInPast_ThrowsIllegalArgumentException()]
-display-name: createBooking_StartTimeInPast_ThrowsIllegalArgumentException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="finalizeBookingPayment_BookingAlreadyPaid_ThrowsException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.530098628" finished-at="2025-06-04T15:32:26.533674862">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingAlreadyPaid_ThrowsException()]
-display-name: finalizeBookingPayment_BookingAlreadyPaid_ThrowsException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-26"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_ValidRequest_ReturnsCreatedBookingAndSavesToDb" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:47.038144478" finished-at="2025-06-04T15:32:47.25549347">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_ValidRequest_ReturnsCreatedBookingAndSavesToDb()]
-display-name: createBooking_ValidRequest_ReturnsCreatedBookingAndSavesToDb()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAllChargingStations_WhenOperatorNotExists_ThenThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="0" started-at="2025-06-04T15:32:38.21303841" finished-at="2025-06-04T15:32:38.341842321">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:getAllChargingStations_WhenOperatorNotExists_ThenThrowsResourceNotFoundException()]
-display-name: getAllChargingStations_WhenOperatorNotExists_ThenThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-34"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getSessions_ValidRequest_ReturnsSessions" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingSessionControllerIT" time="0" started-at="2025-06-04T15:32:42.522504125" finished-at="2025-06-04T15:32:42.686582294">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingSessionControllerIT]/[method:getSessions_ValidRequest_ReturnsSessions()]
-display-name: getSessions_ValidRequest_ReturnsSessions()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-36"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_MixedStationFiltersBySpeed_ReturnsCorrectSlots" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.549445989" finished-at="2025-06-04T15:32:56.840516397">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_MixedStationFiltersBySpeed_ReturnsCorrectSlots()]
-display-name: getChargingSlotsByStationId_MixedStationFiltersBySpeed_ReturnsCorrectSlots()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.510321831" finished-at="2025-06-04T15:32:26.514352924">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking()]
-display-name: finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-26"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_Unauthorized_ReturnsForbidden" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:46.636580789" finished-at="2025-06-04T15:32:46.852134811">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_Unauthorized_ReturnsForbidden()]
-display-name: createBooking_Unauthorized_ReturnsForbidden()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkGreaterThan_shouldThrowException_whenValueIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.936752282" finished-at="2025-06-04T15:33:02.937348574">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldThrowException_whenValueIsNull()]
-display-name: checkGreaterThan_shouldThrowException_whenValueIsNull()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.582303772" finished-at="2025-06-04T15:32:26.584417667">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()]
-display-name: getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_InvalidStartTimeInterval_ReturnsBadRequest" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:47.796514731" finished-at="2025-06-04T15:32:47.963222978">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_InvalidStartTimeInterval_ReturnsBadRequest()]
-display-name: createBooking_InvalidStartTimeInterval_ReturnsBadRequest()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkNotNull_shouldNotThrowException_whenObjectIsNotNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.939743384" finished-at="2025-06-04T15:33:02.940123483">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotNull_shouldNotThrowException_whenObjectIsNotNull()]
-display-name: checkNotNull_shouldNotThrowException_whenObjectIsNotNull()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkLessThan_shouldThrowException_whenValueIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.951420254" finished-at="2025-06-04T15:33:02.951808629">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsNull()]
-display-name: checkLessThan_shouldThrowException_whenValueIsNull()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_InvalidDriverId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.518584691" finished-at="2025-06-04T15:32:26.522291068">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_InvalidDriverId_ThrowsResourceNotFoundException()]
-display-name: createBooking_InvalidDriverId_ThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.563652686" finished-at="2025-06-04T15:32:26.568584059">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException()]
-display-name: createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-68"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="updateChargingStationStatus_WhenStationExists_UpdatesAvailability" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.3137753" finished-at="2025-06-04T15:32:26.320756679">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:updateChargingStationStatus_WhenStationExists_UpdatesAvailability()]
-display-name: updateChargingStationStatus_WhenStationExists_UpdatesAvailability()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-35"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_PastDate_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.082548746" finished-at="2025-06-04T15:32:56.244098646">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_PastDate_ReturnsEmptyListAndZeroPrice()]
-display-name: getChargingSlotsByStationId_PastDate_ReturnsEmptyListAndZeroPrice()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getEvDriverById_NonExistingId_ReturnsEmptyOptional" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.475913269" finished-at="2025-06-04T15:32:26.478532136">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverById_NonExistingId_ReturnsEmptyOptional()]
-display-name: getEvDriverById_NonExistingId_ReturnsEmptyOptional()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.466794762" finished-at="2025-06-04T15:32:26.471496616">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional()]
-display-name: getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_MissingStartTime_ReturnsInternalServerError" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:47.256064565" finished-at="2025-06-04T15:32:47.430714012">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_MissingStartTime_ReturnsInternalServerError()]
-display-name: createBooking_MissingStartTime_ReturnsInternalServerError()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.57160689" finished-at="2025-06-04T15:32:26.578810353">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots()]
-display-name: getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.94078095" finished-at="2025-06-04T15:33:02.941223907">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid()]
-display-name: checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkCoordinates_shouldThrowException_whenLatitudeIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.948666065" finished-at="2025-06-04T15:33:02.949272076">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkCoordinates_shouldThrowException_whenLatitudeIsNull()]
-display-name: checkCoordinates_shouldThrowException_whenLatitudeIsNull()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_Unauthorized_ReturnsForbidden" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.244673299" finished-at="2025-06-04T15:32:56.391965953">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_Unauthorized_ReturnsForbidden()]
-display-name: getChargingSlotsByStationId_Unauthorized_ReturnsForbidden()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.334089531" finished-at="2025-06-04T15:32:26.338056173">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException()]
-display-name: getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="finalizeBookingPayment_BookingNotFound_ThrowsException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.505778262" finished-at="2025-06-04T15:32:26.509993218">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingNotFound_ThrowsException()]
-display-name: finalizeBookingPayment_BookingNotFound_ThrowsException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-26"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkUrl_shouldNotThrowException_whenUrlIsValid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.950584905" finished-at="2025-06-04T15:33:02.951283088">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkUrl_shouldNotThrowException_whenUrlIsValid()]
-display-name: checkUrl_shouldNotThrowException_whenUrlIsValid()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_FilterSlowAndMedium_ReturnsCorrectStations" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.774987585" finished-at="2025-06-04T15:32:51.906385567">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_FilterSlowAndMedium_ReturnsCorrectStations()]
-display-name: getChargingStationsByChargingSpeed_FilterSlowAndMedium_ReturnsCorrectStations()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingStation_WhenOperatorExists_ThenCreatesChargingStation" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="0" started-at="2025-06-04T15:32:37.608483974" finished-at="2025-06-04T15:32:37.817134603">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:createChargingStation_WhenOperatorExists_ThenCreatesChargingStation()]
-display-name: createChargingStation_WhenOperatorExists_ThenCreatesChargingStation()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-34"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.93907711" finished-at="2025-06-04T15:33:02.939608191">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold()]
-display-name: checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="updateChargingStationStatus_WhenStationNotExists_ThenThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="1" started-at="2025-06-04T15:32:36.215921416" finished-at="2025-06-04T15:32:37.607484469">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:updateChargingStationStatus_WhenStationNotExists_ThenThrowsResourceNotFoundException()]
-display-name: updateChargingStationStatus_WhenStationNotExists_ThenThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-35"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingStation_WhenOperatorExists_CreatesChargingStation" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.338361773" finished-at="2025-06-04T15:32:26.341594657">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:createChargingStation_WhenOperatorExists_CreatesChargingStation()]
-display-name: createChargingStation_WhenOperatorExists_CreatesChargingStation()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-34"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.94257608" finished-at="2025-06-04T15:33:02.943066495">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold()]
-display-name: checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_FutureDate_ReturnsAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.584680848" finished-at="2025-06-04T15:32:26.59031337">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_FutureDate_ReturnsAvailableSlots()]
-display-name: getAvailableSlots_FutureDate_ReturnsAvailableSlots()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getUserStatistics_AfterNewBookings_UpdatesCorrectly" classname="ua.tqs.smartvolt.smartvolt.integration.UserControllerIT" time="0" started-at="2025-06-04T15:33:01.686367272" finished-at="2025-06-04T15:33:02.022615551">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.UserControllerIT]/[method:getUserStatistics_AfterNewBookings_UpdatesCorrectly()]
-display-name: getUserStatistics_AfterNewBookings_UpdatesCorrectly()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-33"/>
-<property name="tags" value="IT-Fast,IT-User"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.514683481" finished-at="2025-06-04T15:32:26.518271958">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException()]
-display-name: createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.598533981" finished-at="2025-06-04T15:32:26.599966735">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice()]
-display-name: getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkLessThan_shouldThrowException_whenValueIsEqualToExpected" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.937521287" finished-at="2025-06-04T15:33:02.937944406">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsEqualToExpected()]
-display-name: checkLessThan_shouldThrowException_whenValueIsEqualToExpected()
-]]></system-out>
-<properties>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.278946303" finished-at="2025-06-04T15:32:26.290650085">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException()]
-display-name: updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-35"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.568930195" finished-at="2025-06-04T15:32:26.571326777">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException()]
-display-name: getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_FilterSlow_ReturnsOnlySlowStations" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.483235113" finished-at="2025-06-04T15:32:51.587297422">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_FilterSlow_ReturnsOnlySlowStations()]
-display-name: getChargingStationsByChargingSpeed_FilterSlow_ReturnsOnlySlowStations()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_InvalidStationId_ReturnsNotFound" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.84106982" finished-at="2025-06-04T15:32:56.984466453">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_InvalidStationId_ReturnsNotFound()]
-display-name: getChargingSlotsByStationId_InvalidStationId_ReturnsNotFound()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_ValidRequest_ReturnsAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:55.804457698" finished-at="2025-06-04T15:32:56.081943556">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_ValidRequest_ReturnsAvailableSlots()]
-display-name: getChargingSlotsByStationId_ValidRequest_ReturnsAvailableSlots()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getSessions_ShouldReturnOperatorSessionsResponse" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSessionServiceTest" time="1" started-at="2025-06-04T15:32:24.885424616" finished-at="2025-06-04T15:32:26.053770305">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSessionServiceTest]/[method:getSessions_ShouldReturnOperatorSessionsResponse()]
-display-name: getSessions_ShouldReturnOperatorSessionsResponse()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-36"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getEvDriverById_ExistingId_ReturnsEvDriver" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.482068696" finished-at="2025-06-04T15:32:26.485567225">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverById_ExistingId_ReturnsEvDriver()]
-display-name: getEvDriverById_ExistingId_ReturnsEvDriver()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingSlot_WhenInvalidChargingSpeed_ReturnsBadRequest" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:57.368843609" finished-at="2025-06-04T15:32:57.514791714">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:createChargingSlot_WhenInvalidChargingSpeed_ReturnsBadRequest()]
-display-name: createChargingSlot_WhenInvalidChargingSpeed_ReturnsBadRequest()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-68"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAvailableSlots_ValidRequest_ReturnsCorrectSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.590721" finished-at="2025-06-04T15:32:26.594620027">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_ValidRequest_ReturnsCorrectSlots()]
-display-name: getAvailableSlots_ValidRequest_ReturnsCorrectSlots()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="UnitTest"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingSlot_WhenValidRequestFastSpeed_ReturnsCreatedSlot" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:57.515242736" finished-at="2025-06-04T15:32:57.677016835">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:createChargingSlot_WhenValidRequestFastSpeed_ReturnsCreatedSlot()]
-display-name: createChargingSlot_WhenValidRequestFastSpeed_ReturnsCreatedSlot()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-68"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.291124731" finished-at="2025-06-04T15:32:26.313123875">
+<testcase name="getAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.921574855" finished-at="2025-06-04T16:29:00.939635976">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations()]
 display-name: getAllChargingStations_WhenOperatorExists_ReturnsListOfChargingStations()
@@ -642,7 +68,7 @@ display-name: getAllChargingStations_WhenOperatorExists_ReturnsListOfChargingSta
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotEmptyList_shouldThrowException_whenListIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.946533996" finished-at="2025-06-04T15:33:02.947519115">
+<testcase name="checkNotEmptyList_shouldThrowException_whenListIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.225430757" finished-at="2025-06-04T16:29:01.226200284">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyList_shouldThrowException_whenListIsNullOrEmpty()]
 display-name: checkNotEmptyList_shouldThrowException_whenListIsNullOrEmpty()
@@ -652,7 +78,7 @@ display-name: checkNotEmptyList_shouldThrowException_whenListIsNullOrEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEvDriverBookings_ValidDriverWithBookings_ReturnsChargingHistory" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.460321402" finished-at="2025-06-04T15:32:26.466347307">
+<testcase name="getEvDriverBookings_ValidDriverWithBookings_ReturnsChargingHistory" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.0877985" finished-at="2025-06-04T16:29:01.092256771">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverBookings_ValidDriverWithBookings_ReturnsChargingHistory()]
 display-name: getEvDriverBookings_ValidDriverWithBookings_ReturnsChargingHistory()
@@ -663,18 +89,7 @@ display-name: getEvDriverBookings_ValidDriverWithBookings_ReturnsChargingHistory
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingHistory_ValidDriver_ReturnsHistoryInTableFormat" classname="ua.tqs.smartvolt.smartvolt.integration.UserControllerIT" time="0" started-at="2025-06-04T15:33:02.023157232" finished-at="2025-06-04T15:33:02.374523433">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.UserControllerIT]/[method:getChargingHistory_ValidDriver_ReturnsHistoryInTableFormat()]
-display-name: getChargingHistory_ValidDriver_ReturnsHistoryInTableFormat()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="IT-Fast,IT-User"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkLessThan_shouldThrowException_whenValueIsGreaterThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.943209662" finished-at="2025-06-04T15:33:02.943764368">
+<testcase name="checkLessThan_shouldThrowException_whenValueIsGreaterThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.223865987" finished-at="2025-06-04T16:29:01.224255173">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsGreaterThanThreshold()]
 display-name: checkLessThan_shouldThrowException_whenValueIsGreaterThanThreshold()
@@ -684,7 +99,7 @@ display-name: checkLessThan_shouldThrowException_whenValueIsGreaterThanThreshold
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_NegativePower_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.555492117" finished-at="2025-06-04T15:32:26.558766488">
+<testcase name="createBooking_NegativePower_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.169947695" finished-at="2025-06-04T16:29:01.172471026">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_NegativePower_ThrowsIllegalArgumentException()]
 display-name: createBooking_NegativePower_ThrowsIllegalArgumentException()
@@ -695,7 +110,18 @@ display-name: createBooking_NegativePower_ThrowsIllegalArgumentException()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_InvalidSlotId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.501795379" finished-at="2025-06-04T15:32:26.505464026">
+<testcase name="getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.969255082" finished-at="2025-06-04T16:29:00.972552106">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException()]
+display-name: getChargingStationsByChargingSpeed_WhenNoStationsFound_ThrowsResourceNotFoundException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-19"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createBooking_InvalidSlotId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.125267508" finished-at="2025-06-04T16:29:01.128337117">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_InvalidSlotId_ThrowsResourceNotFoundException()]
 display-name: createBooking_InvalidSlotId_ThrowsResourceNotFoundException()
@@ -706,7 +132,7 @@ display-name: createBooking_InvalidSlotId_ThrowsResourceNotFoundException()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.546256461" finished-at="2025-06-04T15:32:26.549814531">
+<testcase name="createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.161484789" finished-at="2025-06-04T16:29:01.164718134">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException()]
 display-name: createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException()
@@ -717,7 +143,29 @@ display-name: createBooking_PriceNotFoundForSlot_ThrowsResourceNotFoundException
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotEmptyMap_shouldThrowException_whenMapIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.935191078" finished-at="2025-06-04T15:33:02.935794885">
+<testcase name="createBooking_StartTimeInPast_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.157570252" finished-at="2025-06-04T16:29:01.16121739">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_StartTimeInPast_ThrowsIllegalArgumentException()]
+display-name: createBooking_StartTimeInPast_ThrowsIllegalArgumentException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-242"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="finalizeBookingPayment_BookingAlreadyPaid_ThrowsException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.149467949" finished-at="2025-06-04T16:29:01.151875032">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingAlreadyPaid_ThrowsException()]
+display-name: finalizeBookingPayment_BookingAlreadyPaid_ThrowsException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-26"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkNotEmptyMap_shouldThrowException_whenMapIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.213180201" finished-at="2025-06-04T16:29:01.214404256">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyMap_shouldThrowException_whenMapIsNullOrEmpty()]
 display-name: checkNotEmptyMap_shouldThrowException_whenMapIsNullOrEmpty()
@@ -727,7 +175,7 @@ display-name: checkNotEmptyMap_shouldThrowException_whenMapIsNullOrEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.522590757" finished-at="2025-06-04T15:32:26.52962281">
+<testcase name="createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.144215455" finished-at="2025-06-04T16:29:01.149160866">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException()]
 display-name: createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException()
@@ -738,7 +186,7 @@ display-name: createBooking_SlotAlreadyBooked_ThrowsSlotAlreadyBookedException()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEvDriverBookings_ValidDriverNoBookings_ReturnsEmptyList" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.471797247" finished-at="2025-06-04T15:32:26.475640399">
+<testcase name="getEvDriverBookings_ValidDriverNoBookings_ReturnsEmptyList" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.102393702" finished-at="2025-06-04T16:29:01.104131546">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverBookings_ValidDriverNoBookings_ReturnsEmptyList()]
 display-name: getEvDriverBookings_ValidDriverNoBookings_ReturnsEmptyList()
@@ -749,7 +197,7 @@ display-name: getEvDriverBookings_ValidDriverNoBookings_ReturnsEmptyList()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createChargingSlot_WhenValidRequest_ReturnsCreatedSlot" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.57921605" finished-at="2025-06-04T15:32:26.582039168">
+<testcase name="createChargingSlot_WhenValidRequest_ReturnsCreatedSlot" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.189523124" finished-at="2025-06-04T16:29:01.191877779">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()]
 display-name: createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()
@@ -760,18 +208,18 @@ display-name: createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createChargingSlot_WhenValidRequest_ReturnsCreatedSlot" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:57.19442296" finished-at="2025-06-04T15:32:57.368322477">
+<testcase name="finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.132227929" finished-at="2025-06-04T16:29:01.135301156">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()]
-display-name: createChargingSlot_WhenValidRequest_ReturnsCreatedSlot()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking()]
+display-name: finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-68"/>
-<property name="tags" value="IT-Fast"/>
+<property name="requirements" value="SV-26"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkCoordinates_shouldThrowException_whenCoordinatesAreInvalid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.938036258" finished-at="2025-06-04T15:33:02.93895917">
+<testcase name="checkCoordinates_shouldThrowException_whenCoordinatesAreInvalid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.21777088" finished-at="2025-06-04T16:29:01.218709532">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkCoordinates_shouldThrowException_whenCoordinatesAreInvalid()]
 display-name: checkCoordinates_shouldThrowException_whenCoordinatesAreInvalid()
@@ -781,7 +229,7 @@ display-name: checkCoordinates_shouldThrowException_whenCoordinatesAreInvalid()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.490902151" finished-at="2025-06-04T15:32:26.497008096">
+<testcase name="createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.117327657" finished-at="2025-06-04T16:29:01.121780058">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException()]
 display-name: createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException()
@@ -792,40 +240,70 @@ display-name: createBooking_PowerNotFoundForSlot_ThrowsResourceNotFoundException
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getAllChargingStations_WhenOperatorExists_ThenListOfChargingStations" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="0" started-at="2025-06-04T15:32:38.044666348" finished-at="2025-06-04T15:32:38.211664866">
+<testcase name="checkGreaterThan_shouldThrowException_whenValueIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.21545109" finished-at="2025-06-04T16:29:01.216283624">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:getAllChargingStations_WhenOperatorExists_ThenListOfChargingStations()]
-display-name: getAllChargingStations_WhenOperatorExists_ThenListOfChargingStations()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldThrowException_whenValueIsNull()]
+display-name: checkGreaterThan_shouldThrowException_whenValueIsNull()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-34"/>
-<property name="tags" value="IT-Fast"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingStationsByChargingSpeed_FilterMedium_ReturnsOnlyMediumStations" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.168237341" finished-at="2025-06-04T15:32:51.308728914">
+<testcase name="getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.192083142" finished-at="2025-06-04T16:29:01.193443001">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_FilterMedium_ReturnsOnlyMediumStations()]
-display-name: getChargingStationsByChargingSpeed_FilterMedium_ReturnsOnlyMediumStations()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()]
+display-name: getAvailableSlots_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
+<property name="requirements" value="SV-24"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingHistory_NonEvDriverRole_ReturnsForbidden" classname="ua.tqs.smartvolt.smartvolt.integration.UserControllerIT" time="0" started-at="2025-06-04T15:33:02.375086314" finished-at="2025-06-04T15:33:02.521477696">
+<testcase name="checkNotNull_shouldNotThrowException_whenObjectIsNotNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.219510226" finished-at="2025-06-04T16:29:01.219926163">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.UserControllerIT]/[method:getChargingHistory_NonEvDriverRole_ReturnsForbidden()]
-display-name: getChargingHistory_NonEvDriverRole_ReturnsForbidden()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotNull_shouldNotThrowException_whenObjectIsNotNull()]
+display-name: checkNotNull_shouldNotThrowException_whenObjectIsNotNull()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="IT-Fast,IT-User"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.533992505" finished-at="2025-06-04T15:32:26.537503868">
+<testcase name="checkLessThan_shouldThrowException_whenValueIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.230504197" finished-at="2025-06-04T16:29:01.231082246">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsNull()]
+display-name: checkLessThan_shouldThrowException_whenValueIsNull()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createBooking_InvalidDriverId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.14096617" finished-at="2025-06-04T16:29:01.143821399">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_InvalidDriverId_ThrowsResourceNotFoundException()]
+display-name: createBooking_InvalidDriverId_ThrowsResourceNotFoundException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-242"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.176235041" finished-at="2025-06-04T16:29:01.179916132">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException()]
+display-name: createChargingSlot_WhenInvalidChargingSpeed_ThrowsInvalidRequestException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-68"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.152103338" finished-at="2025-06-04T16:29:01.154643329">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid()]
 display-name: finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid()
@@ -836,7 +314,7 @@ display-name: finalizeBookingPayment_ValidBookingNotUsed_StatusChangesToPaid()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkLessThan_shouldNotThrowException_whenValueIsLessThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.951900971" finished-at="2025-06-04T15:33:02.952227391">
+<testcase name="checkLessThan_shouldNotThrowException_whenValueIsLessThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.231266701" finished-at="2025-06-04T16:29:01.231728823">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldNotThrowException_whenValueIsLessThanThreshold()]
 display-name: checkLessThan_shouldNotThrowException_whenValueIsLessThanThreshold()
@@ -846,29 +324,51 @@ display-name: checkLessThan_shouldNotThrowException_whenValueIsLessThanThreshold
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingStationsByChargingSpeed_NoFilters_ReturnsBadRequest" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.395040877" finished-at="2025-06-04T15:32:51.482576404">
+<testcase name="getEvDriverConsumption_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlyConsumption" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.075510604" finished-at="2025-06-04T16:29:01.080192793">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_NoFilters_ReturnsBadRequest()]
-display-name: getChargingStationsByChargingSpeed_NoFilters_ReturnsBadRequest()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverConsumption_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlyConsumption()]
+display-name: getEvDriverConsumption_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlyConsumption()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingSlotsByStationId_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:57.677504585" finished-at="2025-06-04T15:32:57.83805444">
+<testcase name="getEvDriverConsumption_ValidDriverNoBookings_ReturnsEmptyConsumptionResponse" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.080484397" finished-at="2025-06-04T16:29:01.084480847">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()]
-display-name: getChargingSlotsByStationId_NoSlotsForSelectedSpeed_ReturnsEmptyListAndZeroPrice()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverConsumption_ValidDriverNoBookings_ReturnsEmptyConsumptionResponse()]
+display-name: getEvDriverConsumption_ValidDriverNoBookings_ReturnsEmptyConsumptionResponse()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEvDriverByEmail_ExistingEmail_ReturnsEvDriver" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.478940228" finished-at="2025-06-04T15:32:26.481820032">
+<testcase name="updateChargingStationStatus_WhenStationExists_UpdatesAvailability" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.940086778" finished-at="2025-06-04T16:29:00.946608992">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:updateChargingStationStatus_WhenStationExists_UpdatesAvailability()]
+display-name: updateChargingStationStatus_WhenStationExists_UpdatesAvailability()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-35"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getEvDriverById_NonExistingId_ReturnsEmptyOptional" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.104333363" finished-at="2025-06-04T16:29:01.105857548">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverById_NonExistingId_ReturnsEmptyOptional()]
+display-name: getEvDriverById_NonExistingId_ReturnsEmptyOptional()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-32"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getEvDriverByEmail_ExistingEmail_ReturnsEvDriver" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.106047051" finished-at="2025-06-04T16:29:01.108030163">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverByEmail_ExistingEmail_ReturnsEvDriver()]
 display-name: getEvDriverByEmail_ExistingEmail_ReturnsEvDriver()
@@ -879,18 +379,7 @@ display-name: getEvDriverByEmail_ExistingEmail_ReturnsEvDriver()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_InvalidSlotId_ReturnsNotFound" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:47.431265381" finished-at="2025-06-04T15:32:47.587925807">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:createBooking_InvalidSlotId_ReturnsNotFound()]
-display-name: createBooking_InvalidSlotId_ReturnsNotFound()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-242"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.321119707" finished-at="2025-06-04T15:32:26.325776938">
+<testcase name="createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.946927487" finished-at="2025-06-04T16:29:00.950683648">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()]
 display-name: createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()
@@ -901,18 +390,18 @@ display-name: createChargingStation_WhenOperatorDoesNotExist_ThrowsResourceNotFo
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createChargingSlot_WhenStationNotFound_ReturnsNotFound" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.392415792" finished-at="2025-06-04T15:32:56.548579361">
+<testcase name="getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.09595798" finished-at="2025-06-04T16:29:01.099810451">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:createChargingSlot_WhenStationNotFound_ReturnsNotFound()]
-display-name: createChargingSlot_WhenStationNotFound_ReturnsNotFound()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional()]
+display-name: getEvDriverByEmail_NonExistingEmail_ReturnsEmptyOptional()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-68"/>
-<property name="tags" value="IT-Fast"/>
+<property name="requirements" value="SV-32"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEnergyConsumption_ReturnsOperatorEnergyResponse" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.550079626" finished-at="2025-06-04T15:32:26.555110264">
+<testcase name="getEnergyConsumption_ReturnsOperatorEnergyResponse" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.164962039" finished-at="2025-06-04T16:29:01.169662303">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:getEnergyConsumption_ReturnsOperatorEnergyResponse()]
 display-name: getEnergyConsumption_ReturnsOperatorEnergyResponse()
@@ -923,7 +412,29 @@ display-name: getEnergyConsumption_ReturnsOperatorEnergyResponse()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotEmptyString_shouldNotThrowException_whenStringIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.940235201" finished-at="2025-06-04T15:33:02.940685311">
+<testcase name="getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.182549848" finished-at="2025-06-04T16:29:01.189288216">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots()]
+display-name: getAvailableSlots_SomeSlotsBooked_ReturnsOnlyAvailableSlots()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-24"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getEvDriverSpending_ValidDriverNoBookings_ReturnsEmptySpendingResponse" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.100063132" finished-at="2025-06-04T16:29:01.102199971">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverSpending_ValidDriverNoBookings_ReturnsEmptySpendingResponse()]
+display-name: getEvDriverSpending_ValidDriverNoBookings_ReturnsEmptySpendingResponse()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkNotEmptyString_shouldNotThrowException_whenStringIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.220091902" finished-at="2025-06-04T16:29:01.220887337">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyString_shouldNotThrowException_whenStringIsNotEmpty()]
 display-name: checkNotEmptyString_shouldNotThrowException_whenStringIsNotEmpty()
@@ -933,7 +444,38 @@ display-name: checkNotEmptyString_shouldNotThrowException_whenStringIsNotEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T15:32:26.595059687" finished-at="2025-06-04T15:32:26.598325942">
+<testcase name="checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.221158383" finished-at="2025-06-04T16:29:01.221848741">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid()]
+display-name: checkCoordinates_shouldNotThrowException_whenCoordinatesAreValid()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkCoordinates_shouldThrowException_whenLatitudeIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.227186986" finished-at="2025-06-04T16:29:01.22794439">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkCoordinates_shouldThrowException_whenLatitudeIsNull()]
+display-name: checkCoordinates_shouldThrowException_whenLatitudeIsNull()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.958243709" finished-at="2025-06-04T16:29:00.962147115">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException()]
+display-name: getChargingStationsByChargingSpeed_WhenInputSpeedsAreNull_ThrowsResourceNotFoundException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-19"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.202899932" finished-at="2025-06-04T16:29:01.205486721">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundException()]
 display-name: createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundException()
@@ -944,7 +486,7 @@ display-name: createChargingSlot_WhenStationNotFound_ThrowsResourceNotFoundExcep
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_ValidRequest_ReturnsCreatedBooking" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.497439431" finished-at="2025-06-04T15:32:26.501535083">
+<testcase name="createBooking_ValidRequest_ReturnsCreatedBooking" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.122051144" finished-at="2025-06-04T16:29:01.125028662">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_ValidRequest_ReturnsCreatedBooking()]
 display-name: createBooking_ValidRequest_ReturnsCreatedBooking()
@@ -955,7 +497,18 @@ display-name: createBooking_ValidRequest_ReturnsCreatedBooking()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotEmptyList_shouldNotThrowException_whenListIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.935965433" finished-at="2025-06-04T15:33:02.936574931">
+<testcase name="finalizeBookingPayment_BookingNotFound_ThrowsException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.128554042" finished-at="2025-06-04T16:29:01.131930194">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:finalizeBookingPayment_BookingNotFound_ThrowsException()]
+display-name: finalizeBookingPayment_BookingNotFound_ThrowsException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-26"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkNotEmptyList_shouldNotThrowException_whenListIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.214608477" finished-at="2025-06-04T16:29:01.215265233">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyList_shouldNotThrowException_whenListIsNotEmpty()]
 display-name: checkNotEmptyList_shouldNotThrowException_whenListIsNotEmpty()
@@ -965,7 +518,17 @@ display-name: checkNotEmptyList_shouldNotThrowException_whenListIsNotEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEvDriverBookings_DriverNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T15:32:26.354766858" finished-at="2025-06-04T15:32:26.460034907">
+<testcase name="checkUrl_shouldNotThrowException_whenUrlIsValid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.229041036" finished-at="2025-06-04T16:29:01.230301168">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkUrl_shouldNotThrowException_whenUrlIsValid()]
+display-name: checkUrl_shouldNotThrowException_whenUrlIsValid()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getEvDriverBookings_DriverNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.084738688" finished-at="2025-06-04T16:29:01.087541079">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverBookings_DriverNotFound_ThrowsResourceNotFoundException()]
 display-name: getEvDriverBookings_DriverNotFound_ThrowsResourceNotFoundException()
@@ -976,7 +539,17 @@ display-name: getEvDriverBookings_DriverNotFound_ThrowsResourceNotFoundException
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkLessThan_shouldThrowException_whenValueIsEqualToThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.949434659" finished-at="2025-06-04T15:33:02.950386395">
+<testcase name="checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.218875472" finished-at="2025-06-04T16:29:01.219381546">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold()]
+display-name: checkGreaterThan_shouldThrowException_whenValueIsLessThanThreshold()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkLessThan_shouldThrowException_whenValueIsEqualToThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.228179699" finished-at="2025-06-04T16:29:01.228892609">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsEqualToThreshold()]
 display-name: checkLessThan_shouldThrowException_whenValueIsEqualToThreshold()
@@ -986,7 +559,7 @@ display-name: checkLessThan_shouldThrowException_whenValueIsEqualToThreshold()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotNull_shouldThrowException_whenObjectIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.947760665" finished-at="2025-06-04T15:33:02.948461603">
+<testcase name="checkNotNull_shouldThrowException_whenObjectIsNull" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.226354642" finished-at="2025-06-04T16:29:01.22705528">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotNull_shouldThrowException_whenObjectIsNull()]
 display-name: checkNotNull_shouldThrowException_whenObjectIsNull()
@@ -996,7 +569,7 @@ display-name: checkNotNull_shouldThrowException_whenObjectIsNull()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.326154232" finished-at="2025-06-04T15:32:26.333629182">
+<testcase name="getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.951142664" finished-at="2025-06-04T16:29:00.957802255">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse()]
 display-name: getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargingStationsResponse()
@@ -1007,7 +580,18 @@ display-name: getChargingStationsByChargingSpeed_WhenStationsFound_ReturnsChargi
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkUrl_shouldThrowException_whenUrlIsInvalid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.943946517" finished-at="2025-06-04T15:33:02.946155039">
+<testcase name="getEvDriverSpending_DriverNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.092534029" finished-at="2025-06-04T16:29:01.09569557">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverSpending_DriverNotFound_ThrowsResourceNotFoundException()]
+display-name: getEvDriverSpending_DriverNotFound_ThrowsResourceNotFoundException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkUrl_shouldThrowException_whenUrlIsInvalid" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.224377181" finished-at="2025-06-04T16:29:01.225270007">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkUrl_shouldThrowException_whenUrlIsInvalid()]
 display-name: checkUrl_shouldThrowException_whenUrlIsInvalid()
@@ -1017,7 +601,18 @@ display-name: checkUrl_shouldThrowException_whenUrlIsInvalid()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="checkNotEmptyString_shouldThrowException_whenStringIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.941352547" finished-at="2025-06-04T15:33:02.942320283">
+<testcase name="createChargingStation_WhenOperatorExists_CreatesChargingStation" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.962534668" finished-at="2025-06-04T16:29:00.965515111">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:createChargingStation_WhenOperatorExists_CreatesChargingStation()]
+display-name: createChargingStation_WhenOperatorExists_CreatesChargingStation()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-34"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkNotEmptyString_shouldThrowException_whenStringIsNullOrEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.222054405" finished-at="2025-06-04T16:29:01.22302641">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyString_shouldThrowException_whenStringIsNullOrEmpty()]
 display-name: checkNotEmptyString_shouldThrowException_whenStringIsNullOrEmpty()
@@ -1027,7 +622,28 @@ display-name: checkNotEmptyString_shouldThrowException_whenStringIsNullOrEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T15:32:26.537759735" finished-at="2025-06-04T15:32:26.541869785">
+<testcase name="checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.223268011" finished-at="2025-06-04T16:29:01.223774145">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold()]
+display-name: checkGreaterThan_shouldNotThrowException_whenValueIsGraterThanThreshold()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getAvailableSlots_FutureDate_ReturnsAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.193623518" finished-at="2025-06-04T16:29:01.198841998">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_FutureDate_ReturnsAvailableSlots()]
+display-name: getAvailableSlots_FutureDate_ReturnsAvailableSlots()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-24"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.154859092" finished-at="2025-06-04T16:29:01.157350943">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException()]
 display-name: createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException()
@@ -1038,40 +654,61 @@ display-name: createBooking_NegativePricePerKWh_ThrowsIllegalArgumentException()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="deactivateChargingStation_WhenChargingStationExists_ThenDeactivatesChargingStation" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT" time="0" started-at="2025-06-04T15:32:37.817752236" finished-at="2025-06-04T15:32:37.93697684">
+<testcase name="getEvDriverConsumption_DriverNotFound_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.108258279" finished-at="2025-06-04T16:29:01.110891534">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationControllerIT]/[method:deactivateChargingStation_WhenChargingStationExists_ThenDeactivatesChargingStation()]
-display-name: deactivateChargingStation_WhenChargingStationExists_ThenDeactivatesChargingStation()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverConsumption_DriverNotFound_ThrowsResourceNotFoundException()]
+display-name: getEvDriverConsumption_DriverNotFound_ThrowsResourceNotFoundException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException" classname="ua.tqs.smartvolt.smartvolt.services.BookingServiceTest" time="0" started-at="2025-06-04T16:29:01.135546894" finished-at="2025-06-04T16:29:01.140516861">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.BookingServiceTest]/[method:createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException()]
+display-name: createBooking_InvalidStartTimeInterval_ThrowsIllegalArgumentException()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-242"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.205841373" finished-at="2025-06-04T16:29:01.207619121">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice()]
+display-name: getAvailableSlots_PastDate_ReturnsEmptyListAndZeroPrice()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-24"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="checkLessThan_shouldThrowException_whenValueIsEqualToExpected" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.216489859" finished-at="2025-06-04T16:29:01.217549557">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkLessThan_shouldThrowException_whenValueIsEqualToExpected()]
+display-name: checkLessThan_shouldThrowException_whenValueIsEqualToExpected()
+]]></system-out>
+<properties>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.912467365" finished-at="2025-06-04T16:29:00.921070814">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException()]
+display-name: updateChargingStationStatus_WhenStationDoesNotExist_ThrowsResourceNotFoundException()
 ]]></system-out>
 <properties>
 <property name="requirements" value="SV-35"/>
-<property name="tags" value="IT-Fast"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingHistory_Unauthorized_ReturnsForbidden" classname="ua.tqs.smartvolt.smartvolt.integration.UserControllerIT" time="0" started-at="2025-06-04T15:33:02.521917777" finished-at="2025-06-04T15:33:02.666136184">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.UserControllerIT]/[method:getChargingHistory_Unauthorized_ReturnsForbidden()]
-display-name: getChargingHistory_Unauthorized_ReturnsForbidden()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-32"/>
-<property name="tags" value="IT-Fast,IT-User"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingStationsByChargingSpeed_FilterFast_ReturnsOnlyFastStations" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.587846286" finished-at="2025-06-04T15:32:51.689561134">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_FilterFast_ReturnsOnlyFastStations()]
-display-name: getChargingStationsByChargingSpeed_FilterFast_ReturnsOnlyFastStations()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="checkNotEmptyMap_shouldNotThrowException_whenMapIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T15:33:02.933254935" finished-at="2025-06-04T15:33:02.934992498">
+<testcase name="checkNotEmptyMap_shouldNotThrowException_whenMapIsNotEmpty" classname="ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest" time="0" started-at="2025-06-04T16:29:01.210376218" finished-at="2025-06-04T16:29:01.212770877">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.utils.validation.ValidatorTest]/[method:checkNotEmptyMap_shouldNotThrowException_whenMapIsNotEmpty()]
 display-name: checkNotEmptyMap_shouldNotThrowException_whenMapIsNotEmpty()
@@ -1081,29 +718,51 @@ display-name: checkNotEmptyMap_shouldNotThrowException_whenMapIsNotEmpty()
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingStationsByChargingSpeed_InvalidSpeed_ReturnsEmptyListOrError" classname="ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT" time="0" started-at="2025-06-04T15:32:51.30926829" finished-at="2025-06-04T15:32:51.394540523">
+<testcase name="getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.180151081" finished-at="2025-06-04T16:29:01.182302767">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ServiceStationsMapControllerIT]/[method:getChargingStationsByChargingSpeed_InvalidSpeed_ReturnsEmptyListOrError()]
-display-name: getChargingStationsByChargingSpeed_InvalidSpeed_ReturnsEmptyListOrError()
-]]></system-out>
-<properties>
-<property name="requirements" value="SV-19"/>
-<property name="tags" value="IT-Fast"/>
-<property name="_dummy_" value=""/>
-</properties>
-</testcase>
-<testcase name="getChargingSlotsByStationId_FutureDate_ReturnsAvailableSlots" classname="ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT" time="0" started-at="2025-06-04T15:32:56.984990481" finished-at="2025-06-04T15:32:57.193884645">
-<system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.ChargingStationSlotsControllerIT]/[method:getChargingSlotsByStationId_FutureDate_ReturnsAvailableSlots()]
-display-name: getChargingSlotsByStationId_FutureDate_ReturnsAvailableSlots()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException()]
+display-name: getAvailableSlots_InvalidStationId_ThrowsResourceNotFoundException()
 ]]></system-out>
 <properties>
 <property name="requirements" value="SV-24"/>
-<property name="tags" value="IT-Fast"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.077343557" finished-at="2025-06-04T15:32:26.278057435">
+<testcase name="getEvDriverSpending_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlySpending" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:00.977853071" finished-at="2025-06-04T16:29:01.075193993">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverSpending_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlySpending()]
+display-name: getEvDriverSpending_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlySpending()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-33"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getSessions_ShouldReturnOperatorSessionsResponse" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSessionServiceTest" time="1" started-at="2025-06-04T16:28:59.643277435" finished-at="2025-06-04T16:29:00.733157113">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSessionServiceTest]/[method:getSessions_ShouldReturnOperatorSessionsResponse()]
+display-name: getSessions_ShouldReturnOperatorSessionsResponse()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-36"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getEvDriverById_ExistingId_ReturnsEvDriver" classname="ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest" time="0" started-at="2025-06-04T16:29:01.111163021" finished-at="2025-06-04T16:29:01.113389837">
+<system-out><![CDATA[
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.EvDriverServiceTest]/[method:getEvDriverById_ExistingId_ReturnsEvDriver()]
+display-name: getEvDriverById_ExistingId_ReturnsEvDriver()
+]]></system-out>
+<properties>
+<property name="requirements" value="SV-32"/>
+<property name="tags" value="UnitTest"/>
+<property name="_dummy_" value=""/>
+</properties>
+</testcase>
+<testcase name="getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.754966321" finished-at="2025-06-04T16:29:00.9119073">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException()]
 display-name: getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsResourceNotFoundException()
@@ -1114,7 +773,7 @@ display-name: getChargingStationsByChargingSpeed_WhenInputSpeedsAreEmpty_ThrowsR
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getAllChargingStations_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T15:32:26.341991587" finished-at="2025-06-04T15:32:26.344735919">
+<testcase name="getAllChargingStations_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException" classname="ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest" time="0" started-at="2025-06-04T16:29:00.965788041" finished-at="2025-06-04T16:29:00.968816313">
 <system-out><![CDATA[
 unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingStationServiceTest]/[method:getAllChargingStations_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()]
 display-name: getAllChargingStations_WhenOperatorDoesNotExist_ThrowsResourceNotFoundException()
@@ -1125,14 +784,14 @@ display-name: getAllChargingStations_WhenOperatorDoesNotExist_ThrowsResourceNotF
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
-<testcase name="getEnergyConsumption_ValidRequest_ReturnsEnergyConsumption" classname="ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT" time="0" started-at="2025-06-04T15:32:46.852713221" finished-at="2025-06-04T15:32:47.037185829">
+<testcase name="getAvailableSlots_ValidRequest_ReturnsCorrectSlots" classname="ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest" time="0" started-at="2025-06-04T16:29:01.199283642" finished-at="2025-06-04T16:29:01.202621503">
 <system-out><![CDATA[
-unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.integration.BookingControllerIT]/[method:getEnergyConsumption_ValidRequest_ReturnsEnergyConsumption()]
-display-name: getEnergyConsumption_ValidRequest_ReturnsEnergyConsumption()
+unique-id: [engine:junit-jupiter]/[class:ua.tqs.smartvolt.smartvolt.services.ChargingSlotServiceTest]/[method:getAvailableSlots_ValidRequest_ReturnsCorrectSlots()]
+display-name: getAvailableSlots_ValidRequest_ReturnsCorrectSlots()
 ]]></system-out>
 <properties>
-<property name="requirements" value="SV-36"/>
-<property name="tags" value="IT-Fast,IT-Booking"/>
+<property name="requirements" value="SV-24"/>
+<property name="tags" value="UnitTest"/>
 <property name="_dummy_" value=""/>
 </properties>
 </testcase>
