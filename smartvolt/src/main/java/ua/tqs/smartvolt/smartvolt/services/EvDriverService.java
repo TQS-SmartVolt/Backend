@@ -1,6 +1,7 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -51,20 +52,10 @@ public class EvDriverService {
             .orElseThrow(
                 () -> new ResourceNotFoundException("EvDriver not found with id: " + userId));
 
-    // Get all bookings for the found EvDriver using the BookingRepository.
-    // The 'findByDriver' method assumes a relationship where Booking has a 'driver' field.
-    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
+    cleanUpExpiredBookingsForDriver(evDriver);
 
-    // If bookings are expired, delete them from the repository
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime createdAt;
-    for (Booking booking : driverBookings) {
-      createdAt = booking.getCreatedAt();
-      if (createdAt.plusMinutes(5).isBefore(now)) {
-        bookingRepository.delete(booking);
-        driverBookings.remove(booking);
-      }
-    }
+    // Get all bookings for the found EvDriver using the BookingRepository.
+    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
 
     // Stream through the list of bookings and map each Booking object to a ChargingHistoryResponse
     // DTO.
@@ -101,23 +92,13 @@ public class EvDriverService {
             .orElseThrow(
                 () -> new ResourceNotFoundException("EvDriver not found with id: " + userId));
 
+    cleanUpExpiredBookingsForDriver(evDriver);
+
     // Get all bookings for the found EvDriver using the BookingRepository.
     List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
 
     if (driverBookings.isEmpty()) {
-      return new ConsumptionResponse(
-          java.util.Collections.nCopies(12, 0.0)); // Return empty consumption
-    }
-
-    // If bookings are expired, delete them from the repository
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime createdAt;
-    for (Booking booking : driverBookings) {
-      createdAt = booking.getCreatedAt();
-      if (createdAt.plusMinutes(5).isBefore(now)) {
-        bookingRepository.delete(booking);
-        driverBookings.remove(booking);
-      }
+      return new ConsumptionResponse(Collections.nCopies(12, 0.0)); // Return empty consumption
     }
 
     // Group bookings by month and sum their energy delivered
@@ -153,11 +134,13 @@ public class EvDriverService {
             .orElseThrow(
                 () -> new ResourceNotFoundException("EvDriver not found with id: " + userId));
 
+    cleanUpExpiredBookingsForDriver(evDriver);
+
     // Get all bookings for the found EvDriver using the BookingRepository.
     List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
 
     if (driverBookings.isEmpty()) {
-      return new SpendingResponse(java.util.Collections.nCopies(12, 0.0)); // Return empty spending
+      return new SpendingResponse(Collections.nCopies(12, 0.0)); // Return empty spending
     }
 
     // If bookings are expired, delete them from the repository
@@ -200,5 +183,16 @@ public class EvDriverService {
     // Energy (kWh) = Power (kW) * Time (h)
     // Since each time slot is 30 minutes, time = 0.5 hours.
     return power * 0.5;
+  }
+
+  /**
+   * Deletes expired bookings for a given EV Driver. A booking is considered expired if its
+   * 'createdAt' timestamp is more than 5 minutes in the past and its status is "Not Used".
+   *
+   * @param driver The EvDriver for whom to clean up bookings.
+   */
+  private void cleanUpExpiredBookingsForDriver(EvDriver driver) {
+    LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
+    bookingRepository.deleteExpiredBookingsByDriverAndStatus(driver, fiveMinutesAgo, "Not Used");
   }
 }
