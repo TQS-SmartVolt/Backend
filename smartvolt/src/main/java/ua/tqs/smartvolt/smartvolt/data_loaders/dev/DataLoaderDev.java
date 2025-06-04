@@ -147,7 +147,6 @@ public class DataLoaderDev implements CommandLineRunner {
     System.out.println("Charging slots created.");
 
     // Create bookings, payments, and sessions for each month (June 2024 to June 2025)
-    LocalDateTime now = LocalDateTime.now();
 
     // June 2024 (2 bookings)
     Booking booking1 =
