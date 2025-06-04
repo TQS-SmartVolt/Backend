@@ -2,10 +2,12 @@ package ua.tqs.smartvolt.smartvolt.integration;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -215,4 +217,131 @@ class UserControllerIT {
         .statusCode(HttpStatus.FORBIDDEN.value()); // Expect Forbidden as only EV_DRIVER is allowed
     System.out.println("DEBUG: Verified charging history access fails for non-EV_DRIVER role.");
   }
+
+  @Test
+  @Tag("IT-Fast") // Use Medium tag as it involves multiple API calls and data manipulation
+  @Requirement("SV-33") // New requirement for View Personal Charging Statistics
+  void getUserStatistics_AfterNewBookings_UpdatesCorrectly() {
+    int currentMonth = LocalDateTime.now().getMonthValue();
+
+    // 1. Initial Check: Get current consumption and spending for the current month
+    double initialCurrentMonthConsumption = getMonthlyConsumption(driverSvToken, currentMonth);
+    double initialCurrentMonthSpending = getMonthlySpending(driverSvToken, currentMonth);
+
+    System.out.printf(
+        "DEBUG: Initial consumption for month %d: %.2f kWh%n",
+        currentMonth, initialCurrentMonthConsumption);
+    System.out.printf(
+        "DEBUG: Initial spending for month %d: %.2f €%n",
+        currentMonth, initialCurrentMonthSpending);
+
+    // 2. Create two new bookings for the current month
+    // Booking 1: Slot 201 (Slow, 10kW, 0.15€/kWh)
+    BookingData b1Data = createBooking(driverSvToken, 201L, 10.0, 0.15, 1); // 1 hour offset
+    System.out.printf(
+        "DEBUG: Created booking 1 (%.2f kWh, %.2f €) for current month %d.%n",
+        b1Data.energyDelivered(), b1Data.cost(), currentMonth);
+
+    // Booking 2: Slot 203 (Medium, 20kW, 0.25€/kWh)
+    BookingData b2Data = createBooking(driverSvToken, 203L, 20.0, 0.25, 2); // 2 hours offset
+    System.out.printf(
+        "DEBUG: Created booking 2 (%.2f kWh, %.2f €) for current month %d.%n",
+        b2Data.energyDelivered(), b2Data.cost(), currentMonth);
+
+    // 3. Second Check: Get updated consumption and spending for the current month
+    double updatedCurrentMonthConsumption = getMonthlyConsumption(driverSvToken, currentMonth);
+    double updatedCurrentMonthSpending = getMonthlySpending(driverSvToken, currentMonth);
+
+    System.out.printf(
+        "DEBUG: Updated consumption for month %d: %.2f kWh%n",
+        currentMonth, updatedCurrentMonthConsumption);
+    System.out.printf(
+        "DEBUG: Updated spending for month %d: %.2f €%n",
+        currentMonth, updatedCurrentMonthSpending);
+
+    // 4. Verification
+    double expectedConsumptionIncrease = b1Data.energyDelivered() + b2Data.energyDelivered();
+    double expectedSpendingIncrease = b1Data.cost() + b2Data.cost();
+
+    double delta = 0.001;
+
+    assertThat(
+        updatedCurrentMonthConsumption,
+        closeTo(initialCurrentMonthConsumption + expectedConsumptionIncrease, delta));
+    assertThat(
+        updatedCurrentMonthSpending,
+        closeTo(initialCurrentMonthSpending + expectedSpendingIncrease, delta));
+
+    System.out.printf(
+        "DEBUG: Consumption Expected: %.2f kWh, Actual: %.2f kWh%n",
+        initialCurrentMonthConsumption + expectedConsumptionIncrease,
+        updatedCurrentMonthConsumption);
+    System.out.printf(
+        "DEBUG: Spending Expected: %.2f €, Actual: %.2f €%n",
+        initialCurrentMonthSpending + expectedSpendingIncrease, updatedCurrentMonthSpending);
+
+    System.out.println("DEBUG: Consumption and spending updated correctly after new bookings.");
+  }
+
+  private double getMonthlyConsumption(String token, int month) {
+    List<Double> consumptionList =
+        given()
+            .contentType("application/json")
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .get(getUsersBaseUrl() + "/consumption")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .jsonPath()
+            .getList("consumptionPerMonth", Double.class);
+    return consumptionList.get(month - 1);
+  }
+
+  private double getMonthlySpending(String token, int month) {
+    List<Double> spendingList =
+        given()
+            .contentType("application/json")
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .get(getUsersBaseUrl() + "/spending")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .jsonPath()
+            .getList("spendingPerMonth", Double.class);
+    return spendingList.get(month - 1);
+  }
+
+  private BookingData createBooking(
+      String token, Long slotId, double power, double pricePerKWh, int hourOffset) {
+    LocalDateTime bookingStartTime = LocalDateTime.now().plusHours(hourOffset);
+
+    // Adjust to nearest 00 or 30 minute mark
+    int currentMinute = bookingStartTime.getMinute();
+    if (currentMinute > 30) {
+      bookingStartTime = bookingStartTime.withMinute(30).withSecond(0).withNano(0);
+    } else {
+      bookingStartTime = bookingStartTime.withMinute(0).withSecond(0).withNano(0);
+    }
+
+    BookingRequest request = new BookingRequest(slotId, bookingStartTime);
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + token)
+        .body(request)
+        .when()
+        .post(getBookingsBaseUrl() + "/start-payment")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+
+    double energyDelivered = power * 0.5; // Assuming 0.5h duration based on system logic
+    double cost = energyDelivered * pricePerKWh;
+
+    return new BookingData(energyDelivered, cost);
+  }
+
+  // A record to hold calculated booking data
+  private record BookingData(double energyDelivered, double cost) {}
 }
