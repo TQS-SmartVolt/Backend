@@ -53,9 +53,10 @@ class BookingControllerIT {
   }
 
   String driverSvToken;
+  String operatorSvToken;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     // Get token for the EV Driver
     driverSvToken =
         given()
@@ -67,7 +68,19 @@ class BookingControllerIT {
             .extract()
             .path("token");
 
+    // Get token for the Station Operator
+    operatorSvToken =
+        given()
+            .contentType("application/json")
+            .body("{\"email\":\"test@example.com\", \"password\":\"password123\"}")
+            .post(getLoginUrl())
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .path("token");
+
     System.out.println("> EV Driver SV Token for Booking IT: " + driverSvToken);
+    System.out.println("> Station Operator SV Token for Booking IT: " + operatorSvToken);
   }
 
   @Test
@@ -260,5 +273,25 @@ class BookingControllerIT {
 
     System.out.println(
         "DEBUG: Verified booking fails with invalid start time interval, returning 400 BAD REQUEST.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-36")
+  void getEnergyConsumption_ValidRequest_ReturnsEnergyConsumption() {
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + operatorSvToken)
+        .when()
+        .get(getBaseUrl() + "/consumption")
+        .then()
+        .log()
+        .all() // Log the response for debugging if it fails
+        .statusCode(HttpStatus.OK.value())
+        .body("totalEnergy", greaterThanOrEqualTo(0.0f))
+        .body("averageEnergyPerMonth", greaterThanOrEqualTo(0.0f))
+        .body("monthEnergy", notNullValue());
+
+    System.out.println("DEBUG: Successfully retrieved energy consumption data for the operator.");
   }
 }

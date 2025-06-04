@@ -1,13 +1,19 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSession;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
@@ -136,5 +142,46 @@ public class BookingService {
     } else {
       throw new Exception("Booking cannot be cancelled");
     }
+  }
+
+  public OperatorEnergyResponse getEnergyConsumption() {
+    OperatorEnergyResponse response = new OperatorEnergyResponse();
+    List<Booking> bookings = bookingRepository.findAll();
+    Map<String, Double> monthEnergy = new LinkedHashMap<>();
+    LocalDateTime today = LocalDateTime.now();
+    LocalDateTime oneYearAgo = today.minusYears(1).plusMonths(1);
+
+    YearMonth startMonth = YearMonth.from(oneYearAgo).plusMonths(1);
+    YearMonth endMonth = YearMonth.from(today);
+    while (!startMonth.isAfter(endMonth)) {
+      String monthName = startMonth.getMonth().toString().substring(0, 3).toLowerCase();
+      monthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+      monthEnergy.put(monthName, 0.0);
+      startMonth = startMonth.plusMonths(1);
+    }
+
+    for (Booking booking : bookings) {
+      if (booking != null && "used".equals(booking.getStatus())) {
+        LocalDateTime startTime = booking.getStartTime();
+        if (startTime.isAfter(oneYearAgo) && startTime.isBefore(today)) {
+          String month = startTime.getMonth().toString().substring(0, 3).toLowerCase();
+          month =
+              month.substring(0, 1).toUpperCase() + month.substring(1); // Capitalize first letter
+          ChargingSession session = booking.getChargingSession();
+          double energy = session.getEnergyDelivered();
+          monthEnergy.put(month, monthEnergy.getOrDefault(month, 0.0) + energy);
+        }
+      }
+    }
+    response.setMonthEnergy(monthEnergy);
+    double totalEnergy = monthEnergy.values().stream().mapToDouble(Double::doubleValue).sum();
+    response.setTotalEnergy(totalEnergy);
+    double averageEnergyPerMonth =
+        Math.round(
+                monthEnergy.values().stream().mapToDouble(Double::doubleValue).average().orElse(0.0)
+                    * 100.0)
+            / 100.0;
+    response.setAverageEnergyPerMonth(averageEnergyPerMonth);
+    return response;
   }
 }

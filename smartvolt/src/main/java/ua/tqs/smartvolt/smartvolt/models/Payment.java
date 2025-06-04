@@ -30,5 +30,39 @@ public class Payment {
     this.booking = booking;
   }
 
-  // Getters and setters...
+  public Long getPaymentId() {
+    return paymentId;
+  }
+
+  public void setPaymentId(Long paymentId) {
+    this.paymentId = paymentId;
+  }
+
+  public EvDriver getDriver() {
+    return driver;
+  }
+
+  public void setDriver(EvDriver driver) {
+    this.driver = driver;
+  }
+
+  public Booking getBooking() {
+    return booking;
+  }
+
+  public void setBooking(Booking booking) {
+    this.booking = booking;
+  }
+
+  @Override
+  public String toString() {
+    return "Payment{"
+        + "paymentId="
+        + paymentId
+        + ", driver="
+        + driver
+        + ", booking="
+        + booking
+        + '}';
+  }
 }
