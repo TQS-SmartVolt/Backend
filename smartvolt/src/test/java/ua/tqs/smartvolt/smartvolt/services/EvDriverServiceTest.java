@@ -94,19 +94,19 @@ public class EvDriverServiceTest {
     // Booking 1: Slow charging
     LocalDateTime startTime1 =
         LocalDateTime.now().minusDays(1).withHour(10).withMinute(0).withSecond(0).withNano(0);
-    booking1 = new Booking(testDriver, slotSlow, startTime1, "Not Used", costSlow);
+    booking1 = new Booking(testDriver, slotSlow, startTime1, "not_used", costSlow);
     booking1.setBookingId(1L);
 
     // Booking 2: Medium charging
     LocalDateTime startTime2 =
         LocalDateTime.now().minusDays(2).withHour(14).withMinute(30).withSecond(0).withNano(0);
-    booking2 = new Booking(testDriver, slotMedium, startTime2, "Not Used", costMedium);
+    booking2 = new Booking(testDriver, slotMedium, startTime2, "not_used", costMedium);
     booking2.setBookingId(2L);
 
     // Booking 3: Fast charging
     LocalDateTime startTime3 =
         LocalDateTime.now().minusDays(3).withHour(11).withMinute(0).withSecond(0).withNano(0);
-    booking3 = new Booking(testDriver, slotFast, startTime3, "Not Used", costFast);
+    booking3 = new Booking(testDriver, slotFast, startTime3, "not_used", costFast);
     booking3.setBookingId(3L);
 
     // Common stubbing for evDriverRepository.findById
@@ -120,7 +120,7 @@ public class EvDriverServiceTest {
       throws ResourceNotFoundException {
     // Arrange
     List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     List<ChargingHistoryResponse> history =
@@ -191,7 +191,7 @@ public class EvDriverServiceTest {
     // Arrange
     // evDriverRepository.findById already returns testDriver from @BeforeEach
     when(bookingRepository.findByDriver(testDriver))
-        .thenReturn(Arrays.asList()); // Return empty list of bookings
+        .thenReturn(Optional.of(Arrays.asList())); // Return empty list of bookings
 
     // Act
     List<ChargingHistoryResponse> history =

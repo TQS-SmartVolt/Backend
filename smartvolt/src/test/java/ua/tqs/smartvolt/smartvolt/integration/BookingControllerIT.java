@@ -122,7 +122,7 @@ class BookingControllerIT {
                 "startTime",
                 is(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
             .body("driver.userId", equalTo(3))
-            .body("status", equalTo("Not Used"))
+            .body("status", equalTo("not_used"))
             .body("cost", equalTo(0.75F))
             .extract()
             .jsonPath() // Add .jsonPath() to get a JsonPath object
@@ -318,7 +318,7 @@ class BookingControllerIT {
         .statusCode(HttpStatus.OK.value())
         .body("size()", equalTo(2))
         .body("driver.userId", hasItems(3, 3)) 
-        .body("status", hasItems("Paid", "Paid")) 
+        .body("status", hasItems("paid", "paid")) 
         .body("slot.slotId", hasItems(201, 203));
   }
 
@@ -343,6 +343,6 @@ class BookingControllerIT {
     .when()
         .get(getBaseUrl() + "/current-bookings")
     .then()
-        .body("find { it.bookingId == " + bookingId + " }.status", equalTo("Used"));
+        .body("find { it.bookingId == " + bookingId + " }.status", equalTo("used"));
   }
 }

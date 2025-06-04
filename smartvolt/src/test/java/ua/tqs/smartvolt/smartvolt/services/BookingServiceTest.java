@@ -86,14 +86,14 @@ public class BookingServiceTest {
     expectedBooking.setSlot(testSlot);
     expectedBooking.setDriver(testDriver);
     expectedBooking.setStartTime(validBookingRequest.getStartTime());
-    expectedBooking.setStatus("Not Used");
+    expectedBooking.setStatus("not_used");
     expectedBooking.setCost(1.5);
 
     preExistingBooking = new Booking();
     preExistingBooking.setBookingId(99L);
     preExistingBooking.setSlot(testSlot);
     preExistingBooking.setStartTime(validBookingRequest.getStartTime());
-    preExistingBooking.setStatus("Not Used");
+    preExistingBooking.setStatus("not_used");
 
     // Lenient stubbing for common repository calls by default
     lenient().when(evDriverRepository.findById(anyLong())).thenReturn(Optional.of(testDriver));
@@ -129,7 +129,7 @@ public class BookingServiceTest {
     assertThat(createdBooking.getSlot()).isEqualTo(expectedBooking.getSlot());
     assertThat(createdBooking.getDriver()).isEqualTo(expectedBooking.getDriver());
     assertThat(createdBooking.getStartTime()).isEqualTo(expectedBooking.getStartTime());
-    assertThat(createdBooking.getStatus()).isEqualTo("Not Used");
+    assertThat(createdBooking.getStatus()).isEqualTo("not_used");
     assertThat(createdBooking.getCost()).isEqualTo(expectedBooking.getCost());
 
     // Verify repository interactions
@@ -387,7 +387,7 @@ public class BookingServiceTest {
     Long bookingId = 123L;
     Booking bookingToFinalize = new Booking();
     bookingToFinalize.setBookingId(bookingId);
-    bookingToFinalize.setStatus("Not Used");
+    bookingToFinalize.setStatus("not_used");
     // Ensure createdAt is recent enough to not be expired
     bookingToFinalize.setCreatedAt(LocalDateTime.now());
 
@@ -398,7 +398,7 @@ public class BookingServiceTest {
     bookingService.finalizeBookingPayment(bookingId);
 
     // Assert
-    assertThat(bookingToFinalize.getStatus()).isEqualTo("Paid");
+    assertThat(bookingToFinalize.getStatus()).isEqualTo("paid");
     verify(bookingRepository, times(1)).findById(bookingId);
     verify(bookingRepository, times(1)).save(bookingToFinalize);
     verify(bookingRepository, never()).delete(any(Booking.class)); // Ensure not deleted
@@ -431,7 +431,7 @@ public class BookingServiceTest {
     Long bookingId = 456L;
     Booking expiredBooking = new Booking();
     expiredBooking.setBookingId(bookingId);
-    expiredBooking.setStatus("Not Used");
+    expiredBooking.setStatus("not_used");
     // Set createdAt to be more than 5 minutes ago
     expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(6));
 
@@ -456,7 +456,7 @@ public class BookingServiceTest {
     Long bookingId = 789L;
     Booking paidBooking = new Booking();
     paidBooking.setBookingId(bookingId);
-    paidBooking.setStatus("Paid"); // Already paid
+    paidBooking.setStatus("paid"); // Already paid
     paidBooking.setCreatedAt(LocalDateTime.now().minusMinutes(1)); // Not expired
 
     when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(paidBooking));
@@ -497,12 +497,12 @@ public class BookingServiceTest {
       // Arrange
       Booking expiredBooking = new Booking();
       expiredBooking.setBookingId(1L);
-      expiredBooking.setStatus("Not Used");
+      expiredBooking.setStatus("not_used");
       expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(10));
 
       Booking freshBooking = new Booking();
       freshBooking.setBookingId(2L);
-      freshBooking.setStatus("Not Used");
+      freshBooking.setStatus("not_used");
       freshBooking.setCreatedAt(LocalDateTime.now());
 
       List<Booking> bookings = List.of(expiredBooking, freshBooking);
@@ -550,7 +550,7 @@ public class BookingServiceTest {
 
       Booking booking = new Booking();
       booking.setBookingId(bookingId);
-      booking.setStatus("Not Used"); // Not "Paid"
+      booking.setStatus("not_used"); // Not "paid"
       EvDriver evDriver = new EvDriver();
       evDriver.setUserId(driverId);
       booking.setDriver(evDriver);

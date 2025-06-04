@@ -27,7 +27,7 @@ import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 public class BookingService {
 
   private static final String DRIVER_NOT_FOUND_MSG = "Driver not found with id: ";
-  private static final String NOT_USED_STATUS = "Not Used";
+  private static final String NOT_USED_STATUS = "not_used";
 
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
@@ -127,13 +127,13 @@ public class BookingService {
     
     return bookings.stream()
         .filter(booking -> {
-          if (booking.getStatus().equals("Used")) {
+          if (booking.getStatus().equals("used")) {
             LocalDateTime now = LocalDateTime.now();
             // "Used" bookings: only include if now is within 30 minutes after start time
             return !now.isBefore(booking.getStartTime()) &&
                 now.isBefore(booking.getStartTime().plusMinutes(30));
-          } else if (booking.getStatus().equals("Paid")) {
-            // "Paid" bookings: include all from now on
+          } else if (booking.getStatus().equals("paid")) {
+            // "paid" bookings: include all from now on
             return !booking.getStartTime().isBefore(LocalDateTime.now().minusMinutes(30));
           }
           return false;
@@ -167,8 +167,8 @@ public class BookingService {
       throw new Exception("Driver does not match booking driver");
     }
 
-    if (booking.getStatus().equals("Paid")) {
-      booking.setStatus("Used");
+    if (booking.getStatus().equals("paid")) {
+      booking.setStatus("used");
       ChargingSlot slot = booking.getSlot();
       slot.setLocked(false);
       chargingSlotRepository.save(slot);
@@ -188,7 +188,7 @@ public class BookingService {
     }
 
     if (booking.getStatus().equals(NOT_USED_STATUS)) {
-      booking.setStatus("Paid");
+      booking.setStatus("paid");
       bookingRepository.save(booking);
     } else {
       throw new Exception("Booking already paid");

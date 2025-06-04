@@ -25,5 +25,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
   Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
 
-  List<Booking> findByDriver(EvDriver evDriver);
 }

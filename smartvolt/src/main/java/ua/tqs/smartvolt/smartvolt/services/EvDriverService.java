@@ -50,7 +50,7 @@ public class EvDriverService {
 
     // Get all bookings for the found EvDriver using the BookingRepository.
     // The 'findByDriver' method assumes a relationship where Booking has a 'driver' field.
-    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
+    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
 
     // Stream through the list of bookings and map each Booking object to a ChargingHistoryResponse
     // DTO.
