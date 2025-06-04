@@ -1,11 +1,13 @@
 package ua.tqs.smartvolt.smartvolt.data_loaders.uat;
 
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
@@ -108,16 +110,58 @@ public class DataLoaderUAT implements CommandLineRunner {
         "Charging Station created: %s with ID %s%n",
         testChargingStation3.getName(), testChargingStation3.getStationId());
 
+    ChargingSlot testChargingSlot1 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
+    ChargingSlot testChargingSlot2 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
+    ChargingSlot testChargingSlot3 =
+        new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation1);
+    ChargingSlot testChargingSlot4 =
+        new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation2);
+    ChargingSlot testChargingSlot5 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
+    ChargingSlot testChargingSlot6 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
+
     chargingSlotRepository.saveAll(
         List.of(
-            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1),
-            new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1),
-            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation1),
-            new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation2),
-            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3),
-            new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3)));
-
+            testChargingSlot1,
+            testChargingSlot2,
+            testChargingSlot3,
+            testChargingSlot4,
+            testChargingSlot5,
+            testChargingSlot6));
     System.out.println("Charging slots created.");
+
+    // --- Data for UAT User Story 5.1 ---
+
+    // Create a new EV Driver
+    EvDriver newTestEVDriver =
+        new EvDriver("Joao Pinto", "newtest@example.com", passwordEncoder.encode("passwordXPTO!"));
+    evDriverRepository.saveAndFlush(newTestEVDriver);
+
+    // Create a new EV Driver for the "no history" scenario
+    EvDriver noHistoryDriver =
+        new EvDriver(
+            "No History Driver", "nohistory@example.com", passwordEncoder.encode("passwordXPTO!"));
+    evDriverRepository.saveAndFlush(noHistoryDriver);
+    System.out.printf(
+        "No History EV Driver created: %s with ID %s%n",
+        noHistoryDriver.getName(), noHistoryDriver.getUserId());
+
+    // Create Booking data for newTestEVDriver (Joao Pinto, newtest@example.com)
+    LocalDateTime now = LocalDateTime.now();
+
+    // Booking 1: Slow Charging Session - tomorrow
+    LocalDateTime booking1Time =
+        now.plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0);
+    double power1 = testChargingSlot1.getPower();
+    double price1 = testChargingSlot1.getPricePerKWh();
+    double cost1 = (power1 * 0.5) * price1; // Correct cost calculation
+    Booking booking1 =
+        new Booking(newTestEVDriver, testChargingSlot1, booking1Time, "Not Used", cost1);
+    bookingRepository.save(booking1);
+    System.out.printf(
+        "UAT Booking 1 created for driver %s, slot %s, cost %.2f%n",
+        newTestEVDriver.getName(), testChargingSlot1.getSlotId(), cost1);
+
+    // -----------------------------------
 
     System.out.println("DataLoader finished.");
   }

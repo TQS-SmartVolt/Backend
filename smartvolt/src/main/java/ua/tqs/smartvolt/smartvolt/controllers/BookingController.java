@@ -32,11 +32,13 @@ public class BookingController {
   }
 
   @PostMapping("/{bookingId}/finalize-payment")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
     bookingService.finalizeBookingPayment(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public void cancelBooking(@PathVariable Long bookingId) throws Exception {
     bookingService.cancelBooking(bookingId);
   }
