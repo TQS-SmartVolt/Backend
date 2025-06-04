@@ -1,4 +1,4 @@
-@UAT-Webaaa
+@UAT-Web
 Feature: EV Driver Station Discovery
   To allow EV drivers to find available charging stations on a map
 

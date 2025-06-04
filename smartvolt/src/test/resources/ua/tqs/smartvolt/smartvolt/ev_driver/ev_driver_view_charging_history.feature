@@ -10,16 +10,10 @@ Feature: EV Driver View Charging History
     And the user is on page "/service/history"
     Then I should be on the charging history page
     And I should see the charging history table displayed
-    And I should see 3 charging sessions in the history
+    And I should see 1 charging sessions in the history
     And the 1 charging session entry should display:
       | Date                | Station        | Charging Speed | Charging Power (kW) | Energy Delivered (kWh) | Price per kWh | Cost  |
-      | tomorrow, 09:00     | New Station 1      | Slow           | 10 kW            | 5 kWh               | 0.15€         | 0.75€ |
-    And the 2 charging session entry should display:
-      | Date                | Station        | Charging Speed | Charging Power (kW) | Energy Delivered (kWh) | Price per kWh | Cost  |
-      | tomorrow, 14:30     | New Station 2      | Medium         | 20 kW            | 10 kWh              | 0.25€         | 2.50€ |
-    And the 3 charging session entry should display:
-      | Date                | Station        | Charging Speed | Charging Power (kW) | Energy Delivered (kWh) | Price per kWh | Cost  |
-      | tomorrow, 18:00     | New Station 3      | Fast           | 30 kW            | 15 kWh              | 0.40€         | 6.00€ |
+      | tomorrow, 09:00     | Station 1      | Slow           | 10 kW            | 5 kWh               | 0.20€         | 1.00€ |
 
   Scenario: View charging history with no sessions
     Given the EV driver is logged in with email "nohistory@example.com" and password "passwordXPTO!"

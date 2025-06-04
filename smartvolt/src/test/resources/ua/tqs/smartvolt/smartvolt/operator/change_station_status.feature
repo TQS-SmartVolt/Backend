@@ -1,4 +1,4 @@
-@UAT-Weba
+@UAT-Web
 Feature: Change Station Status
   To allow operators to change stations status
 

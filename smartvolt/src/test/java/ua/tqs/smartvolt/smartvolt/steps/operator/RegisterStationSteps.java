@@ -54,7 +54,6 @@ public class RegisterStationSteps {
   }
 
   @Then("{int} stations should have been found")
-  @Then("{int} station should have been found")
   public void stationsShouldHaveBeenFound(int expectedCount) {
     stationCards = backOfficePage.getStationCards();
     assertTrue(
