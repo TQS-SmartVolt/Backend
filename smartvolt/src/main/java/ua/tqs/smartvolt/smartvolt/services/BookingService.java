@@ -96,7 +96,10 @@ public class BookingService {
     if (power < 0 || pricePerKWh < 0) {
       throw new IllegalArgumentException("Invalid power or price");
     }
-    double cost = power * pricePerKWh;
+
+    // Corrected cost calculation: energyDelivered (power * 0.5) * pricePerKWh
+    double energyDelivered = power * 0.5; // Calculate energy delivered for 30 minutes
+    double cost = energyDelivered * pricePerKWh; // Calculate cost based on energy delivered
 
     if (cost < 0) {
       throw new IllegalArgumentException("Invalid cost");

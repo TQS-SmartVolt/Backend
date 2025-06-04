@@ -6,6 +6,7 @@ import ua.tqs.smartvolt.smartvolt.MyTestConfiguration;
 import ua.tqs.smartvolt.smartvolt.pages.Website;
 import ua.tqs.smartvolt.smartvolt.pages.auth.LoginPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.BookingPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ChargingHistoryPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.PaymentPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStationsMapPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
@@ -18,6 +19,7 @@ public class TestContext {
   private ServiceStationsMapPage serviceStationsMapPage;
   private BookingPage bookingPage;
   private PaymentPage paymentPage;
+  private ChargingHistoryPage chargingHistoryPage;
 
   public static String FRONTEND_PROTOCOL = "http";
   public static String FRONTEND_IP = MyTestConfiguration.getHost();
@@ -45,6 +47,7 @@ public class TestContext {
     this.serviceStationsMapPage = new ServiceStationsMapPage(driver);
     this.bookingPage = new BookingPage(driver);
     this.paymentPage = new PaymentPage(driver);
+    this.chargingHistoryPage = new ChargingHistoryPage(driver);
     this.website = new Website(driver);
   }
 
@@ -74,6 +77,10 @@ public class TestContext {
 
   public PaymentPage getPaymentPage() {
     return paymentPage;
+  }
+
+  public ChargingHistoryPage getChargingHistoryPage() {
+    return chargingHistoryPage;
   }
 
   public void quit() {

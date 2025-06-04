@@ -129,22 +129,62 @@ public class DataLoaderUAT implements CommandLineRunner {
         "Charging Station created: %s with ID %s%n",
         testChargingStation3.getName(), testChargingStation3.getStationId());
 
-    ChargingSlot slot1 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
-    ChargingSlot slot2 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
-    ChargingSlot slot3 = new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation1);
-    ChargingSlot slot4 = new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation2);
-    ChargingSlot slot5 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
-    ChargingSlot slot6 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
+    ChargingSlot testChargingSlot1 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
+    ChargingSlot testChargingSlot2 = new ChargingSlot(true, 0.20, 10, "Slow", testChargingStation1);
+    ChargingSlot testChargingSlot3 =
+        new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation1);
+    ChargingSlot testChargingSlot4 =
+        new ChargingSlot(true, 0.30, 20, "Medium", testChargingStation2);
+    ChargingSlot testChargingSlot5 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
+    ChargingSlot testChargingSlot6 = new ChargingSlot(true, 0.50, 30, "Fast", testChargingStation3);
+
+    ChargingSlot slot1 = testChargingSlot1;
+    ChargingSlot slot2 = testChargingSlot2;
+    ChargingSlot slot3 = testChargingSlot3;
+    ChargingSlot slot4 = testChargingSlot4;
+    ChargingSlot slot5 = testChargingSlot5;
+    ChargingSlot slot6 = testChargingSlot6;
 
     chargingSlotRepository.saveAll(List.of(slot1, slot2, slot3, slot4, slot5, slot6));
-
     System.out.println("Charging slots created.");
+
+    // --- Data for UAT User Story 5.1 ---
+
+    // Create a new EV Driver
+    EvDriver newTestEVDriver =
+        new EvDriver("Joao Pinto", "newtest@example.com", passwordEncoder.encode("passwordXPTO!"));
+    evDriverRepository.saveAndFlush(newTestEVDriver);
+
+    // Create a new EV Driver for the "no history" scenario
+    EvDriver noHistoryDriver =
+        new EvDriver(
+            "No History Driver", "nohistory@example.com", passwordEncoder.encode("passwordXPTO!"));
+    evDriverRepository.saveAndFlush(noHistoryDriver);
+    System.out.printf(
+        "No History EV Driver created: %s with ID %s%n",
+        noHistoryDriver.getName(), noHistoryDriver.getUserId());
+
+    // Create Booking data for newTestEVDriver (Joao Pinto, newtest@example.com)
+    LocalDateTime now = LocalDateTime.now();
+
+    // Booking 1: Slow Charging Session - tomorrow
+    LocalDateTime booking1Time =
+        now.plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0);
+    double power1 = testChargingSlot1.getPower();
+    double price1 = testChargingSlot1.getPricePerKWh();
+    double cost1 = (power1 * 0.5) * price1; // Correct cost calculation
+    Booking booking1 =
+        new Booking(newTestEVDriver, testChargingSlot1, booking1Time, "Not Used", cost1);
+    bookingRepository.save(booking1);
+    System.out.printf(
+        "UAT Booking 1 created for driver %s, slot %s, cost %.2f%n",
+        newTestEVDriver.getName(), testChargingSlot1.getSlotId(), cost1);
+
+    // -----------------------------------
 
     // Create bookings, payments, and sessions for each month (June 2024 to June 2025)
 
-    // June 2024 (2 bookings)
-    Booking booking1 =
-        new Booking(testEVDriver, slot1, LocalDateTime.of(2024, 6, 5, 10, 0, 0), "used", 10.00);
+    // June 2024 (1 booking)
     Booking booking2 =
         new Booking(anotherEVDriver, slot5, LocalDateTime.of(2024, 6, 15, 14, 0, 0), "used", 15.00);
 

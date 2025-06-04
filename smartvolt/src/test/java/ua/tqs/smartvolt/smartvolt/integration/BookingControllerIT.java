@@ -112,7 +112,7 @@ class BookingControllerIT {
                 is(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
             .body("driver.userId", equalTo(3))
             .body("status", equalTo("Not Used"))
-            .body("cost", equalTo(1.5F))
+            .body("cost", equalTo(0.75F))
             .extract()
             .jsonPath() // Add .jsonPath() to get a JsonPath object
             .getLong("bookingId"); // Then use getLong() to explicitly extract as a Long

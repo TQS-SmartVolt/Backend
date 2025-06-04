@@ -406,7 +406,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingNotFound_ThrowsException() {
     // Arrange
     Long nonExistentBookingId = 999L;
@@ -425,7 +425,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking() {
     // Arrange
     Long bookingId = 456L;
@@ -450,7 +450,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingAlreadyPaid_ThrowsException() {
     // Arrange
     Long bookingId = 789L;
