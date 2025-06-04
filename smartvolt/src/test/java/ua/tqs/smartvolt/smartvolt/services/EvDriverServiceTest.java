@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.when;
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingHistoryResponse;
+import ua.tqs.smartvolt.smartvolt.dto.ConsumptionResponse;
+import ua.tqs.smartvolt.smartvolt.dto.SpendingResponse;
+import ua.tqs.smartvolt.smartvolt.dto.UserInfoResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
@@ -270,5 +275,297 @@ public class EvDriverServiceTest {
     // Assert
     assertThat(foundDriver).isEmpty();
     verify(evDriverRepository, times(1)).findById(nonExistentId);
+  }
+
+  // --- User Story 5.2 - View Personal Charging Statistics (Consumption) ---
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33") // User Story 5.2 - View Personal Charging Statistics
+  void
+      getEvDriverConsumption_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlyConsumption()
+          throws ResourceNotFoundException {
+    // Arrange
+    // Create new bookings specifically for this test, set to today's date
+    LocalDateTime today = LocalDateTime.now();
+
+    Booking booking4 =
+        new Booking(
+            testDriver,
+            slotSlow,
+            today.withHour(9).withMinute(0).withSecond(0).withNano(0),
+            "Not Used",
+            costSlow);
+    booking4.setBookingId(4L);
+    booking4.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
+
+    Booking booking5 =
+        new Booking(
+            testDriver,
+            slotMedium,
+            today.withHour(15).withMinute(30).withSecond(0).withNano(0),
+            "Not Used",
+            costMedium);
+    booking5.setBookingId(5L);
+    booking5.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
+
+    List<Booking> driverBookings = Arrays.asList(booking4, booking5);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+
+    // Act
+    ConsumptionResponse consumptionResponse =
+        evDriverService.getEvDriverConsumption(testDriver.getUserId());
+
+    // Assert
+    assertThat(consumptionResponse).isNotNull();
+    List<Double> monthlyConsumption = consumptionResponse.getConsumptionPerMonth();
+    assertThat(monthlyConsumption).isNotNull().hasSize(12);
+
+    // Calculate expected total consumption for the current month based on booking4 and booking5
+    int currentMonth = LocalDateTime.now().getMonthValue();
+    double expectedCurrentMonthConsumption =
+        (booking4.getSlot().getPower() * factor) + (booking5.getSlot().getPower() * factor);
+
+    // Verify consumption for the current month
+    assertThat(monthlyConsumption.get(currentMonth - 1)).isEqualTo(expectedCurrentMonthConsumption);
+
+    // Verify other months are 0.0 (since our test bookings are only in one month)
+    for (int i = 0; i < 12; i++) {
+      if (i != (currentMonth - 1)) {
+        assertThat(monthlyConsumption.get(i)).isEqualTo(0.0);
+      }
+    }
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(1)).findByDriver(testDriver);
+    // Verify cleanup method is called
+    verify(bookingRepository, times(1))
+        .deleteExpiredBookingsByDriverAndStatus(
+            eq(testDriver), any(LocalDateTime.class), eq("Not Used"));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33")
+  void getEvDriverConsumption_DriverNotFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long nonExistentUserId = 999L;
+    when(evDriverRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> evDriverService.getEvDriverConsumption(nonExistentUserId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("EvDriver not found with id: " + nonExistentUserId);
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(nonExistentUserId);
+    verify(bookingRepository, never()).findByDriver(any(EvDriver.class));
+    verify(bookingRepository, never()).deleteExpiredBookingsByDriverAndStatus(any(), any(), any());
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33")
+  void getEvDriverConsumption_ValidDriverNoBookings_ReturnsEmptyConsumptionResponse()
+      throws ResourceNotFoundException {
+    // Arrange
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+
+    // Act
+    ConsumptionResponse consumptionResponse =
+        evDriverService.getEvDriverConsumption(testDriver.getUserId());
+
+    // Assert
+    assertThat(consumptionResponse).isNotNull();
+    List<Double> monthlyConsumption = consumptionResponse.getConsumptionPerMonth();
+    assertThat(monthlyConsumption).isNotNull().hasSize(12);
+    assertThat(monthlyConsumption).containsOnly(0.0); // All 12 months should be 0.0
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(1)).findByDriver(testDriver);
+    verify(bookingRepository, times(1))
+        .deleteExpiredBookingsByDriverAndStatus(
+            eq(testDriver), any(LocalDateTime.class), eq("Not Used"));
+  }
+
+  // --- User Story 5.2 - View Personal Charging Statistics (Spending) ---
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33") // User Story 5.2 - View Personal Charging Statistics
+  void getEvDriverSpending_ValidDriverWithBookingsForCurrentMonth_ReturnsCorrectMonthlySpending()
+      throws ResourceNotFoundException {
+    // Arrange
+    // Create new bookings specifically for this test, set to today's date
+    LocalDateTime today = LocalDateTime.now();
+
+    Booking booking6 =
+        new Booking(
+            testDriver,
+            slotSlow,
+            today.withHour(10).withMinute(0).withSecond(0).withNano(0),
+            "Not Used",
+            costSlow);
+    booking6.setBookingId(6L);
+    booking6.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
+
+    Booking booking7 =
+        new Booking(
+            testDriver,
+            slotFast,
+            today.withHour(16).withMinute(30).withSecond(0).withNano(0),
+            "Not Used",
+            costFast);
+    booking7.setBookingId(7L);
+    booking7.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
+
+    List<Booking> driverBookings = Arrays.asList(booking6, booking7);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+
+    // Act
+    SpendingResponse spendingResponse = evDriverService.getEvDriverSpending(testDriver.getUserId());
+
+    // Assert
+    assertThat(spendingResponse).isNotNull();
+    List<Double> monthlySpending = spendingResponse.getSpendingPerMonth();
+    assertThat(monthlySpending).isNotNull().hasSize(12);
+
+    // Calculate expected total spending for the current month based on booking6 and booking7
+    int currentMonth = LocalDateTime.now().getMonthValue();
+    double expectedCurrentMonthSpending = booking6.getCost() + booking7.getCost();
+
+    // Verify spending for the current month
+    assertThat(monthlySpending.get(currentMonth - 1)).isEqualTo(expectedCurrentMonthSpending);
+
+    // Verify other months are 0.0 (since our test bookings are only in one month)
+    for (int i = 0; i < 12; i++) {
+      if (i != (currentMonth - 1)) {
+        assertThat(monthlySpending.get(i)).isEqualTo(0.0);
+      }
+    }
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(1)).findByDriver(testDriver);
+    // Verify cleanup method is called
+    verify(bookingRepository, times(1))
+        .deleteExpiredBookingsByDriverAndStatus(
+            eq(testDriver), any(LocalDateTime.class), eq("Not Used"));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33")
+  void getEvDriverSpending_DriverNotFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long nonExistentUserId = 999L;
+    when(evDriverRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> evDriverService.getEvDriverSpending(nonExistentUserId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("EvDriver not found with id: " + nonExistentUserId);
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(nonExistentUserId);
+    verify(bookingRepository, never()).findByDriver(any(EvDriver.class));
+    verify(bookingRepository, never()).deleteExpiredBookingsByDriverAndStatus(any(), any(), any());
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-33")
+  void getEvDriverSpending_ValidDriverNoBookings_ReturnsEmptySpendingResponse()
+      throws ResourceNotFoundException {
+    // Arrange
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+
+    // Act
+    SpendingResponse spendingResponse = evDriverService.getEvDriverSpending(testDriver.getUserId());
+
+    // Assert
+    assertThat(spendingResponse).isNotNull();
+    List<Double> monthlySpending = spendingResponse.getSpendingPerMonth();
+    assertThat(monthlySpending).isNotNull().hasSize(12);
+    assertThat(monthlySpending).containsOnly(0.0); // All 12 months should be 0.0
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(1)).findByDriver(testDriver);
+    verify(bookingRepository, times(1))
+        .deleteExpiredBookingsByDriverAndStatus(
+            eq(testDriver), any(LocalDateTime.class), eq("Not Used"));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_ValidDriver_ReturnsUserInfoResponse() throws ResourceNotFoundException {
+    // Arrange
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+
+    // Act
+    UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
+
+    // Assert
+    assertThat(userInfo).isNotNull();
+    assertThat(userInfo.getName()).isEqualTo(testDriver.getName());
+    assertThat(userInfo.getEmail()).isEqualTo(testDriver.getEmail());
+    assertThat(userInfo.getTotalEnergyConsumed()).isEqualTo(0.0);
+    assertThat(userInfo.getTotalMoneySpent()).isEqualTo(0.0);
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(3)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(2)).findByDriver(testDriver);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_DriverNotFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long nonExistentUserId = 999L;
+    when(evDriverRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> evDriverService.getEvDriverInfo(nonExistentUserId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("EvDriver not found with id: " + nonExistentUserId);
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(nonExistentUserId);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_ValidDriverWithBookings_ReturnsUserInfoResponseWithTotals()
+      throws ResourceNotFoundException {
+    // Arrange
+    List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+
+    // Act
+    UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
+
+    // Assert
+    assertThat(userInfo).isNotNull();
+    assertThat(userInfo.getName()).isEqualTo(testDriver.getName());
+    assertThat(userInfo.getEmail()).isEqualTo(testDriver.getEmail());
+
+    double totalEnergyConsumed =
+        (booking1.getSlot().getPower() * factor)
+            + (booking2.getSlot().getPower() * factor)
+            + (booking3.getSlot().getPower() * factor);
+    assertThat(userInfo.getTotalEnergyConsumed()).isEqualTo(totalEnergyConsumed);
+
+    double totalMoneySpent = booking1.getCost() + booking2.getCost() + booking3.getCost();
+    assertThat(userInfo.getTotalMoneySpent()).isEqualTo(totalMoneySpent);
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(3)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(2)).findByDriver(testDriver);
   }
 }
