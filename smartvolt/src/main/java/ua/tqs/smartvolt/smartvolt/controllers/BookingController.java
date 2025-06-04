@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.services.BookingService;
 import java.util.List;
@@ -51,12 +52,20 @@ public class BookingController {
   }
 
   @PostMapping("/{bookingId}/finalize-payment")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
     bookingService.finalizeBookingPayment(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public void cancelBooking(@PathVariable Long bookingId) throws Exception {
     bookingService.cancelBooking(bookingId);
+  }
+
+  @GetMapping("/consumption")
+  @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  public OperatorEnergyResponse getEnergyConsumption() {
+    return bookingService.getEnergyConsumption();
   }
 }

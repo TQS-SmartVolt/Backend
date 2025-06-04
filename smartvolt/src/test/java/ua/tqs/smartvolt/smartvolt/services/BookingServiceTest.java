@@ -21,14 +21,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSession;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.models.StationOperator;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
+import ua.tqs.smartvolt.smartvolt.repositories.ChargingSessionRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 
@@ -38,6 +41,7 @@ public class BookingServiceTest {
   @Mock private BookingRepository bookingRepository;
   @Mock private EvDriverRepository evDriverRepository;
   @Mock private ChargingSlotRepository chargingSlotRepository;
+  @Mock private ChargingSessionRepository chargingSessionRepository;
 
   private BookingService bookingService;
 
@@ -59,10 +63,11 @@ public class BookingServiceTest {
     testDriver.setEmail("driver@example.com");
     testDriver.setName("Test Driver");
 
-    StationOperator operator = new StationOperator();
-    operator.setUserId(1L);
+    StationOperator testOperator = new StationOperator();
+    testOperator.setUserId(1L);
 
-    testStation = new ChargingStation("Test Station", 40.0, -8.0, "Test Address", true, operator);
+    testStation =
+        new ChargingStation("Test Station", 40.0, -8.0, "Test Address", true, testOperator);
     testStation.setStationId(200L);
 
     testSlot = new ChargingSlot();
@@ -401,7 +406,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingNotFound_ThrowsException() {
     // Arrange
     Long nonExistentBookingId = 999L;
@@ -420,7 +425,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingExpired_ThrowsExceptionAndDeletesBooking() {
     // Arrange
     Long bookingId = 456L;
@@ -445,7 +450,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
-  @Requirement("SV-243")
+  @Requirement("SV-26")
   void finalizeBookingPayment_BookingAlreadyPaid_ThrowsException() {
     // Arrange
     Long bookingId = 789L;
@@ -557,5 +562,74 @@ public class BookingServiceTest {
       assertThatThrownBy(() -> bookingService.unlockChargingSlot(bookingId, driverId))
           .isInstanceOf(Exception.class)
           .hasMessageContaining("Booking is not paid or already used");
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-36")
+  void getEnergyConsumption_ReturnsOperatorEnergyResponse() {
+    // Arrange
+    List<Booking> bookings = createBookingsAndSessions();
+    when(bookingRepository.findAll()).thenReturn(bookings);
+
+    // Act
+    OperatorEnergyResponse response = bookingService.getEnergyConsumption();
+
+    // Assert
+    assertThat(response).isNotNull();
+    assertThat(response.getTotalEnergy()).isEqualTo(20.0);
+    assertThat(response.getAverageEnergyPerMonth()).isEqualTo(1.82);
+
+    verify(bookingRepository, times(1)).findAll();
+  }
+
+  // ======================== Auxiliar Methods ========================
+  List<Booking> createBookingsAndSessions() {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime startOfCurrentMonth =
+        now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    LocalDateTime startOfPreviousMonth = startOfCurrentMonth.minusMonths(1);
+    LocalDateTime startOfPreviousOfPreviousMonth = startOfPreviousMonth.minusMonths(1);
+
+    // Create bookings
+    Booking booking1 =
+        new Booking(
+            testDriver, testSlot, startOfPreviousMonth.plusDays(5).plusHours(10), "used", 20.0);
+    ChargingSession session1 = new ChargingSession(5, booking1);
+    booking1.setChargingSession(session1);
+    Booking booking2 =
+        new Booking(
+            testDriver, testSlot, startOfPreviousMonth.plusDays(10).plusHours(12), "used", 25.0);
+    ChargingSession session2 = new ChargingSession(5, booking2);
+    booking2.setChargingSession(session2);
+    Booking booking3 =
+        new Booking(
+            testDriver,
+            testSlot,
+            startOfPreviousOfPreviousMonth.plusDays(3).plusHours(8),
+            "used",
+            30.0);
+    ChargingSession session3 = new ChargingSession(5, booking3);
+    booking3.setChargingSession(session3);
+    Booking booking4 =
+        new Booking(
+            testDriver,
+            testSlot,
+            startOfPreviousOfPreviousMonth.plusDays(15).plusHours(14),
+            "used",
+            35.0);
+    ChargingSession session4 = new ChargingSession(5, booking4);
+    booking4.setChargingSession(session4);
+    Booking booking5 =
+        new Booking(
+            testDriver,
+            testSlot,
+            startOfPreviousOfPreviousMonth.plusDays(20).plusHours(16),
+            "not_used",
+            40.0);
+    ChargingSession session5 = new ChargingSession(5, booking5);
+    booking5.setChargingSession(session5);
+
+    return List.of(booking1, booking2, booking3, booking4, booking5);
   }
 }

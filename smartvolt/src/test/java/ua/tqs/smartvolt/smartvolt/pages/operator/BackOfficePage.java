@@ -59,6 +59,18 @@ public class BackOfficePage extends Website {
   @FindBy(css = "[data-testid='confirm-add-slot-button']")
   private WebElement confirmAddSlotButton;
 
+  @FindBy(css = "[data-testid='operator-total-sessions']")
+  private WebElement operatorTotalSessions;
+
+  @FindBy(css = "[data-testid='operator-total-energy']")
+  private WebElement operatorTotalEnergy;
+
+  @FindBy(css = "[data-testid='operator-average-sessions']")
+  private WebElement operatorAverageSessions;
+
+  @FindBy(css = "[data-testid='operator-average-energy']")
+  private WebElement operatorAverageEnergy;
+
   public BackOfficePage(WebDriver driver) {
     super(driver);
   }
@@ -124,6 +136,30 @@ public class BackOfficePage extends Website {
     WebElement slotsElement = stationCard.findElement(By.cssSelector("[data-testid$='slots']"));
     String slotsText = slotsElement.getText().split(" ")[0]; // Extract the number before "Slots"
     return Integer.parseInt(slotsText);
+  }
+
+  public int getOperatorTotalSessions() {
+    wait.until(ExpectedConditions.visibilityOf(operatorTotalSessions));
+    String text = operatorTotalSessions.getText();
+    return Integer.parseInt(text.replaceAll("[^0-9]", "")); // Extract number from text
+  }
+
+  public double getOperatorTotalEnergy() {
+    wait.until(ExpectedConditions.visibilityOf(operatorTotalEnergy));
+    String text = operatorTotalEnergy.getText();
+    return Double.parseDouble(text.replaceAll("[^0-9.]", "")); // Extract number from text
+  }
+
+  public double getOperatorAverageSessions() {
+    wait.until(ExpectedConditions.visibilityOf(operatorAverageSessions));
+    String text = operatorAverageSessions.getText();
+    return Double.parseDouble(text.replaceAll("[^0-9.]", "")); // Extract number from text
+  }
+
+  public double getOperatorAverageEnergy() {
+    wait.until(ExpectedConditions.visibilityOf(operatorAverageEnergy));
+    String text = operatorAverageEnergy.getText();
+    return Double.parseDouble(text.replaceAll("[^0-9.]", "")); // Extract number from text
   }
 
   public boolean isActionModalVisible() {
