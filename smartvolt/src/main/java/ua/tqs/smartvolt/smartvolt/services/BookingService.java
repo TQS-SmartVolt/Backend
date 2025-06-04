@@ -115,17 +115,11 @@ public class BookingService {
 
     List<Booking> bookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
     deleteNotUsedBookings(bookings);
-    // Filter bookings to only include those that are: "Paid" and from now on and
-    // "Used" AND within 30 minutes of the current time
-    List<Booking> boks = bookings.stream()
+    
+    return bookings.stream()
         .filter(booking -> {
-          System.out.println("\n\n\nBOOKING: " + booking.toString() + "\n\n\n");
           if (booking.getStatus().equals("Used")) {
             LocalDateTime now = LocalDateTime.now();
-            System.out.println("Booking is Used: " + booking.getStartTime());
-            System.out.println("NOW: " + now);
-            System.out.println("Booking start: " + booking.getStartTime());
-            System.out.println("Booking end: " + booking.getStartTime().plusMinutes(30));
             // "Used" bookings: only include if now is within 30 minutes after start time
             return !now.isBefore(booking.getStartTime()) &&
                 now.isBefore(booking.getStartTime().plusMinutes(30));
@@ -136,9 +130,6 @@ public class BookingService {
           return false;
         })
         .toList();
-
-    System.out.println("\n\n\nFiltered Bookings: " + boks.toString() + "\n\n\n");
-    return boks;
   }
 
   public void deleteNotUsedBookings(List<Booking> bookings) {

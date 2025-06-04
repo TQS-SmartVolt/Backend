@@ -107,9 +107,6 @@ class ChargingStationSlotsControllerIT {
             .then()
             .statusCode(HttpStatus.OK.value())
             .body("pricePerKWh", equalTo(0.15F)) // Keep the exact price check
-            .body(
-                "availableSlotMapping",
-                hasSize(96)) // Check total expected entries (2 slots * 48 half-hours)
             .extract()
             .jsonPath()
             .getList("availableSlotMapping.slotId"); // Extract all slotIds

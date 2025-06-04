@@ -49,3 +49,7 @@ INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_spe
 INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
 (205, TRUE, 0.18, 10, 'Slow', 105),
 (206, TRUE, 0.28, 20, 'Medium', 105);
+
+INSERT INTO booking (booking_id, driver_id, slot_id, start_time, status, cost) VALUES
+(301, 3, 201, date_trunc('hour', NOW()) + INTERVAL '30 minutes' * floor(date_part('minute', NOW()) / 30.0), 'Paid', 1.5), -- Booking for Test Driver on Station Slow
+(302, 3, 203, date_trunc('hour', NOW()) + INTERVAL '2 hour', 'Paid', 2.5); -- Booking for Test Driver on Station Medium

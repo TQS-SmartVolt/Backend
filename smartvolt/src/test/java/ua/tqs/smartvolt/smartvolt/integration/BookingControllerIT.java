@@ -7,9 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,8 +58,16 @@ class BookingControllerIT {
 
   String driverSvToken;
 
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+
+  @Autowired
+  private Flyway flyway;
+
   @BeforeEach
   public void setUp() {
+    flyway.clean(); // Clean the database before each test
+    flyway.migrate(); // Apply migrations to set up the database
     // Get token for the EV Driver
     driverSvToken =
         given()
@@ -81,7 +93,6 @@ class BookingControllerIT {
 
     BookingRequest request = new BookingRequest(slotId, startTime);
 
-    // CHANGE THIS LINE: Change String to Long
     Long bookingId =
         given()
             .contentType("application/json")
@@ -105,8 +116,6 @@ class BookingControllerIT {
             .getLong("bookingId"); // Then use getLong() to explicitly extract as a Long
 
     assertNotNull(bookingId, "Booking ID should not be null, indicating successful creation");
-
-    System.out.println("DEBUG: Successfully created booking with ID: " + bookingId);
   }
 
   @Test
@@ -260,5 +269,47 @@ class BookingControllerIT {
 
     System.out.println(
         "DEBUG: Verified booking fails with invalid start time interval, returning 400 BAD REQUEST.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-27") 
+  void whenGetCurrentBookings_thenReturnListOfBookings() {
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+    .when()
+        .get(getBaseUrl() + "/current-bookings")
+    .then()
+        .log().all() 
+        .statusCode(HttpStatus.OK.value())
+        .body("size()", equalTo(2))
+        .body("driver.userId", hasItems(3, 3)) 
+        .body("status", hasItems("Paid", "Paid")) 
+        .body("slot.slotId", hasItems(201, 203));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-27")
+  void whenUnlockChargingStation_thenStatusUpdated() {
+    Long bookingId = 301L; 
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+    .when()
+        .patch(getBaseUrl() + "/" + bookingId + "/unlock")
+    .then()
+        .log().all() 
+        .statusCode(HttpStatus.OK.value());
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+    .when()
+        .get(getBaseUrl() + "/current-bookings")
+    .then()
+        .body("find { it.bookingId == " + bookingId + " }.status", equalTo("Used"));
   }
 }
