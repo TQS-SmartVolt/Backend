@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +34,11 @@ public class Booking {
   private double cost;
 
   @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private ChargingSession chargingSession;
 
   @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private Payment payment;
 
   @Column(nullable = false, updatable = false)
@@ -146,10 +149,6 @@ public class Booking {
         + '\''
         + ", cost="
         + cost
-        + ", chargingSession="
-        + chargingSession
-        + ", payment="
-        + payment
         + ", createdAt="
         + createdAt
         + '}';

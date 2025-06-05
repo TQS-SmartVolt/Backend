@@ -28,7 +28,7 @@ public class AuthController {
       summary = "Get authenticated user details",
       description =
           "Retrieves the details of the currently authenticated user using the token from the cookie.")
-  public AuthResponse api_auth_me() throws ResourceNotFoundException {
+  public AuthResponse apiAuthMe() throws ResourceNotFoundException {
     return authService.me(); // with token from cookie
   }
 
@@ -37,7 +37,7 @@ public class AuthController {
       summary = "Sign in",
       description =
           "Allows a user to sign in using their credentials and receive an authentication token.")
-  public AuthResponse api_sign_in(@RequestBody AuthRequest authRequest)
+  public AuthResponse apiSignIn(@RequestBody AuthRequest authRequest)
       throws ResourceNotFoundException {
     return authService.signIn(authRequest);
   }
@@ -47,7 +47,7 @@ public class AuthController {
       summary = "Sign up",
       description =
           "Allows a new user to sign up by providing their details and creating an account.")
-  public User api_create_user(@RequestBody UserSignUp userSignUp) throws ResourceNotFoundException {
+  public User apiCreateUser(@RequestBody UserSignUp userSignUp) throws ResourceNotFoundException {
     return authService.createUser(userSignUp);
   }
 }

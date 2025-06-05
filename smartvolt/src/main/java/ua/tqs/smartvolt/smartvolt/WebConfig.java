@@ -29,12 +29,11 @@ public class WebConfig {
   private String testContainersHost = "host.testcontainers.internal";
   private String deploymentHost = "deti-tqs-21.ua.pt";
 
+  private static final String DELETE = "DELETE";
+  private static final String OPTIONS = "OPTIONS";
+
   @Bean
   public WebMvcConfigurer corsConfigurer() {
-    System.out.println("Testcontainers host: " + testContainersHost);
-    System.out.println("Frontend IP: " + frontendIp);
-    System.out.println("Frontend Port: " + frontendPort);
-    System.out.println("Frontend Protocol: " + frontendprotocol);
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
@@ -44,7 +43,7 @@ public class WebConfig {
                 frontendprotocol + "://" + frontendIp + ":" + frontendPort,
                 frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
                 frontendprotocol + "://" + deploymentHost + ":" + frontendPort)
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedMethods("GET", "POST", "PUT", DELETE, OPTIONS)
             .allowedHeaders("*")
             .allowCredentials(true);
       }
@@ -78,7 +77,7 @@ public class WebConfig {
             frontendprotocol + "://" + frontendIp + ":" + frontendPort,
             frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
             frontendprotocol + "://" + deploymentHost + ":" + frontendPort));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", DELETE, OPTIONS));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -94,7 +93,7 @@ public class WebConfig {
             frontendprotocol + "://" + frontendIp + ":" + frontendPort,
             frontendprotocol + "://" + testContainersHost + ":" + frontendPort,
             frontendprotocol + "://" + deploymentHost + ":" + frontendPort));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", DELETE, OPTIONS));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
