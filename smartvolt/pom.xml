@@ -48,6 +48,12 @@
         </build>
     </profile>
     <profile>
+        <id>Capacity</id>
+        <properties>
+        <groups>Capacity</groups>
+        </properties>
+    </profile>
+    <profile>
 
     <id>UnitTests-IT</id>
     <activation>
