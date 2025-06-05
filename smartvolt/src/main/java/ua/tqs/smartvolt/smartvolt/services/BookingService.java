@@ -34,7 +34,7 @@ public class BookingService {
   public BookingService(
       BookingRepository bookingRepository,
       EvDriverRepository evDriverRepository,
-      ChargingSlotRepository chargingSlotRepository, 
+      ChargingSlotRepository chargingSlotRepository,
       ChargingSessionService chargingSessionService) {
     this.chargingSessionService = chargingSessionService;
     this.bookingRepository = bookingRepository;
@@ -261,6 +261,7 @@ public class BookingService {
   public Booking getBookingDetails(Long bookingId) throws ResourceNotFoundException {
     return bookingRepository
         .findById(bookingId)
-        .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
   }
 }

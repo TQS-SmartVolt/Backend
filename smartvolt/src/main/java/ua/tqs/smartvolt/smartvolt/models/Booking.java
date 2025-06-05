@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Booking {
