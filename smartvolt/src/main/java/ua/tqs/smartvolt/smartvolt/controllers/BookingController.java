@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,9 @@ public class BookingController {
 
   @PostMapping("/start-payment")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Create a new booking",
+      description = "Allows an EV driver to create a new booking for a charging station.")
   public Booking createBooking(@RequestBody BookingRequest request) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
@@ -37,6 +41,9 @@ public class BookingController {
 
   @GetMapping("/current-bookings")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get current bookings",
+      description = "Retrieves the list of current bookings for the authenticated EV driver.")
   public List<Booking> getBookingsToUnlock() throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
@@ -45,6 +52,9 @@ public class BookingController {
 
   @PatchMapping("/{bookingId}/unlock")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Unlock a charging station",
+      description = "Allows an EV driver to unlock a charging station after payment.")
   public void unlockChargingStation(@PathVariable Long bookingId) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
@@ -53,18 +63,28 @@ public class BookingController {
 
   @PostMapping("/{bookingId}/finalize-payment")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Finalize booking payment",
+      description =
+          "Finalizes the payment for a booking, allowing the EV driver to complete the transaction.")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
     bookingService.finalizeBookingPayment(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Cancel a booking",
+      description = "Allows an EV driver to cancel a booking before it is finalized.")
   public void cancelBooking(@PathVariable Long bookingId) throws Exception {
     bookingService.cancelBooking(bookingId);
   }
 
   @GetMapping("/consumption")
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Get energy consumption statistics",
+      description = "Retrieves the total energy consumption statistics for the operator.")
   public OperatorEnergyResponse getEnergyConsumption() {
     return bookingService.getEnergyConsumption();
   }
