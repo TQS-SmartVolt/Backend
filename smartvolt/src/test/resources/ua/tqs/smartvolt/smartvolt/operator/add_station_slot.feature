@@ -1,4 +1,4 @@
-# @UAT-Web
+@UAT-Web
 Feature: Add Station Slot
   To allow operators to change stations status
 

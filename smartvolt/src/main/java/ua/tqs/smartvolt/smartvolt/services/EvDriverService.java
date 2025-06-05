@@ -96,7 +96,7 @@ public class EvDriverService {
     cleanUpExpiredBookingsForDriver(evDriver);
 
     // Get all bookings for the found EvDriver using the BookingRepository.
-    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
+    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver).orElse(Collections.emptyList());
 
     if (driverBookings.isEmpty()) {
       return new ConsumptionResponse(Collections.nCopies(12, 0.0)); // Return empty consumption
@@ -138,7 +138,7 @@ public class EvDriverService {
     cleanUpExpiredBookingsForDriver(evDriver);
 
     // Get all bookings for the found EvDriver using the BookingRepository.
-    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver);
+    List<Booking> driverBookings = bookingRepository.findByDriver(evDriver).orElse(Collections.emptyList());
 
     if (driverBookings.isEmpty()) {
       return new SpendingResponse(Collections.nCopies(12, 0.0)); // Return empty spending

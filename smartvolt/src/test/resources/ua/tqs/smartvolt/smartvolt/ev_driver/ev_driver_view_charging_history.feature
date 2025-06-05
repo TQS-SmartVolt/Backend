@@ -1,4 +1,4 @@
-# @UAT-Web
+@UAT-Web
 Feature: EV Driver View Charging History
   As a driver, I want to view my charging history so that I can review my charging past sessions.
 

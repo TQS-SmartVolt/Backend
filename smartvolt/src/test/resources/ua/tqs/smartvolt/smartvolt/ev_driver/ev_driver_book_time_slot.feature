@@ -1,4 +1,4 @@
-# @UAT-Web
+@UAT-Web
 Feature: EV Driver Book a Time Slot
   To allow EV drivers to book a specific charging slot
 

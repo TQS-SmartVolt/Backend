@@ -1,4 +1,4 @@
-# @UAT-Web
+@UAT-Web
 Feature: EV Driver Confirm and View Payment Details
   As a driver, I want to confirm my booking payment so that I can finalize the process.
 

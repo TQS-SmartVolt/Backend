@@ -1,4 +1,4 @@
-# @UAT-Web
+@UAT-Web
 Feature: Check Stats
   To allow operators to check stats.
 
