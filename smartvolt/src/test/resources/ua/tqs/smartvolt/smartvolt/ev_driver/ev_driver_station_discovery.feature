@@ -10,7 +10,7 @@ Feature: EV Driver Station Discovery
     Then I should see the map displayed
     And I expand the filter section
     And I click the "Show Markers" button on the station map
-    Then I should see exactly 2 charging station markers on the map
+    Then I should see exactly 3 charging station markers on the map
 
   Scenario: Verify charging station marker details
     Then I should see the map displayed

@@ -133,7 +133,11 @@ public class ServiceStatisticsPage extends Website {
   }
 
   public String getEvDriverName() {
-    wait.until(ExpectedConditions.visibilityOf(evDriverName));
+    wait.until(
+        ExpectedConditions.and(
+            ExpectedConditions.visibilityOf(evDriverName),
+            ExpectedConditions.not(
+                ExpectedConditions.textToBePresentInElement(evDriverName, "User"))));
     return evDriverName.getText();
   }
 

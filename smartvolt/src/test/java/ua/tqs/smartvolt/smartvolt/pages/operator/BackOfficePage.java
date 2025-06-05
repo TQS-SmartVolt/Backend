@@ -117,17 +117,17 @@ public class BackOfficePage extends Website {
   public String getStationCardAvailability(WebElement stationCard) {
     wait.until(ExpectedConditions.visibilityOf(stationCard));
     try {
-      WebElement activeLabel =
-          wait.until(
-              ExpectedConditions.presenceOfNestedElementLocatedBy(
-                  stationCard, By.cssSelector("[data-testid='station-card-active']")));
-      return activeLabel.getText();
-    } catch (TimeoutException e) {
       WebElement inactiveLabel =
           wait.until(
               ExpectedConditions.presenceOfNestedElementLocatedBy(
                   stationCard, By.cssSelector("[data-testid='station-card-inactive']")));
       return inactiveLabel.getText();
+    } catch (TimeoutException e) {
+      WebElement activeLabel =
+          wait.until(
+              ExpectedConditions.presenceOfNestedElementLocatedBy(
+                  stationCard, By.cssSelector("[data-testid='station-card-active']")));
+      return activeLabel.getText();
     }
   }
 
