@@ -9,8 +9,8 @@ import ua.tqs.smartvolt.smartvolt.pages.ev_driver.BookingPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ChargingHistoryPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.PaymentPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStationsMapPage;
-import ua.tqs.smartvolt.smartvolt.pages.ev_driver.UnlockPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStatisticsPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.UnlockPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 
 public class TestContext {

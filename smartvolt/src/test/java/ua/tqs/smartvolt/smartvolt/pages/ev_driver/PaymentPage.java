@@ -38,7 +38,7 @@ public class PaymentPage extends Website {
   @FindBy(css = "[data-testid='expiration-date-input']")
   private WebElement expirationDateInput;
 
-  @FindBy(css = "[data-testid='cvc-input']")    
+  @FindBy(css = "[data-testid='cvc-input']")
   private WebElement cvcInput;
 
   @FindBy(css = "[data-testid='confirm-payment-button']")
@@ -125,9 +125,9 @@ public class PaymentPage extends Website {
   /**
    * Fills in the payment form with the provided card details.
    *
-   * @param cardNumber    The card number to enter.
+   * @param cardNumber The card number to enter.
    * @param expirationDate The expiration date in MM/YY format.
-   * @param cvc           The CVC code for the card.
+   * @param cvc The CVC code for the card.
    */
   public void fillPaymentForm(String cardNumber, String expirationDate, String cvc) {
     System.out.println("DEBUG: PaymentPage.fillPaymentForm() - Filling payment form.");
@@ -135,16 +135,15 @@ public class PaymentPage extends Website {
       wait.until(ExpectedConditions.visibilityOf(cardNumberInput)).sendKeys(cardNumber);
       wait.until(ExpectedConditions.visibilityOf(expirationDateInput)).sendKeys(expirationDate);
       wait.until(ExpectedConditions.visibilityOf(cvcInput)).sendKeys(cvc);
-      System.out.println("DEBUG: PaymentPage.fillPaymentForm() - Payment form filled successfully.");
+      System.out.println(
+          "DEBUG: PaymentPage.fillPaymentForm() - Payment form filled successfully.");
     } catch (Exception e) {
       System.err.println(
           "ERROR: PaymentPage.fillPaymentForm() - Failed to fill payment form: " + e.getMessage());
     }
   }
 
-  /**
-   * Clicks the confirm payment button to submit the payment.
-   */
+  /** Clicks the confirm payment button to submit the payment. */
   public void confirmPayment() {
     System.out.println("DEBUG: PaymentPage.confirmPayment() - Clicking confirm payment button.");
     try {
@@ -177,9 +176,7 @@ public class PaymentPage extends Website {
     }
   }
 
-  /**
-   * Clicks the confirm button in the payment confirmation dialog.
-   */
+  /** Clicks the confirm button in the payment confirmation dialog. */
   public void clickConfirmPaymentDialogButton() {
     System.out.println(
         "DEBUG: PaymentPage.clickConfirmPaymentDialogButton() - Clicking confirm button in payment dialog.");

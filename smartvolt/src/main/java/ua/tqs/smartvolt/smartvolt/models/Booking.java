@@ -132,16 +132,26 @@ public class Booking {
 
   @Override
   public String toString() {
-    return "Booking{" +
-        "bookingId=" + bookingId +
-        ", driver=" + driver +
-        ", slot=" + slot +
-        ", startTime=" + startTime +
-        ", status='" + status + '\'' +
-        ", cost=" + cost +
-        ", chargingSession=" + chargingSession +
-        ", payment=" + payment +
-        ", createdAt=" + createdAt +
-        '}';
+    return "Booking{"
+        + "bookingId="
+        + bookingId
+        + ", driver="
+        + driver
+        + ", slot="
+        + slot
+        + ", startTime="
+        + startTime
+        + ", status='"
+        + status
+        + '\''
+        + ", cost="
+        + cost
+        + ", chargingSession="
+        + chargingSession
+        + ", payment="
+        + payment
+        + ", createdAt="
+        + createdAt
+        + '}';
   }
 }

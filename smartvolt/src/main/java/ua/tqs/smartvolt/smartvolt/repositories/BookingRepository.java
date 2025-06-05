@@ -12,9 +12,6 @@ import org.springframework.stereotype.Repository;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
-import java.util.Optional;
-import java.util.List;
-import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -25,10 +22,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
   // For example, find bookings by user ID, date range, etc.
 
   Optional<List<Booking>> findByDriver(EvDriver driver);
+
   List<Booking> findByStatus(String status);
 
   Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
-
 
   @Modifying // Indicates that this query will modify the database
   @Transactional // Ensures the operation runs within a transaction

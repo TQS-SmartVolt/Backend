@@ -8,7 +8,6 @@ import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -66,8 +65,7 @@ class UserControllerIT {
   private String driverSvToken;
   private String operatorSvToken; // Also get operator token for negative test if needed
 
-  @Autowired
-  private Flyway flyway;
+  @Autowired private Flyway flyway;
 
   @BeforeEach
   public void setUp() {

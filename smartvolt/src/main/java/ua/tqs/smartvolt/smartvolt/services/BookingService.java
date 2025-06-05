@@ -1,15 +1,12 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.checkerframework.checker.units.qual.s;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
@@ -45,14 +42,16 @@ public class BookingService {
   public Booking createBooking(BookingRequest request, Long driverId)
       throws ResourceNotFoundException, SlotAlreadyBookedException {
     // Get the driver, slot and start time from the request
-    EvDriver evDriver = evDriverRepository
-        .findById(driverId)
-        .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     final Long slotId = request.getSlotId();
-    ChargingSlot slot = chargingSlotRepository
-        .findById(slotId)
-        .orElseThrow(() -> new ResourceNotFoundException("Slot not found with id: " + slotId));
+    ChargingSlot slot =
+        chargingSlotRepository
+            .findById(slotId)
+            .orElseThrow(() -> new ResourceNotFoundException("Slot not found with id: " + slotId));
 
     // Check if the start time is exactly on the hour or half-hour mark
     LocalDateTime startTime = request.getStartTime();
@@ -85,15 +84,17 @@ public class BookingService {
     // Create a new booking
     Booking booking = new Booking();
 
-    final double power = chargingSlotRepository
-        .getPowerBySlotId(slotId)
-        .orElseThrow(
-            () -> new ResourceNotFoundException("Power not found for slotId: " + slotId));
+    final double power =
+        chargingSlotRepository
+            .getPowerBySlotId(slotId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Power not found for slotId: " + slotId));
 
-    final double pricePerKWh = chargingSlotRepository
-        .getPricePerKWhBySlotId(slotId)
-        .orElseThrow(
-            () -> new ResourceNotFoundException("Price not found for slotId: " + slotId));
+    final double pricePerKWh =
+        chargingSlotRepository
+            .getPricePerKWhBySlotId(slotId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Price not found for slotId: " + slotId));
 
     if (power < 0 || pricePerKWh < 0) {
       throw new IllegalArgumentException("Invalid power or price");
@@ -118,34 +119,36 @@ public class BookingService {
   }
 
   public List<Booking> getBookingsToUnlock(Long driverId) throws Exception {
-    EvDriver evDriver = evDriverRepository
-        .findById(driverId)
-        .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
-    List<Booking> bookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
+    List<Booking> bookings =
+        bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
     deleteNotUsedBookings(bookings);
-    
+
     return bookings.stream()
-        .filter(booking -> {
-          if (booking.getStatus().equals("used")) {
-            LocalDateTime now = LocalDateTime.now();
-            // "Used" bookings: only include if now is within 30 minutes after start time
-            return !now.isBefore(booking.getStartTime()) &&
-                now.isBefore(booking.getStartTime().plusMinutes(30));
-          } else if (booking.getStatus().equals("paid")) {
-            // "paid" bookings: include all from now on
-            return !booking.getStartTime().isBefore(LocalDateTime.now().minusMinutes(30));
-          }
-          return false;
-        })
+        .filter(
+            booking -> {
+              if (booking.getStatus().equals("used")) {
+                LocalDateTime now = LocalDateTime.now();
+                // "Used" bookings: only include if now is within 30 minutes after start time
+                return !now.isBefore(booking.getStartTime())
+                    && now.isBefore(booking.getStartTime().plusMinutes(30));
+              } else if (booking.getStatus().equals("paid")) {
+                // "paid" bookings: include all from now on
+                return !booking.getStartTime().isBefore(LocalDateTime.now().minusMinutes(30));
+              }
+              return false;
+            })
         .toList();
   }
 
   public void deleteNotUsedBookings(List<Booking> bookings) {
     LocalDateTime now = LocalDateTime.now();
-    List<Booking> notUsedBookings = bookings.stream()
-        .filter(booking -> booking.getStatus().equals(NOT_USED_STATUS))
-        .toList();
+    List<Booking> notUsedBookings =
+        bookings.stream().filter(booking -> booking.getStatus().equals(NOT_USED_STATUS)).toList();
 
     for (Booking booking : notUsedBookings) {
       LocalDateTime createdAt = booking.getCreatedAt();
@@ -156,12 +159,15 @@ public class BookingService {
   }
 
   public void unlockChargingSlot(Long bookingId, Long driverId) throws Exception {
-    Booking booking = bookingRepository.findById(bookingId)
-        .orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
+    Booking booking =
+        bookingRepository
+            .findById(bookingId)
+            .orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
 
-    EvDriver evDriver = evDriverRepository
-        .findById(driverId)
-        .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
 
     if (!booking.getDriver().equals(evDriver)) {
       throw new Exception("Driver does not match booking driver");
@@ -178,7 +184,8 @@ public class BookingService {
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
-    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+    Booking booking =
+        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
 
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime createdAt = booking.getCreatedAt();
@@ -196,7 +203,8 @@ public class BookingService {
   }
 
   public void cancelBooking(Long bookingId) throws Exception {
-    Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+    Booking booking =
+        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
     if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {

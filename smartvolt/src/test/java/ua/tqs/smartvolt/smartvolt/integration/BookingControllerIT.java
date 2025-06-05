@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -23,7 +23,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -58,11 +57,9 @@ class BookingControllerIT {
 
   String driverSvToken;
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
-  @Autowired
-  private Flyway flyway;
+  @Autowired private Flyway flyway;
   String operatorSvToken;
 
   @BeforeEach
@@ -306,19 +303,20 @@ class BookingControllerIT {
 
   @Test
   @Tag("IT-Fast")
-  @Requirement("SV-27") 
+  @Requirement("SV-27")
   void whenGetCurrentBookings_thenReturnListOfBookings() {
     given()
         .contentType("application/json")
         .header("Authorization", "Bearer " + driverSvToken)
-    .when()
+        .when()
         .get(getBaseUrl() + "/current-bookings")
-    .then()
-        .log().all() 
+        .then()
+        .log()
+        .all()
         .statusCode(HttpStatus.OK.value())
         .body("size()", equalTo(2))
-        .body("driver.userId", hasItems(3, 3)) 
-        .body("status", hasItems("paid", "paid")) 
+        .body("driver.userId", hasItems(3, 3))
+        .body("status", hasItems("paid", "paid"))
         .body("slot.slotId", hasItems(207, 209));
   }
 
@@ -326,23 +324,24 @@ class BookingControllerIT {
   @Tag("IT-Fast")
   @Requirement("SV-27")
   void whenUnlockChargingStation_thenStatusUpdated() {
-    Long bookingId = 301L; 
+    Long bookingId = 301L;
 
     given()
         .contentType("application/json")
         .header("Authorization", "Bearer " + driverSvToken)
-    .when()
+        .when()
         .patch(getBaseUrl() + "/" + bookingId + "/unlock")
-    .then()
-        .log().all() 
+        .then()
+        .log()
+        .all()
         .statusCode(HttpStatus.OK.value());
 
     given()
         .contentType("application/json")
         .header("Authorization", "Bearer " + driverSvToken)
-    .when()
+        .when()
         .get(getBaseUrl() + "/current-bookings")
-    .then()
+        .then()
         .body("find { it.bookingId == " + bookingId + " }.status", equalTo("used"));
   }
 }
