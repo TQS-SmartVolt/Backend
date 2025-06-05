@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,6 +44,9 @@ public class ChargingStationController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Create a new charging station",
+      description = "Allows a station operator to create a new charging station.")
   public ChargingStation createChargingStation(@RequestBody ChargingStationRequest request)
       throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,6 +56,9 @@ public class ChargingStationController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Get all charging stations for the operator",
+      description = "Returns a list of all charging stations managed by the operator.")
   public List<ChargingStationWithSlots> getAllChargingStations() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long operatorId = Long.parseLong(authentication.getName());
@@ -60,6 +67,10 @@ public class ChargingStationController {
 
   @GetMapping("/{stationId}/slots")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get available charging slots by station ID",
+      description =
+          "Returns available charging slots for a specific station based on charging speed and date.")
   public ChargingSlotsResponse getChargingSlotsByStationId(
       @PathVariable Long stationId,
       @RequestParam String chargingSpeed,
@@ -71,6 +82,10 @@ public class ChargingStationController {
   @PostMapping("/{stationId}/slots")
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Add a new charging slot to a station",
+      description =
+          "Allows a station operator to add a new charging slot to an existing charging station.")
   public ChargingSlot addChargingSlotToStation(
       @PathVariable Long stationId, @RequestBody ChargingSlotRequest request)
       throws ResourceNotFoundException, InvalidRequestException {
@@ -79,6 +94,10 @@ public class ChargingStationController {
 
   @GetMapping("/map")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get all charging stations with their slots",
+      description =
+          "Returns all charging stations along with their available slots for EV drivers.")
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
       @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
@@ -86,6 +105,9 @@ public class ChargingStationController {
 
   @PatchMapping("/{stationId}/status")
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Update charging station status",
+      description = "Allows a station operator to activate or deactivate a charging station.")
   public ChargingStation updateChargingStationStatus(
       @PathVariable Long stationId, @RequestParam boolean activate)
       throws ResourceNotFoundException {

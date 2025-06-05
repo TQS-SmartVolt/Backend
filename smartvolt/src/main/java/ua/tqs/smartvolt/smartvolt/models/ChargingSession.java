@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class ChargingSession {
 
   @OneToOne
   @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
+  @JsonBackReference
   private Booking booking;
 
   public ChargingSession() {}
