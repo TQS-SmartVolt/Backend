@@ -182,6 +182,30 @@ public class DataLoaderUAT implements CommandLineRunner {
 
     // -----------------------------------
 
+    // New Driver for UAT User Story 5.3
+    EvDriver driverForProfileUserStorie =
+        new EvDriver(
+            "Maria Silva", "driver5.3@example.com", passwordEncoder.encode("password5.3!"));
+    evDriverRepository.saveAndFlush(driverForProfileUserStorie);
+    System.out.printf(
+        "New Driver for UAT 5.3 created: %s with ID %s%n",
+        driverForProfileUserStorie.getName(), driverForProfileUserStorie.getUserId());
+
+    // Create booking for UAT User Story 5.3
+    LocalDateTime dateProfile =
+        now.plusDays(2).withHour(10).withMinute(0).withSecond(0).withNano(0);
+
+    double powerProfile = testChargingSlot2.getPower();
+    double priceProfile = testChargingSlot2.getPricePerKWh();
+    double costProfile = (powerProfile * 0.5) * priceProfile; // Correct cost calculation
+    Booking bookingProfile =
+        new Booking(
+            driverForProfileUserStorie, testChargingSlot2, dateProfile, "not_used", costProfile);
+    bookingRepository.save(bookingProfile);
+    System.out.printf(
+        "UAT Booking 5.3 created for driver %s, slot %s, cost %.2f%n",
+        driverForProfileUserStorie.getName(), testChargingSlot2.getSlotId(), costProfile);
+
     // Create bookings, payments, and sessions for each month (June 2024 to June 2025)
 
     // June 2024 (1 booking)
