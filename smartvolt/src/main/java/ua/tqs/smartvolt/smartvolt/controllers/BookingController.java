@@ -1,10 +1,12 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,22 @@ public class BookingController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.createBooking(request, driverId);
+  }
+
+  @GetMapping("/current-bookings")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  public List<Booking> getBookingsToUnlock() throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Long driverId = Long.parseLong(authentication.getName());
+    return bookingService.getBookingsToUnlock(driverId);
+  }
+
+  @PatchMapping("/{bookingId}/unlock")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  public void unlockChargingStation(@PathVariable Long bookingId) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Long driverId = Long.parseLong(authentication.getName());
+    bookingService.unlockChargingSlot(bookingId, driverId);
   }
 
   @PostMapping("/{bookingId}/finalize-payment")

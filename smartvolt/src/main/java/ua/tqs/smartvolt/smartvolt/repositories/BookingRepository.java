@@ -21,9 +21,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
   // Custom query methods can be defined here if needed
   // For example, find bookings by user ID, date range, etc.
 
-  Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
+  Optional<List<Booking>> findByDriver(EvDriver driver);
 
-  List<Booking> findByDriver(EvDriver evDriver);
+  List<Booking> findByStatus(String status);
+
+  Optional<Booking> findBySlotAndStartTime(ChargingSlot slot, LocalDateTime startTime);
 
   @Modifying // Indicates that this query will modify the database
   @Transactional // Ensures the operation runs within a transaction

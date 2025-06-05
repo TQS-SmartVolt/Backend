@@ -7,12 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -53,10 +56,16 @@ class BookingControllerIT {
   }
 
   String driverSvToken;
+
+  @Autowired private JdbcTemplate jdbcTemplate;
+
+  @Autowired private Flyway flyway;
   String operatorSvToken;
 
   @BeforeEach
   void setUp() {
+    flyway.clean(); // Clean the database before each test
+    flyway.migrate(); // Apply migrations to set up the database
     // Get token for the EV Driver
     driverSvToken =
         given()
@@ -94,7 +103,6 @@ class BookingControllerIT {
 
     BookingRequest request = new BookingRequest(slotId, startTime);
 
-    // CHANGE THIS LINE: Change String to Long
     Long bookingId =
         given()
             .contentType("application/json")
@@ -111,15 +119,13 @@ class BookingControllerIT {
                 "startTime",
                 is(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
             .body("driver.userId", equalTo(3))
-            .body("status", equalTo("Not Used"))
+            .body("status", equalTo("not_used"))
             .body("cost", equalTo(0.75F))
             .extract()
             .jsonPath() // Add .jsonPath() to get a JsonPath object
             .getLong("bookingId"); // Then use getLong() to explicitly extract as a Long
 
     assertNotNull(bookingId, "Booking ID should not be null, indicating successful creation");
-
-    System.out.println("DEBUG: Successfully created booking with ID: " + bookingId);
   }
 
   @Test
@@ -293,5 +299,49 @@ class BookingControllerIT {
         .body("monthEnergy", notNullValue());
 
     System.out.println("DEBUG: Successfully retrieved energy consumption data for the operator.");
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-27")
+  void whenGetCurrentBookings_thenReturnListOfBookings() {
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .get(getBaseUrl() + "/current-bookings")
+        .then()
+        .log()
+        .all()
+        .statusCode(HttpStatus.OK.value())
+        .body("size()", equalTo(2))
+        .body("driver.userId", hasItems(3, 3))
+        .body("status", hasItems("paid", "paid"))
+        .body("slot.slotId", hasItems(207, 209));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-27")
+  void whenUnlockChargingStation_thenStatusUpdated() {
+    Long bookingId = 301L;
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .patch(getBaseUrl() + "/" + bookingId + "/unlock")
+        .then()
+        .log()
+        .all()
+        .statusCode(HttpStatus.OK.value());
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .get(getBaseUrl() + "/current-bookings")
+        .then()
+        .body("find { it.bookingId == " + bookingId + " }.status", equalTo("used"));
   }
 }

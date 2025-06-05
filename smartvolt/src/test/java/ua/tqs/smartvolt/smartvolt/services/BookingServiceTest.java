@@ -86,14 +86,14 @@ public class BookingServiceTest {
     expectedBooking.setSlot(testSlot);
     expectedBooking.setDriver(testDriver);
     expectedBooking.setStartTime(validBookingRequest.getStartTime());
-    expectedBooking.setStatus("Not Used");
+    expectedBooking.setStatus("not_used");
     expectedBooking.setCost(1.5);
 
     preExistingBooking = new Booking();
     preExistingBooking.setBookingId(99L);
     preExistingBooking.setSlot(testSlot);
     preExistingBooking.setStartTime(validBookingRequest.getStartTime());
-    preExistingBooking.setStatus("Not Used");
+    preExistingBooking.setStatus("not_used");
 
     // Lenient stubbing for common repository calls by default
     lenient().when(evDriverRepository.findById(anyLong())).thenReturn(Optional.of(testDriver));
@@ -129,7 +129,7 @@ public class BookingServiceTest {
     assertThat(createdBooking.getSlot()).isEqualTo(expectedBooking.getSlot());
     assertThat(createdBooking.getDriver()).isEqualTo(expectedBooking.getDriver());
     assertThat(createdBooking.getStartTime()).isEqualTo(expectedBooking.getStartTime());
-    assertThat(createdBooking.getStatus()).isEqualTo("Not Used");
+    assertThat(createdBooking.getStatus()).isEqualTo("not_used");
     assertThat(createdBooking.getCost()).isEqualTo(expectedBooking.getCost());
 
     // Verify repository interactions
@@ -387,7 +387,7 @@ public class BookingServiceTest {
     Long bookingId = 123L;
     Booking bookingToFinalize = new Booking();
     bookingToFinalize.setBookingId(bookingId);
-    bookingToFinalize.setStatus("Not Used");
+    bookingToFinalize.setStatus("not_used");
     // Ensure createdAt is recent enough to not be expired
     bookingToFinalize.setCreatedAt(LocalDateTime.now());
 
@@ -398,7 +398,7 @@ public class BookingServiceTest {
     bookingService.finalizeBookingPayment(bookingId);
 
     // Assert
-    assertThat(bookingToFinalize.getStatus()).isEqualTo("Paid");
+    assertThat(bookingToFinalize.getStatus()).isEqualTo("paid");
     verify(bookingRepository, times(1)).findById(bookingId);
     verify(bookingRepository, times(1)).save(bookingToFinalize);
     verify(bookingRepository, never()).delete(any(Booking.class)); // Ensure not deleted
@@ -431,7 +431,7 @@ public class BookingServiceTest {
     Long bookingId = 456L;
     Booking expiredBooking = new Booking();
     expiredBooking.setBookingId(bookingId);
-    expiredBooking.setStatus("Not Used");
+    expiredBooking.setStatus("not_used");
     // Set createdAt to be more than 5 minutes ago
     expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(6));
 
@@ -456,7 +456,7 @@ public class BookingServiceTest {
     Long bookingId = 789L;
     Booking paidBooking = new Booking();
     paidBooking.setBookingId(bookingId);
-    paidBooking.setStatus("Paid"); // Already paid
+    paidBooking.setStatus("paid"); // Already paid
     paidBooking.setCreatedAt(LocalDateTime.now().minusMinutes(1)); // Not expired
 
     when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(paidBooking));
@@ -470,6 +470,97 @@ public class BookingServiceTest {
     verify(bookingRepository, times(1)).findById(bookingId);
     verify(bookingRepository, never()).save(any(Booking.class)); // Should not save
     verify(bookingRepository, never()).delete(any(Booking.class)); // Should not delete
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void getBookingsToUnlock_InvalidDriver_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long invalidDriverId = 999L;
+    when(evDriverRepository.findById(invalidDriverId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.getBookingsToUnlock(invalidDriverId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("Driver not found with id: " + invalidDriverId);
+
+    verify(evDriverRepository, times(1)).findById(invalidDriverId);
+    verify(bookingRepository, never()).findByDriver(any());
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void deleteNotUsedBookings_DeletesExpiredNotUsedBookings() {
+    // Arrange
+    Booking expiredBooking = new Booking();
+    expiredBooking.setBookingId(1L);
+    expiredBooking.setStatus("not_used");
+    expiredBooking.setCreatedAt(LocalDateTime.now().minusMinutes(10));
+
+    Booking freshBooking = new Booking();
+    freshBooking.setBookingId(2L);
+    freshBooking.setStatus("not_used");
+    freshBooking.setCreatedAt(LocalDateTime.now());
+
+    List<Booking> bookings = List.of(expiredBooking, freshBooking);
+
+    // Act
+    bookingService.deleteNotUsedBookings(bookings);
+
+    // Assert
+    verify(bookingRepository, times(1)).delete(expiredBooking);
+    verify(bookingRepository, never()).delete(freshBooking);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-27")
+  void unlockChargingSlot_DriverDoesNotMatch_ThrowsException() {
+    // Arrange
+    Long bookingId = 1L;
+    Long driverId = 2L;
+
+    Booking booking = new Booking();
+    booking.setBookingId(bookingId);
+    EvDriver bookingDriver = new EvDriver();
+    bookingDriver.setUserId(3L);
+    booking.setDriver(bookingDriver);
+
+    EvDriver evDriver = new EvDriver();
+    evDriver.setUserId(driverId);
+
+    when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+    when(evDriverRepository.findById(driverId)).thenReturn(Optional.of(evDriver));
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.unlockChargingSlot(bookingId, driverId))
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining("Driver does not match booking driver");
+  }
+
+  @Test
+  @Tag("UnitTest")
+  void unlockChargingSlot_BookingNotPaidOrAlreadyUsed_ThrowsException() {
+    // Arrange
+    Long bookingId = 1L;
+    Long driverId = 2L;
+
+    Booking booking = new Booking();
+    booking.setBookingId(bookingId);
+    booking.setStatus("not_used"); // Not "paid"
+    EvDriver evDriver = new EvDriver();
+    evDriver.setUserId(driverId);
+    booking.setDriver(evDriver);
+
+    when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+    when(evDriverRepository.findById(driverId)).thenReturn(Optional.of(evDriver));
+
+    // Act & Assert
+    assertThatThrownBy(() -> bookingService.unlockChargingSlot(bookingId, driverId))
+        .isInstanceOf(Exception.class)
+        .hasMessageContaining("Booking is not paid or already used");
   }
 
   @Test

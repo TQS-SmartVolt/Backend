@@ -22,6 +22,10 @@ import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 
 @Service
 public class BookingService {
+
+  private static final String DRIVER_NOT_FOUND_MSG = "Driver not found with id: ";
+  private static final String NOT_USED_STATUS = "not_used";
+
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
@@ -41,8 +45,7 @@ public class BookingService {
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Driver not found with id: " + driverId));
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     final Long slotId = request.getSlotId();
     ChargingSlot slot =
@@ -109,10 +112,75 @@ public class BookingService {
     booking.setDriver(evDriver);
     booking.setSlot(slot);
     booking.setStartTime(startTime);
-    booking.setStatus("Not Used");
+    booking.setStatus(NOT_USED_STATUS);
     booking.setCost(cost);
 
     return bookingRepository.save(booking);
+  }
+
+  public List<Booking> getBookingsToUnlock(Long driverId) throws Exception {
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
+
+    List<Booking> bookings =
+        bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
+    deleteNotUsedBookings(bookings);
+
+    return bookings.stream()
+        .filter(
+            booking -> {
+              if (booking.getStatus().equals("used")) {
+                LocalDateTime now = LocalDateTime.now();
+                // "Used" bookings: only include if now is within 30 minutes after start time
+                return !now.isBefore(booking.getStartTime())
+                    && now.isBefore(booking.getStartTime().plusMinutes(30));
+              } else if (booking.getStatus().equals("paid")) {
+                // "paid" bookings: include all from now on
+                return !booking.getStartTime().isBefore(LocalDateTime.now().minusMinutes(30));
+              }
+              return false;
+            })
+        .toList();
+  }
+
+  public void deleteNotUsedBookings(List<Booking> bookings) {
+    LocalDateTime now = LocalDateTime.now();
+    List<Booking> notUsedBookings =
+        bookings.stream().filter(booking -> booking.getStatus().equals(NOT_USED_STATUS)).toList();
+
+    for (Booking booking : notUsedBookings) {
+      LocalDateTime createdAt = booking.getCreatedAt();
+      if (createdAt.plusMinutes(5).isBefore(now)) {
+        bookingRepository.delete(booking);
+      }
+    }
+  }
+
+  public void unlockChargingSlot(Long bookingId, Long driverId) throws Exception {
+    Booking booking =
+        bookingRepository
+            .findById(bookingId)
+            .orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
+
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+
+    if (!booking.getDriver().equals(evDriver)) {
+      throw new Exception("Driver does not match booking driver");
+    }
+
+    if (booking.getStatus().equals("paid")) {
+      booking.setStatus("used");
+      ChargingSlot slot = booking.getSlot();
+      slot.setLocked(false);
+      chargingSlotRepository.save(slot);
+    } else {
+      throw new Exception("Booking is not paid or already used");
+    }
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
@@ -126,8 +194,8 @@ public class BookingService {
       throw new Exception("Booking expired");
     }
 
-    if (booking.getStatus().equals("Not Used")) {
-      booking.setStatus("Paid");
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
+      booking.setStatus("paid");
       bookingRepository.save(booking);
     } else {
       throw new Exception("Booking already paid");
@@ -137,7 +205,7 @@ public class BookingService {
   public void cancelBooking(Long bookingId) throws Exception {
     Booking booking =
         bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
-    if (booking.getStatus().equals("Not Used")) {
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {
       throw new Exception("Booking cannot be cancelled");

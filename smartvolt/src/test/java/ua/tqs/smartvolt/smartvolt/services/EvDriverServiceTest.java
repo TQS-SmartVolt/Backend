@@ -99,19 +99,19 @@ public class EvDriverServiceTest {
     // Booking 1: Slow charging
     LocalDateTime startTime1 =
         LocalDateTime.now().minusDays(1).withHour(10).withMinute(0).withSecond(0).withNano(0);
-    booking1 = new Booking(testDriver, slotSlow, startTime1, "Not Used", costSlow);
+    booking1 = new Booking(testDriver, slotSlow, startTime1, "not_used", costSlow);
     booking1.setBookingId(1L);
 
     // Booking 2: Medium charging
     LocalDateTime startTime2 =
         LocalDateTime.now().minusDays(2).withHour(14).withMinute(30).withSecond(0).withNano(0);
-    booking2 = new Booking(testDriver, slotMedium, startTime2, "Not Used", costMedium);
+    booking2 = new Booking(testDriver, slotMedium, startTime2, "not_used", costMedium);
     booking2.setBookingId(2L);
 
     // Booking 3: Fast charging
     LocalDateTime startTime3 =
         LocalDateTime.now().minusDays(3).withHour(11).withMinute(0).withSecond(0).withNano(0);
-    booking3 = new Booking(testDriver, slotFast, startTime3, "Not Used", costFast);
+    booking3 = new Booking(testDriver, slotFast, startTime3, "not_used", costFast);
     booking3.setBookingId(3L);
 
     // Common stubbing for evDriverRepository.findById
@@ -125,7 +125,7 @@ public class EvDriverServiceTest {
       throws ResourceNotFoundException {
     // Arrange
     List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     List<ChargingHistoryResponse> history =
@@ -196,7 +196,7 @@ public class EvDriverServiceTest {
     // Arrange
     // evDriverRepository.findById already returns testDriver from @BeforeEach
     when(bookingRepository.findByDriver(testDriver))
-        .thenReturn(Arrays.asList()); // Return empty list of bookings
+        .thenReturn(Optional.of(Arrays.asList())); // Return empty list of bookings
 
     // Act
     List<ChargingHistoryResponse> history =
@@ -310,7 +310,7 @@ public class EvDriverServiceTest {
     booking5.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
 
     List<Booking> driverBookings = Arrays.asList(booking4, booking5);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     ConsumptionResponse consumptionResponse =
@@ -370,7 +370,8 @@ public class EvDriverServiceTest {
   void getEvDriverConsumption_ValidDriverNoBookings_ReturnsEmptyConsumptionResponse()
       throws ResourceNotFoundException {
     // Arrange
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+    when(bookingRepository.findByDriver(testDriver))
+        .thenReturn(Optional.of(Collections.emptyList()));
 
     // Act
     ConsumptionResponse consumptionResponse =
@@ -422,7 +423,7 @@ public class EvDriverServiceTest {
     booking7.setCreatedAt(today.minusMinutes(1)); // Ensure not expired
 
     List<Booking> driverBookings = Arrays.asList(booking6, booking7);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     SpendingResponse spendingResponse = evDriverService.getEvDriverSpending(testDriver.getUserId());
@@ -480,7 +481,8 @@ public class EvDriverServiceTest {
   void getEvDriverSpending_ValidDriverNoBookings_ReturnsEmptySpendingResponse()
       throws ResourceNotFoundException {
     // Arrange
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+    when(bookingRepository.findByDriver(testDriver))
+        .thenReturn(Optional.of(Collections.emptyList()));
 
     // Act
     SpendingResponse spendingResponse = evDriverService.getEvDriverSpending(testDriver.getUserId());
@@ -504,7 +506,8 @@ public class EvDriverServiceTest {
   @Requirement("SV-31")
   void getEvDriverInfo_ValidDriver_ReturnsUserInfoResponse() throws ResourceNotFoundException {
     // Arrange
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+    when(bookingRepository.findByDriver(testDriver))
+        .thenReturn(Optional.of(Collections.emptyList()));
 
     // Act
     UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
@@ -545,7 +548,7 @@ public class EvDriverServiceTest {
       throws ResourceNotFoundException {
     // Arrange
     List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());

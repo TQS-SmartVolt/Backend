@@ -174,7 +174,7 @@ public class DataLoaderUAT implements CommandLineRunner {
     double price1 = testChargingSlot1.getPricePerKWh();
     double cost1 = (power1 * 0.5) * price1; // Correct cost calculation
     Booking booking1 =
-        new Booking(newTestEVDriver, testChargingSlot1, booking1Time, "Not Used", cost1);
+        new Booking(newTestEVDriver, testChargingSlot1, booking1Time, "not_used", cost1);
     bookingRepository.save(booking1);
     System.out.printf(
         "UAT Booking 1 created for driver %s, slot %s, cost %.2f%n",
