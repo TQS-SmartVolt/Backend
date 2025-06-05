@@ -83,4 +83,4 @@ jobs:
           npm install -g @lhci/cli@0.14.x
           npm run lhci:${{ matrix.target }}
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
