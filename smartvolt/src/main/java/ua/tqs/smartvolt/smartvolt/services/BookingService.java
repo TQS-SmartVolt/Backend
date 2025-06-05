@@ -210,7 +210,8 @@ public class BookingService {
     }
   }
 
-  public void cancelBooking(Long bookingId) throws ResourceNotFoundException, IllegalStateException {
+  public void cancelBooking(Long bookingId)
+      throws ResourceNotFoundException, IllegalStateException {
     Booking booking =
         bookingRepository
             .findById(bookingId)

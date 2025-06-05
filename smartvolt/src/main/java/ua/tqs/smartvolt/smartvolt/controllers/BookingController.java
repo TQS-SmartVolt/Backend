@@ -35,7 +35,8 @@ public class BookingController {
   @Operation(
       summary = "Create a new booking",
       description = "Allows an EV driver to create a new booking for a charging station.")
-  public Booking createBooking(@RequestBody BookingRequest request) throws ResourceNotFoundException, SlotAlreadyBookedException {
+  public Booking createBooking(@RequestBody BookingRequest request)
+      throws ResourceNotFoundException, SlotAlreadyBookedException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.createBooking(request, driverId);

@@ -163,7 +163,8 @@ class BookingServiceTest {
     when(evDriverRepository.findById(testDriver.getUserId())).thenReturn(Optional.of(testDriver));
 
     // Act & Assert
-    assertThatThrownBy(() -> bookingService.createBooking(requestWithInvalidSlot, testDriver.getUserId()))
+    assertThatThrownBy(
+            () -> bookingService.createBooking(requestWithInvalidSlot, testDriver.getUserId()))
         .isInstanceOf(ResourceNotFoundException.class)
         .hasMessageContaining("Slot not found with id: " + invalidSlotId);
 
@@ -367,7 +368,8 @@ class BookingServiceTest {
     when(chargingSlotRepository.findById(testSlot.getSlotId())).thenReturn(Optional.of(testSlot));
 
     // Act & Assert
-    assertThatThrownBy(() -> bookingService.createBooking(requestWithPastTime, testDriver.getUserId()))
+    assertThatThrownBy(
+            () -> bookingService.createBooking(requestWithPastTime, testDriver.getUserId()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Cannot create a booking in the past.");
 
@@ -664,8 +666,7 @@ class BookingServiceTest {
     // Act & Assert
     ResourceNotFoundException exception =
         assertThrows(
-            ResourceNotFoundException.class,
-            () -> bookingService.getBookingDetails(bookingId));
+            ResourceNotFoundException.class, () -> bookingService.getBookingDetails(bookingId));
     assertTrue(exception.getMessage().contains("Booking not found with id: " + bookingId));
     verify(bookingRepository, times(1)).findById(bookingId);
   }
