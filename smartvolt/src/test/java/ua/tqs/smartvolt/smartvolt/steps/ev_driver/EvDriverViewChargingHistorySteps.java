@@ -8,6 +8,7 @@ import io.cucumber.java.en.Then;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ChargingHistoryPage;
 import ua.tqs.smartvolt.smartvolt.steps.common.TestContext;
@@ -24,7 +25,7 @@ public class EvDriverViewChargingHistorySteps {
   // and bookingDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12:
   // false, })
   private static final DateTimeFormatter UI_DATE_TIME_FORMATTER =
-      DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm");
+      DateTimeFormatter.ofPattern("MMM dd, yyyy, HH:mm", Locale.ENGLISH);
 
   public EvDriverViewChargingHistorySteps(TestContext context) {
     this.context = context;
@@ -88,9 +89,13 @@ public class EvDriverViewChargingHistorySteps {
             .withSecond(0) // Ensure seconds are 0 for consistent comparison
             .withNano(0); // Ensure nanos are 0 for consistent comparison
 
+    System.out.println(
+        String.format("DEBUG: Expected LocalDateTime: %s", expectedDateTime.toString()));
+
     // Format the expected LocalDateTime to match the frontend's display format
     String expectedFormattedDateTime = expectedDateTime.format(UI_DATE_TIME_FORMATTER);
-
+    System.out.println(
+        String.format("DEBUG: Expected formatted date and time: %s", expectedFormattedDateTime));
     // Column order: Date, Station, Charging Speed, Charging Power (kW), Energy Delivered (kWh),
     // Price per kWh, Cost
     assertEquals(

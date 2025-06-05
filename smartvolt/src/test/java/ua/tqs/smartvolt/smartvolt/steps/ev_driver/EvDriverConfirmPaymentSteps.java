@@ -54,4 +54,28 @@ public class EvDriverConfirmPaymentSteps {
     assertTrue(
         paymentPage.arePaymentDetailsDisplayed(), "All payment details should be displayed.");
   }
+
+  @And("I insert the card details with number {string}, expiration date {string}, and CVV {string}")
+  public void iInsertTheCardDetailsWithNumberExpirationDateAndCVV(
+      String cardNumber, String expirationDate, String cvv) {
+    System.out.println(
+        "DEBUG: EvDriverConfirmPaymentSteps.iInsertTheCardDetailsWithNumberExpirationDateAndCVV() - Inserting card details.");
+    paymentPage.fillPaymentForm(cardNumber, expirationDate, cvv);
+  }
+
+  @And("I click the confirm payment button")
+  public void iClickTheConfirmPaymentButton() {
+    System.out.println(
+        "DEBUG: EvDriverConfirmPaymentSteps.iClickTheConfirmPaymentButton() - Clicking confirm payment button.");
+    paymentPage.confirmPayment();
+  }
+
+  @Then("I should see the payment confirmation dialog")
+  public void iShouldSeeThePaymentConfirmationDialog() {
+    System.out.println(
+        "DEBUG: EvDriverConfirmPaymentSteps.iShouldSeeThePaymentConfirmationDialog() - Verifying payment confirmation dialog.");
+    assertTrue(
+        paymentPage.isPaymentConfirmationDialogDisplayed(),
+        "Payment confirmation dialog should be displayed.");
+  }
 }

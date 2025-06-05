@@ -32,6 +32,24 @@ public class PaymentPage extends Website {
   @FindBy(css = "[data-testid='payment-total-cost']")
   private WebElement paymentTotalCostDisplay;
 
+  @FindBy(css = "[data-testid='card-number-input']")
+  private WebElement cardNumberInput;
+
+  @FindBy(css = "[data-testid='expiration-date-input']")
+  private WebElement expirationDateInput;
+
+  @FindBy(css = "[data-testid='cvc-input']")
+  private WebElement cvcInput;
+
+  @FindBy(css = "[data-testid='confirm-payment-button']")
+  private WebElement confirmPaymentButton;
+
+  @FindBy(css = "[data-testid='booking-confirmation-dialog']")
+  private WebElement paymentConfirmationDialog;
+
+  @FindBy(css = "[data-testid='confirm-booking-button']")
+  private WebElement dialogConfirmButton;
+
   // --- Page Actions & Assertions ---
 
   /**
@@ -101,6 +119,75 @@ public class PaymentPage extends Website {
           "ERROR: PaymentPage.arePaymentDetailsDisplayed() - Failed to verify payment details visibility: "
               + e.getMessage());
       return false;
+    }
+  }
+
+  /**
+   * Fills in the payment form with the provided card details.
+   *
+   * @param cardNumber The card number to enter.
+   * @param expirationDate The expiration date in MM/YY format.
+   * @param cvc The CVC code for the card.
+   */
+  public void fillPaymentForm(String cardNumber, String expirationDate, String cvc) {
+    System.out.println("DEBUG: PaymentPage.fillPaymentForm() - Filling payment form.");
+    try {
+      wait.until(ExpectedConditions.visibilityOf(cardNumberInput)).sendKeys(cardNumber);
+      wait.until(ExpectedConditions.visibilityOf(expirationDateInput)).sendKeys(expirationDate);
+      wait.until(ExpectedConditions.visibilityOf(cvcInput)).sendKeys(cvc);
+      System.out.println(
+          "DEBUG: PaymentPage.fillPaymentForm() - Payment form filled successfully.");
+    } catch (Exception e) {
+      System.err.println(
+          "ERROR: PaymentPage.fillPaymentForm() - Failed to fill payment form: " + e.getMessage());
+    }
+  }
+
+  /** Clicks the confirm payment button to submit the payment. */
+  public void confirmPayment() {
+    System.out.println("DEBUG: PaymentPage.confirmPayment() - Clicking confirm payment button.");
+    try {
+      wait.until(ExpectedConditions.elementToBeClickable(confirmPaymentButton)).click();
+      System.out.println("DEBUG: PaymentPage.confirmPayment() - Payment confirmed successfully.");
+    } catch (Exception e) {
+      System.err.println(
+          "ERROR: PaymentPage.confirmPayment() - Failed to confirm payment: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Checks if the payment confirmation dialog is displayed.
+   *
+   * @return true if the payment confirmation dialog is visible, false otherwise.
+   */
+  public boolean isPaymentConfirmationDialogDisplayed() {
+    System.out.println(
+        "DEBUG: PaymentPage.isPaymentConfirmationDialogDisplayed() - Entering method.");
+    try {
+      wait.until(ExpectedConditions.visibilityOf(paymentConfirmationDialog));
+      System.out.println(
+          "DEBUG: PaymentPage.isPaymentConfirmationDialogDisplayed() - Payment confirmation dialog is visible.");
+      return paymentConfirmationDialog.isDisplayed();
+    } catch (Exception e) {
+      System.err.println(
+          "ERROR: PaymentPage.isPaymentConfirmationDialogDisplayed() - Payment confirmation dialog not displayed: "
+              + e.getMessage());
+      return false;
+    }
+  }
+
+  /** Clicks the confirm button in the payment confirmation dialog. */
+  public void clickConfirmPaymentDialogButton() {
+    System.out.println(
+        "DEBUG: PaymentPage.clickConfirmPaymentDialogButton() - Clicking confirm button in payment dialog.");
+    try {
+      wait.until(ExpectedConditions.elementToBeClickable(dialogConfirmButton)).click();
+      System.out.println(
+          "DEBUG: PaymentPage.clickConfirmPaymentDialogButton() - Confirm button clicked successfully.");
+    } catch (Exception e) {
+      System.err.println(
+          "ERROR: PaymentPage.clickConfirmPaymentDialogButton() - Failed to click confirm button: "
+              + e.getMessage());
     }
   }
 }

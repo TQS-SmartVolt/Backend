@@ -35,7 +35,10 @@ INSERT INTO charging_station (station_id, name, latitude, longitude, address, av
 -- Station Slow (102) - only Slow slots
 INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
 (201, TRUE, 0.15, 10, 'Slow', 102),
-(202, TRUE, 0.15, 10, 'Slow', 102);
+(202, TRUE, 0.15, 10, 'Slow', 102),
+(207, TRUE, 0.15, 10, 'Slow', 102),
+(208, TRUE, 0.15, 10, 'Slow', 102),
+(209, TRUE, 0.15, 10, 'Slow', 102);
 
 -- Station Medium (103) - only Medium slots
 INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
@@ -49,3 +52,8 @@ INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_spe
 INSERT INTO charging_slot (slot_id, is_locked, price_perkwh, power, charging_speed, station_id) VALUES
 (205, TRUE, 0.18, 10, 'Slow', 105),
 (206, TRUE, 0.28, 20, 'Medium', 105);
+
+INSERT INTO booking (booking_id, driver_id, slot_id, start_time, status, cost) VALUES
+(301, 3, 207, date_trunc('hour', NOW()) + INTERVAL '30 minutes' * floor(date_part('minute', NOW()) / 30.0), 'paid', 1.5), -- Booking for Test Driver on Station Slow
+(302, 3, 208, date_trunc('hour', NOW()) - INTERVAL '2 hour', 'not_used', 2.5),
+(303, 3, 209, date_trunc('hour', NOW()) + INTERVAL '2 hour', 'paid', 2.5); -- Booking for Test Driver on Station Medium

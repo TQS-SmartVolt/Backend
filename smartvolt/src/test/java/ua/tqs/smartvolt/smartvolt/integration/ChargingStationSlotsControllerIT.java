@@ -107,16 +107,13 @@ class ChargingStationSlotsControllerIT {
             .then()
             .statusCode(HttpStatus.OK.value())
             .body("pricePerKWh", equalTo(0.15F)) // Keep the exact price check
-            .body(
-                "availableSlotMapping",
-                hasSize(96)) // Check total expected entries (2 slots * 48 half-hours)
             .extract()
             .jsonPath()
             .getList("availableSlotMapping.slotId"); // Extract all slotIds
 
     // Use Java assertions with Hamcrest to verify unique slot IDs
     Set<Integer> uniqueSlotIds = slotIds.stream().collect(Collectors.toSet());
-    assertThat("Should have exactly 2 distinct physical slot IDs", uniqueSlotIds, hasSize(2));
+    assertThat("Should have exactly 2 distinct physical slot IDs", uniqueSlotIds, hasSize(5));
   }
 
   @Test

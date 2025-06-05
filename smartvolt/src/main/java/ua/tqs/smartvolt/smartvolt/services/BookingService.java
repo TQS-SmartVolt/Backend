@@ -1,13 +1,19 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
+import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
+import ua.tqs.smartvolt.smartvolt.models.ChargingSession;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
 import ua.tqs.smartvolt.smartvolt.repositories.BookingRepository;
@@ -16,6 +22,10 @@ import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 
 @Service
 public class BookingService {
+
+  private static final String DRIVER_NOT_FOUND_MSG = "Driver not found with id: ";
+  private static final String NOT_USED_STATUS = "not_used";
+
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
@@ -35,8 +45,7 @@ public class BookingService {
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Driver not found with id: " + driverId));
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     final Long slotId = request.getSlotId();
     ChargingSlot slot =
@@ -103,10 +112,75 @@ public class BookingService {
     booking.setDriver(evDriver);
     booking.setSlot(slot);
     booking.setStartTime(startTime);
-    booking.setStatus("Not Used");
+    booking.setStatus(NOT_USED_STATUS);
     booking.setCost(cost);
 
     return bookingRepository.save(booking);
+  }
+
+  public List<Booking> getBookingsToUnlock(Long driverId) throws Exception {
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
+
+    List<Booking> bookings =
+        bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
+    deleteNotUsedBookings(bookings);
+
+    return bookings.stream()
+        .filter(
+            booking -> {
+              if (booking.getStatus().equals("used")) {
+                LocalDateTime now = LocalDateTime.now();
+                // "Used" bookings: only include if now is within 30 minutes after start time
+                return !now.isBefore(booking.getStartTime())
+                    && now.isBefore(booking.getStartTime().plusMinutes(30));
+              } else if (booking.getStatus().equals("paid")) {
+                // "paid" bookings: include all from now on
+                return !booking.getStartTime().isBefore(LocalDateTime.now().minusMinutes(30));
+              }
+              return false;
+            })
+        .toList();
+  }
+
+  public void deleteNotUsedBookings(List<Booking> bookings) {
+    LocalDateTime now = LocalDateTime.now();
+    List<Booking> notUsedBookings =
+        bookings.stream().filter(booking -> booking.getStatus().equals(NOT_USED_STATUS)).toList();
+
+    for (Booking booking : notUsedBookings) {
+      LocalDateTime createdAt = booking.getCreatedAt();
+      if (createdAt.plusMinutes(5).isBefore(now)) {
+        bookingRepository.delete(booking);
+      }
+    }
+  }
+
+  public void unlockChargingSlot(Long bookingId, Long driverId) throws Exception {
+    Booking booking =
+        bookingRepository
+            .findById(bookingId)
+            .orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
+
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(driverId)
+            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+
+    if (!booking.getDriver().equals(evDriver)) {
+      throw new Exception("Driver does not match booking driver");
+    }
+
+    if (booking.getStatus().equals("paid")) {
+      booking.setStatus("used");
+      ChargingSlot slot = booking.getSlot();
+      slot.setLocked(false);
+      chargingSlotRepository.save(slot);
+    } else {
+      throw new Exception("Booking is not paid or already used");
+    }
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
@@ -120,8 +194,8 @@ public class BookingService {
       throw new Exception("Booking expired");
     }
 
-    if (booking.getStatus().equals("Not Used")) {
-      booking.setStatus("Paid");
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
+      booking.setStatus("paid");
       bookingRepository.save(booking);
     } else {
       throw new Exception("Booking already paid");
@@ -131,10 +205,51 @@ public class BookingService {
   public void cancelBooking(Long bookingId) throws Exception {
     Booking booking =
         bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
-    if (booking.getStatus().equals("Not Used")) {
+    if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {
       throw new Exception("Booking cannot be cancelled");
     }
+  }
+
+  public OperatorEnergyResponse getEnergyConsumption() {
+    OperatorEnergyResponse response = new OperatorEnergyResponse();
+    List<Booking> bookings = bookingRepository.findAll();
+    Map<String, Double> monthEnergy = new LinkedHashMap<>();
+    LocalDateTime today = LocalDateTime.now();
+    LocalDateTime oneYearAgo = today.minusYears(1).plusMonths(1);
+
+    YearMonth startMonth = YearMonth.from(oneYearAgo).plusMonths(1);
+    YearMonth endMonth = YearMonth.from(today);
+    while (!startMonth.isAfter(endMonth)) {
+      String monthName = startMonth.getMonth().toString().substring(0, 3).toLowerCase();
+      monthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+      monthEnergy.put(monthName, 0.0);
+      startMonth = startMonth.plusMonths(1);
+    }
+
+    for (Booking booking : bookings) {
+      if (booking != null && "used".equals(booking.getStatus())) {
+        LocalDateTime startTime = booking.getStartTime();
+        if (startTime.isAfter(oneYearAgo) && startTime.isBefore(today)) {
+          String month = startTime.getMonth().toString().substring(0, 3).toLowerCase();
+          month =
+              month.substring(0, 1).toUpperCase() + month.substring(1); // Capitalize first letter
+          ChargingSession session = booking.getChargingSession();
+          double energy = session.getEnergyDelivered();
+          monthEnergy.put(month, monthEnergy.getOrDefault(month, 0.0) + energy);
+        }
+      }
+    }
+    response.setMonthEnergy(monthEnergy);
+    double totalEnergy = monthEnergy.values().stream().mapToDouble(Double::doubleValue).sum();
+    response.setTotalEnergy(totalEnergy);
+    double averageEnergyPerMonth =
+        Math.round(
+                monthEnergy.values().stream().mapToDouble(Double::doubleValue).average().orElse(0.0)
+                    * 100.0)
+            / 100.0;
+    response.setAverageEnergyPerMonth(averageEnergyPerMonth);
+    return response;
   }
 }

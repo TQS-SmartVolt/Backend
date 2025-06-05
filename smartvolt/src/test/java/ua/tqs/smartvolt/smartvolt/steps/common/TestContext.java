@@ -9,6 +9,8 @@ import ua.tqs.smartvolt.smartvolt.pages.ev_driver.BookingPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ChargingHistoryPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.PaymentPage;
 import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStationsMapPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.ServiceStatisticsPage;
+import ua.tqs.smartvolt.smartvolt.pages.ev_driver.UnlockPage;
 import ua.tqs.smartvolt.smartvolt.pages.operator.BackOfficePage;
 
 public class TestContext {
@@ -20,6 +22,8 @@ public class TestContext {
   private BookingPage bookingPage;
   private PaymentPage paymentPage;
   private ChargingHistoryPage chargingHistoryPage;
+  private UnlockPage unlockPage;
+  private ServiceStatisticsPage serviceStatisticsPage;
 
   public static String FRONTEND_PROTOCOL = "http";
   public static String FRONTEND_IP = MyTestConfiguration.getHost();
@@ -48,7 +52,9 @@ public class TestContext {
     this.bookingPage = new BookingPage(driver);
     this.paymentPage = new PaymentPage(driver);
     this.chargingHistoryPage = new ChargingHistoryPage(driver);
+    this.serviceStatisticsPage = new ServiceStatisticsPage(driver);
     this.website = new Website(driver);
+    this.unlockPage = new UnlockPage(driver);
   }
 
   public WebDriver getDriver() {
@@ -81,6 +87,14 @@ public class TestContext {
 
   public ChargingHistoryPage getChargingHistoryPage() {
     return chargingHistoryPage;
+  }
+
+  public UnlockPage getUnlockPage() {
+    return unlockPage;
+  }
+
+  public ServiceStatisticsPage getServiceStatisticsPage() {
+    return serviceStatisticsPage;
   }
 
   public void quit() {
