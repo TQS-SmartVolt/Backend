@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
+import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.services.BookingService;
 
@@ -45,7 +46,7 @@ public class BookingController {
 
   @PatchMapping("/{bookingId}/unlock")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
-  public void unlockChargingStation(@PathVariable Long bookingId) throws Exception {
+  public void unlockChargingSlot(@PathVariable Long bookingId) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     bookingService.unlockChargingSlot(bookingId, driverId);
@@ -55,6 +56,12 @@ public class BookingController {
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
     bookingService.finalizeBookingPayment(bookingId);
+  }
+
+  @GetMapping("/{bookingId}")
+  @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  public Booking getBooking(@PathVariable Long bookingId) throws ResourceNotFoundException {
+    return bookingService.getBookingDetails(bookingId);
   }
 
   @DeleteMapping("/{bookingId}")

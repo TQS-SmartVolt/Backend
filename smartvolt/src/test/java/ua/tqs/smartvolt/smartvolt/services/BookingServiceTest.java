@@ -2,6 +2,10 @@ package ua.tqs.smartvolt.smartvolt.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
@@ -42,6 +46,7 @@ public class BookingServiceTest {
   @Mock private EvDriverRepository evDriverRepository;
   @Mock private ChargingSlotRepository chargingSlotRepository;
   @Mock private ChargingSessionRepository chargingSessionRepository;
+  @Mock private ChargingSessionService chargingSessionService;
 
   private BookingService bookingService;
 
@@ -56,7 +61,7 @@ public class BookingServiceTest {
   @BeforeEach
   void setUp() {
     bookingService =
-        new BookingService(bookingRepository, evDriverRepository, chargingSlotRepository);
+        new BookingService(bookingRepository, evDriverRepository, chargingSlotRepository, chargingSessionService);
 
     testDriver = new EvDriver();
     testDriver.setUserId(101L);
@@ -631,5 +636,37 @@ public class BookingServiceTest {
     booking5.setChargingSession(session5);
 
     return List.of(booking1, booking2, booking3, booking4, booking5);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-28")
+  void getBookingDetails_ValidId_ReturnsBooking() throws ResourceNotFoundException {
+      // Arrange
+      Long bookingId = 1L;
+      Booking booking = new Booking();
+      booking.setBookingId(bookingId);
+      when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+      // Act
+      Booking result = bookingService.getBookingDetails(bookingId);
+      // Assert
+      assertNotNull(result);
+      assertEquals(bookingId, result.getBookingId());
+      verify(bookingRepository, times(1)).findById(bookingId);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-28")
+  void getBookingDetails_InvalidId_ThrowsException() {
+      // Arrange
+      Long bookingId = 2L;
+      when(bookingRepository.findById(bookingId)).thenReturn(Optional.empty());
+      // Act & Assert
+      ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+          bookingService.getBookingDetails(bookingId);
+      });
+      assertTrue(exception.getMessage().contains("Booking not found with id: " + bookingId));
+      verify(bookingRepository, times(1)).findById(bookingId);
   }
 }

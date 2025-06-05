@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Booking {
@@ -33,9 +34,11 @@ public class Booking {
   private double cost;
 
   @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private ChargingSession chargingSession;
 
   @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private Payment payment;
 
   @Column(nullable = false, updatable = false)
@@ -146,10 +149,6 @@ public class Booking {
         + '\''
         + ", cost="
         + cost
-        + ", chargingSession="
-        + chargingSession
-        + ", payment="
-        + payment
         + ", createdAt="
         + createdAt
         + '}';

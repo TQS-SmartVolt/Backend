@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class ChargingSession {
@@ -18,6 +19,7 @@ public class ChargingSession {
 
   @OneToOne
   @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
+  @JsonBackReference
   private Booking booking;
 
   public ChargingSession() {}

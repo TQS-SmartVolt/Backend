@@ -29,11 +29,14 @@ public class BookingService {
   private final BookingRepository bookingRepository;
   private final EvDriverRepository evDriverRepository;
   private final ChargingSlotRepository chargingSlotRepository;
+  private final ChargingSessionService chargingSessionService;
 
   public BookingService(
       BookingRepository bookingRepository,
       EvDriverRepository evDriverRepository,
-      ChargingSlotRepository chargingSlotRepository) {
+      ChargingSlotRepository chargingSlotRepository, 
+      ChargingSessionService chargingSessionService) {
+    this.chargingSessionService = chargingSessionService;
     this.bookingRepository = bookingRepository;
     this.evDriverRepository = evDriverRepository;
     this.chargingSlotRepository = chargingSlotRepository;
@@ -169,6 +172,8 @@ public class BookingService {
             .findById(driverId)
             .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
 
+    chargingSessionService.createChargingSession(booking);
+
     if (!booking.getDriver().equals(evDriver)) {
       throw new Exception("Driver does not match booking driver");
     }
@@ -251,5 +256,11 @@ public class BookingService {
             / 100.0;
     response.setAverageEnergyPerMonth(averageEnergyPerMonth);
     return response;
+  }
+
+  public Booking getBookingDetails(Long bookingId) throws ResourceNotFoundException {
+    return bookingRepository
+        .findById(bookingId)
+        .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
   }
 }

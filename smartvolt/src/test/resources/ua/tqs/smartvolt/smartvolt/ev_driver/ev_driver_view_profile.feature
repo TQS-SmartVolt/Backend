@@ -8,4 +8,4 @@ Feature: EV Driver View Profile
 
   Scenario: Verify profile
     And the user is on page "/service/account"
-    Then I should see name "Jane Smith", email "test@example.com", totalEnergy 145 and totalMoney 181
+    Then I should see name "Jane Smith", email "test@example.com", totalEnergy 150 and totalMoney 181

@@ -214,15 +214,23 @@ public class DataLoaderDev implements CommandLineRunner {
         new Booking(
             anotherEVDriver, slot1, LocalDateTime.of(2025, 5, 15, 10, 0, 0), "not_used", 10.00);
 
-    // June 2025 (1 booking, up to June 3)
-    Booking booking22 =
-        new Booking(testEVDriver, slot2, LocalDateTime.of(2025, 6, 2, 11, 0, 0), "used", 9.00);
+    LocalDateTime now1 = LocalDateTime.now();
+    int minute1 = now1.getMinute();
+    int roundedMinute1 = (minute1 < 30) ? 0 : 30;
+    LocalDateTime sessionStart1 = now1.withMinute(roundedMinute1).withSecond(0).withNano(0);
+    Booking booking22 = new Booking(testEVDriver, slot2, sessionStart1, "used", 9.00);
+
+    LocalDateTime now2 = LocalDateTime.now();
+    int minute2 = now2.getMinute();
+    int roundedMinute2 = (minute2 < 30) ? 0 : 30;
+    LocalDateTime sessionStart2 = now2.withMinute(roundedMinute2).withSecond(0).withNano(0);
+    Booking booking23 = new Booking(testEVDriver, slot2, sessionStart2, "paid", 9.00);
 
     bookingRepository.saveAll(
         Arrays.asList(
             booking1, booking2, booking3, booking4, booking5, booking6, booking7, booking8,
             booking9, booking10, booking11, booking12, booking13, booking14, booking15, booking16,
-            booking17, booking18, booking19, booking20, booking21, booking22));
+            booking17, booking18, booking19, booking20, booking21, booking22, booking23));
     System.out.println("Bookings created.");
 
     // Create payments for each booking
@@ -248,12 +256,13 @@ public class DataLoaderDev implements CommandLineRunner {
     Payment payment20 = new Payment(testEVDriver, booking20);
     Payment payment21 = new Payment(anotherEVDriver, booking21);
     Payment payment22 = new Payment(testEVDriver, booking22);
+    Payment payment23 = new Payment(testEVDriver, booking23);
 
     paymentRepository.saveAll(
         Arrays.asList(
             payment1, payment2, payment3, payment4, payment5, payment6, payment7, payment8,
             payment9, payment10, payment11, payment12, payment13, payment14, payment15, payment16,
-            payment17, payment18, payment19, payment20, payment21, payment22));
+            payment17, payment18, payment19, payment20, payment21, payment22, payment23));
     System.out.println("Payments created.");
 
     // Create charging sessions with energyDelivered = slot power * 0.5

@@ -1,6 +1,14 @@
 package ua.tqs.smartvolt.smartvolt.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
@@ -10,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorSessionsResponse;
@@ -122,5 +131,44 @@ class ChargingSessionServiceTest {
     booking5.setChargingSession(session5);
 
     return List.of(session1, session2, session3, session4, session5);
+  }
+
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-28")
+  void createChargingSession_WhenNoSessionExists_CreatesSession() {
+      // Arrange
+      Booking booking = mock(Booking.class);
+      ChargingSlot slot = mock(ChargingSlot.class);
+      when(booking.getChargingSession()).thenReturn(null);
+      when(booking.getSlot()).thenReturn(slot);
+      when(slot.getPower()).thenReturn(22.0);
+
+      // Act
+      chargingSessionService.createChargingSession(booking);
+
+      // Assert using argThat
+      verify(chargingSessionRepository, times(1)).save(argThat(session ->
+          session.getEnergyDelivered() == 11.0 &&
+          session.getBooking() == booking
+      ));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-28")
+  void createChargingSession_WhenSessionExists_ThrowsException() {
+      // Arrange
+      Booking booking = mock(Booking.class);
+      ChargingSession existingSession = mock(ChargingSession.class);
+      when(booking.getChargingSession()).thenReturn(existingSession);
+
+      // Act & Assert
+      IllegalStateException ex = assertThrows(IllegalStateException.class, () -> {
+          chargingSessionService.createChargingSession(booking);
+      });
+      assertEquals("Charging session already exists for this booking.", ex.getMessage());
+      verify(chargingSessionRepository, never()).save(any());
   }
 }
