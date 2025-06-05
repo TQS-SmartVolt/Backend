@@ -8,7 +8,6 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-
   web-quality-stage:
     runs-on: ubuntu-latest
 
@@ -19,7 +18,6 @@ jobs:
       contents: read
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -72,9 +70,15 @@ jobs:
         run: |
           npm install
 
+      - name: Setup virtual display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          export DISPLAY=:99
+          nohup Xvfb :99 -screen 0 1920x1080x24 &
+
       - name: Run Frontend Quality Tests
         working-directory: web-quality-tests
-        continue-on-error: true
         run: |
           npm install -g @lhci/cli@0.14.x
           npm run lhci:${{ matrix.target }}
