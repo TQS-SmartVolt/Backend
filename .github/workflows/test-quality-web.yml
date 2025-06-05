@@ -63,13 +63,20 @@ jobs:
           token: ${{ secrets.SMART_VOLT_SECRET }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16.x
+
+      - name: Install dependencies
+        working-directory: web-quality-tests
+        run: |
+          npm install
 
       - name: Run Frontend Quality Tests
         working-directory: web-quality-tests
         continue-on-error: true
         run: |
-          npm install && npm install -g @lhci/cli@0.14.x
+          npm install -g @lhci/cli@0.14.x
           npm run lhci:${{ matrix.target }}
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
