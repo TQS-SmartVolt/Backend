@@ -283,6 +283,26 @@ class UserControllerIT {
     System.out.println("DEBUG: Consumption and spending updated correctly after new bookings.");
   }
 
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-34") // New requirement for View Personal User Info
+  void getUserInfo_ValidDriver_ReturnsUserInfo() {
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .get(getUsersBaseUrl())
+        .then()
+        .log()
+        .all() // Log the response for debugging
+        .statusCode(HttpStatus.OK.value())
+        .body("name", equalTo("Test Driver"))
+        .body("email", equalTo("evdriver@example.com"))
+        .body("totalEnergyConsumed", equalTo(45.0F))
+        .body("totalMoneySpent", greaterThanOrEqualTo(12.5F));
+    System.out.println("DEBUG: Successfully retrieved and verified user info.");
+  }
+
   private double getMonthlyConsumption(String token, int month) {
     List<Double> consumptionList =
         given()

@@ -20,6 +20,18 @@ public class ServiceStatisticsPage extends Website {
   @FindBy(css = "[data-testid='spending-chart'] [data-testid='chart-visual-container']")
   private WebElement spendingChartContainer;
 
+  @FindBy(css = "[data-testid='evdriver-name']")
+  private WebElement evDriverName;
+
+  @FindBy(css = "[data-testid='evdriver-email']")
+  private WebElement evDriverEmail;
+
+  @FindBy(css = "[data-testid='evdriver-total-energy']")
+  private WebElement evDriverTotalEnergy;
+
+  @FindBy(css = "[data-testid='evdriver-total-spent']")
+  private WebElement evDriverTotalSpent;
+
   public ServiceStatisticsPage(WebDriver driver) {
     super(driver);
   }
@@ -118,5 +130,31 @@ public class ServiceStatisticsPage extends Website {
               + e.getMessage());
       return false;
     }
+  }
+
+  public String getEvDriverName() {
+    wait.until(
+        ExpectedConditions.and(
+            ExpectedConditions.visibilityOf(evDriverName),
+            ExpectedConditions.not(
+                ExpectedConditions.textToBePresentInElement(evDriverName, "User"))));
+    return evDriverName.getText();
+  }
+
+  public String getEvDriverEmail() {
+    wait.until(ExpectedConditions.visibilityOf(evDriverEmail));
+    return evDriverEmail.getText();
+  }
+
+  public double getEvDriverTotalEnergy() {
+    wait.until(ExpectedConditions.visibilityOf(evDriverTotalEnergy));
+    String text = evDriverTotalEnergy.getText();
+    return Double.parseDouble(text.replaceAll("[^0-9.]", "")); // Extract number from text
+  }
+
+  public double getEvDriverTotalSpent() {
+    wait.until(ExpectedConditions.visibilityOf(evDriverTotalSpent));
+    String text = evDriverTotalSpent.getText();
+    return Double.parseDouble(text.replaceAll("[^0-9.]", "")); // Extract number from text
   }
 }

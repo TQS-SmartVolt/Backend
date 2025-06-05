@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingHistoryResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ConsumptionResponse;
 import ua.tqs.smartvolt.smartvolt.dto.SpendingResponse;
+import ua.tqs.smartvolt.smartvolt.dto.UserInfoResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
@@ -496,5 +497,75 @@ public class EvDriverServiceTest {
     verify(bookingRepository, times(1))
         .deleteExpiredBookingsByDriverAndStatus(
             eq(testDriver), any(LocalDateTime.class), eq("Not Used"));
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_ValidDriver_ReturnsUserInfoResponse() throws ResourceNotFoundException {
+    // Arrange
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+
+    // Act
+    UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
+
+    // Assert
+    assertThat(userInfo).isNotNull();
+    assertThat(userInfo.getName()).isEqualTo(testDriver.getName());
+    assertThat(userInfo.getEmail()).isEqualTo(testDriver.getEmail());
+    assertThat(userInfo.getTotalEnergyConsumed()).isEqualTo(0.0);
+    assertThat(userInfo.getTotalMoneySpent()).isEqualTo(0.0);
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(3)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(2)).findByDriver(testDriver);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_DriverNotFound_ThrowsResourceNotFoundException() {
+    // Arrange
+    Long nonExistentUserId = 999L;
+    when(evDriverRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    assertThatThrownBy(() -> evDriverService.getEvDriverInfo(nonExistentUserId))
+        .isInstanceOf(ResourceNotFoundException.class)
+        .hasMessageContaining("EvDriver not found with id: " + nonExistentUserId);
+
+    // Verify
+    verify(evDriverRepository, times(1)).findById(nonExistentUserId);
+  }
+
+  @Test
+  @Tag("UnitTest")
+  @Requirement("SV-31")
+  void getEvDriverInfo_ValidDriverWithBookings_ReturnsUserInfoResponseWithTotals()
+      throws ResourceNotFoundException {
+    // Arrange
+    List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+
+    // Act
+    UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
+
+    // Assert
+    assertThat(userInfo).isNotNull();
+    assertThat(userInfo.getName()).isEqualTo(testDriver.getName());
+    assertThat(userInfo.getEmail()).isEqualTo(testDriver.getEmail());
+
+    double totalEnergyConsumed =
+        (booking1.getSlot().getPower() * factor)
+            + (booking2.getSlot().getPower() * factor)
+            + (booking3.getSlot().getPower() * factor);
+    assertThat(userInfo.getTotalEnergyConsumed()).isEqualTo(totalEnergyConsumed);
+
+    double totalMoneySpent = booking1.getCost() + booking2.getCost() + booking3.getCost();
+    assertThat(userInfo.getTotalMoneySpent()).isEqualTo(totalMoneySpent);
+
+    // Verify repository interactions
+    verify(evDriverRepository, times(3)).findById(testDriver.getUserId());
+    verify(bookingRepository, times(2)).findByDriver(testDriver);
   }
 }

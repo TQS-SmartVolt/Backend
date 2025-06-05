@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ua.tqs.smartvolt.smartvolt.dto.ChargingHistoryResponse;
 import ua.tqs.smartvolt.smartvolt.dto.ConsumptionResponse;
 import ua.tqs.smartvolt.smartvolt.dto.SpendingResponse;
+import ua.tqs.smartvolt.smartvolt.dto.UserInfoResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.models.EvDriver;
@@ -58,7 +59,8 @@ public class EvDriverService {
     // The 'findByDriver' method assumes a relationship where Booking has a 'driver' field.
     List<Booking> driverBookings = bookingRepository.findByDriver(evDriver).orElse(java.util.Collections.emptyList());
 
-    // Stream through the list of bookings and map each Booking object to a ChargingHistoryResponse
+    // Stream through the list of bookings and map each Booking object to a
+    // ChargingHistoryResponse
     // DTO.
     return driverBookings.stream()
         .map(
@@ -160,6 +162,30 @@ public class EvDriverService {
     }
 
     return new SpendingResponse(monthlySpending); // Return the spending response
+  }
+
+  public UserInfoResponse getEvDriverInfo(Long userId) throws ResourceNotFoundException {
+    // Find the EvDriver by their ID, throwing an exception if not found.
+    EvDriver evDriver =
+        evDriverRepository
+            .findById(userId)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("EvDriver not found with id: " + userId));
+
+    ConsumptionResponse consumptionResponse = getEvDriverConsumption(userId);
+    double totalEnergyConsumed =
+        consumptionResponse.getConsumptionPerMonth().stream()
+            .mapToDouble(Double::doubleValue)
+            .sum();
+    SpendingResponse spendingResponse = getEvDriverSpending(userId);
+    double totalMoneySpent =
+        spendingResponse.getSpendingPerMonth().stream().mapToDouble(Double::doubleValue).sum();
+
+    // Return a UserInfoResponse DTO with the driver's name, email, total energy
+    // consumed, and
+    // total money spent.
+    return new UserInfoResponse(
+        evDriver.getName(), evDriver.getEmail(), totalEnergyConsumed, totalMoneySpent);
   }
 
   /**
