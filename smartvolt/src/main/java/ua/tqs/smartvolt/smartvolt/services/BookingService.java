@@ -165,7 +165,8 @@ public class BookingService {
     Booking booking =
         bookingRepository
             .findById(bookingId)
-            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
 
     EvDriver evDriver =
         evDriverRepository
@@ -190,7 +191,9 @@ public class BookingService {
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
     Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        bookingRepository
+            .findById(bookingId)
+            .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime createdAt = booking.getCreatedAt();
@@ -209,7 +212,9 @@ public class BookingService {
 
   public void cancelBooking(Long bookingId) throws Exception {
     Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        bookingRepository
+            .findById(bookingId)
+            .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {
