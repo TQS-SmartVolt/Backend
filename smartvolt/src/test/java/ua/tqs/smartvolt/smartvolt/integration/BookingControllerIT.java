@@ -344,4 +344,62 @@ class BookingControllerIT {
         .then()
         .body("find { it.bookingId == " + bookingId + " }.status", equalTo("used"));
   }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-28")
+  void getBooking_ValidId_ReturnsBooking() {
+    // Arrange: create a booking first
+    Long slotId = 201L;
+    LocalDateTime startTime =
+        LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0).withNano(0);
+    BookingRequest request = new BookingRequest(slotId, startTime);
+
+    Long bookingId =
+        given()
+            .contentType("application/json")
+            .header("Authorization", "Bearer " + driverSvToken)
+            .body(request)
+            .when()
+            .post(getBaseUrl() + "/start-payment")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .jsonPath()
+            .getLong("bookingId");
+
+    // Act & Assert: fetch the booking by ID
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .get(getBaseUrl() + "/" + bookingId)
+        .then()
+        .log()
+        .all()
+        .statusCode(HttpStatus.OK.value())
+        .body("bookingId", equalTo(bookingId.intValue()))
+        .body("slot.slotId", equalTo(slotId.intValue()))
+        .body("driver.userId", equalTo(3))
+        .body("status", equalTo("not_used"));
+  }
+
+  @Test
+  @Tag("IT-Fast")
+  @Requirement("SV-28")
+  void getBooking_InvalidId_ReturnsNotFound() {
+    Long invalidBookingId = 999999L;
+
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Bearer " + driverSvToken)
+        .when()
+        .get(getBaseUrl() + "/" + invalidBookingId)
+        .then()
+        .log()
+        .all()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body("error", equalTo("Not Found"))
+        .body("message", containsString("Booking not found with id: " + invalidBookingId));
+  }
 }

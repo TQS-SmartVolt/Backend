@@ -59,4 +59,13 @@ public class ChargingSessionService {
 
     return response;
   }
+
+  public void createChargingSession(Booking booking) {
+    if (booking.getChargingSession() != null) {
+      throw new IllegalStateException("Charging session already exists for this booking.");
+    }
+    double energyDelivered = 0.5 * booking.getSlot().getPower(); // energy for 30 min
+    ChargingSession session = new ChargingSession(energyDelivered, booking);
+    chargingSessionRepository.save(session);
+  }
 }
