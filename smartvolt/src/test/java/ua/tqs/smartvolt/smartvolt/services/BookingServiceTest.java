@@ -542,6 +542,7 @@ public class BookingServiceTest {
 
   @Test
   @Tag("UnitTest")
+  @Requirement("SV-27")
   void unlockChargingSlot_BookingNotPaidOrAlreadyUsed_ThrowsException() {
     // Arrange
     Long bookingId = 1L;
