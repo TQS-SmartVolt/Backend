@@ -40,7 +40,7 @@ import ua.tqs.smartvolt.smartvolt.repositories.ChargingSlotRepository;
 import ua.tqs.smartvolt.smartvolt.repositories.EvDriverRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingServiceTest {
+class BookingServiceTest {
 
   @Mock private BookingRepository bookingRepository;
   @Mock private EvDriverRepository evDriverRepository;
@@ -163,8 +163,7 @@ public class BookingServiceTest {
     when(evDriverRepository.findById(testDriver.getUserId())).thenReturn(Optional.of(testDriver));
 
     // Act & Assert
-    assertThatThrownBy(
-            () -> bookingService.createBooking(requestWithInvalidSlot, testDriver.getUserId()))
+    assertThatThrownBy(() -> bookingService.createBooking(requestWithInvalidSlot, testDriver.getUserId()))
         .isInstanceOf(ResourceNotFoundException.class)
         .hasMessageContaining("Slot not found with id: " + invalidSlotId);
 
@@ -368,8 +367,7 @@ public class BookingServiceTest {
     when(chargingSlotRepository.findById(testSlot.getSlotId())).thenReturn(Optional.of(testSlot));
 
     // Act & Assert
-    assertThatThrownBy(
-            () -> bookingService.createBooking(requestWithPastTime, testDriver.getUserId()))
+    assertThatThrownBy(() -> bookingService.createBooking(requestWithPastTime, testDriver.getUserId()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Cannot create a booking in the past.");
 
@@ -667,9 +665,7 @@ public class BookingServiceTest {
     ResourceNotFoundException exception =
         assertThrows(
             ResourceNotFoundException.class,
-            () -> {
-              bookingService.getBookingDetails(bookingId);
-            });
+            () -> bookingService.getBookingDetails(bookingId));
     assertTrue(exception.getMessage().contains("Booking not found with id: " + bookingId));
     verify(bookingRepository, times(1)).findById(bookingId);
   }

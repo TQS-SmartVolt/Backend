@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
+import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.services.BookingService;
 
@@ -34,7 +35,7 @@ public class BookingController {
   @Operation(
       summary = "Create a new booking",
       description = "Allows an EV driver to create a new booking for a charging station.")
-  public Booking createBooking(@RequestBody BookingRequest request) throws Exception {
+  public Booking createBooking(@RequestBody BookingRequest request) throws ResourceNotFoundException, SlotAlreadyBookedException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.createBooking(request, driverId);
@@ -45,7 +46,7 @@ public class BookingController {
   @Operation(
       summary = "Get current bookings",
       description = "Retrieves the list of current bookings for the authenticated EV driver.")
-  public List<Booking> getBookingsToUnlock() throws Exception {
+  public List<Booking> getBookingsToUnlock() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.getBookingsToUnlock(driverId);

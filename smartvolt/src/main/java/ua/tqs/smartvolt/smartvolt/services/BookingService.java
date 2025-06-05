@@ -121,7 +121,7 @@ public class BookingService {
     return bookingRepository.save(booking);
   }
 
-  public List<Booking> getBookingsToUnlock(Long driverId) throws Exception {
+  public List<Booking> getBookingsToUnlock(Long driverId) throws ResourceNotFoundException {
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
@@ -210,7 +210,7 @@ public class BookingService {
     }
   }
 
-  public void cancelBooking(Long bookingId) throws Exception {
+  public void cancelBooking(Long bookingId) throws ResourceNotFoundException, IllegalStateException {
     Booking booking =
         bookingRepository
             .findById(bookingId)
