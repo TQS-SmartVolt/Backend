@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,9 @@ public class UserController {
 
   @GetMapping("/bookings")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get user bookings",
+      description = "Retrieves the list of charging history for the authenticated EV driver.")
   public List<ChargingHistoryResponse> getUserBookings() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long userId = Long.parseLong(authentication.getName());
@@ -33,6 +37,9 @@ public class UserController {
 
   @GetMapping("/consumption")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get user consumption",
+      description = "Retrieves the total energy consumption for the authenticated EV driver.")
   public ConsumptionResponse getUserConsumption() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long userId = Long.parseLong(authentication.getName());
@@ -41,6 +48,9 @@ public class UserController {
 
   @GetMapping("/spending")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get user spending",
+      description = "Retrieves the total spending for the authenticated EV driver.")
   public SpendingResponse getUserSpending() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long userId = Long.parseLong(authentication.getName());
@@ -49,6 +59,9 @@ public class UserController {
 
   @GetMapping()
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
+  @Operation(
+      summary = "Get user information",
+      description = "Retrieves detailed information about the authenticated EV driver.")
   public UserInfoResponse getUserInfo() throws ResourceNotFoundException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long userId = Long.parseLong(authentication.getName());

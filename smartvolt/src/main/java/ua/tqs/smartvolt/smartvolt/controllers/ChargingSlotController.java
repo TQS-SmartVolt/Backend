@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,9 @@ public class ChargingSlotController {
   }
 
   @GetMapping("/{slotId}")
+  @Operation(
+      summary = "Get details of a charging slot by its ID",
+      description = "Retrieves detailed information about a specific charging slot using its ID.")
   public ChargingSlotResponse getSlotDetailsById(@PathVariable Long slotId) {
     return chargingSlotService.getSlotDetailsById(slotId);
   }
