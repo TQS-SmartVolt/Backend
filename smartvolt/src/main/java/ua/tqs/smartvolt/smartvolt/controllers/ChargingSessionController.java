@@ -1,5 +1,6 @@
 package ua.tqs.smartvolt.smartvolt.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,10 @@ public class ChargingSessionController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_STATION_OPERATOR')")
+  @Operation(
+      summary = "Get charging sessions statistics for the operator",
+      description =
+          "Retrieves the total number of charging sessions, average sessions per month, and a breakdown of sessions by month for the operator.")
   public OperatorSessionsResponse getOperatorSessions() {
     return chargingSessionService.getSessions();
   }
