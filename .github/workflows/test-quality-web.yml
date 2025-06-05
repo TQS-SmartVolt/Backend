@@ -2,35 +2,55 @@ name: Quality Web Tests
 
 on:
   push:
-    branches-ignore: [main, dev]
+    branches-ignore: [main, dev] # Runs on pushes to any branch EXCEPT main or dev
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
-
   web-quality-stage:
     runs-on: ubuntu-latest
 
+    # Add environment variables for all Lighthouse CI runs here, using GitHub Secrets
+    # It's crucial to pass these from your GitHub Secrets
+    env:
+      LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For GitHub status checks
+
+      # General thresholds (can be overridden per config if needed, but useful as defaults)
+      PERFORMANCE_THRESHOLD: 0.9
+      ACCESSIBILITY_THRESHOLD: 0.9
+      BEST_PRACTICES_THRESHOLD: 0.9
+      SEO_THRESHOLD: 0.9
+
+      # Specific URLs and tokens for each app type
+      WEB_URL_EVDRIVER: ${{ secrets.WEB_URL_EVDRIVER }}
+      EV_DRIVER_BEARER_TOKEN: ${{ secrets.EV_DRIVER_BEARER_TOKEN }}
+
+      WEB_URL_OPERATOR: ${{ secrets.WEB_URL_OPERATOR }}
+      OPERATOR_BEARER_TOKEN: ${{ secrets.OPERATOR_BEARER_TOKEN }}
+
+      WEB_URL_PUBLIC: ${{ secrets.WEB_URL_PUBLIC }} # If public pages are on a different base URL
+
     strategy:
       matrix:
-        target: [public-pages, operator-pages, evdriver-pages]
+        target: [public-pages, operator-pages, evdriver-pages] # Use specific names matching your LHCI configs
     permissions:
       contents: read
 
     steps:
-
-      - name: Checkout repository
+      - name: Checkout root repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Checkout AppConfig repository
+        # Consider making AppConfig a submodule of your main repo if it's always needed together.
         uses: actions/checkout@v2
         with:
           submodules: true
           repository: TQS-SmartVolt/AppConfig
           token: ${{ secrets.SMART_VOLT_SECRET }}
+          path: AppConfig # Checkout into a specific folder to avoid conflicts
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -40,20 +60,25 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Staging with Docker Compose
+        # Ensure this context is correct for running docker compose
+        working-directory: AppConfig # Assuming compose.stag.yml is in AppConfig
         run: |
           set -a
-          sed -i '/^VITE_BACKEND_HOST=host\.testcontainers\.internal$/d' .env.staging   # Remove the line to run in localhost
+          # Remove the line to run in localhost ONLY if it causes issues in CI
+          # If .env.staging is correctly set up for CI, this sed might not be needed.
+          sed -i '/^VITE_BACKEND_HOST=host\.testcontainers\.internal$/d' .env.staging
           source .env.staging
           docker compose --file compose.stag.yml down
           docker compose --file compose.stag.yml up -d --build
           docker image prune -a -f
         env:
+          # These env vars are for Docker Compose itself
           DOCKER_PORT: 8080
           username: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Change working directory
-        run: cd ..
+      # The `cd ..` was problematic as it changes the shell's directory
+      # without affecting subsequent steps. Use `working-directory` instead.
 
       - name: Checkout Frontend repository
         uses: actions/checkout@v2
@@ -61,15 +86,31 @@ jobs:
           submodules: true
           repository: TQS-SmartVolt/Frontend
           token: ${{ secrets.SMART_VOLT_SECRET }}
+          path: Frontend # Checkout into a specific folder
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Run Frontend Quality Tests
-        working-directory: web-quality-tests
+      - name: Install XVFB (X Virtual Framebuffer)
+        # This is the key fix for "Missing X server or $DISPLAY"
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Install Frontend Quality Test Dependencies
+        working-directory: Frontend/web-quality-tests # Adjust path if Frontend is checked out elsewhere
         run: |
           npm install
-          npm install -g @lhci/cli@0.14.x
-          npm run lhci:${{ matrix.target }}
+          # It's better to install @lhci/cli locally as a dev dependency
+          # npm install -g @lhci/cli@0.14.x
+          # Ensure @lhci/cli is in your package.json devDependencies for local installation
+          # e.g., "devDependencies": { "@lhci/cli": "^0.14.0" }
+
+      - name: Run Lighthouse CI for ${{ matrix.target }}
+        working-directory: Frontend/web-quality-tests # Adjust path
+        run: |
+          # The xvfb-run command provides the virtual display for Chrome
+          xvfb-run --auto-display npm run lhci:${{ matrix.target }}
+        # Pass relevant environment variables from the job's `env` section
+        # These are now available to your .lighthouserc.cjs files via process.env
+        # No need to list them individually here if they are in the job-level `env`
