@@ -67,7 +67,7 @@ public class WebConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
     return http.build();
-  }
+  } 
 
   @Bean
   UrlBasedCorsConfigurationSource apiConfigurationSource() {
