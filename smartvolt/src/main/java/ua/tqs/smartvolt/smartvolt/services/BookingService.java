@@ -165,17 +165,17 @@ public class BookingService {
     Booking booking =
         bookingRepository
             .findById(bookingId)
-            .orElseThrow(() -> new Exception("Booking not found with id: " + bookingId));
+            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
 
     EvDriver evDriver =
         evDriverRepository
             .findById(driverId)
-            .orElseThrow(() -> new Exception(DRIVER_NOT_FOUND_MSG + driverId));
+            .orElseThrow(() -> new ResourceNotFoundException(DRIVER_NOT_FOUND_MSG + driverId));
 
     chargingSessionService.createChargingSession(booking);
 
     if (!booking.getDriver().equals(evDriver)) {
-      throw new Exception("Driver does not match booking driver");
+      throw new IllegalStateException("Driver does not match booking driver");
     }
 
     if (booking.getStatus().equals("paid")) {
@@ -184,36 +184,36 @@ public class BookingService {
       slot.setLocked(false);
       chargingSlotRepository.save(slot);
     } else {
-      throw new Exception("Booking is not paid or already used");
+      throw new IllegalStateException("Booking is not paid or already used");
     }
   }
 
   public void finalizeBookingPayment(Long bookingId) throws Exception {
     Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+        bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime createdAt = booking.getCreatedAt();
     if (createdAt.plusMinutes(5).isBefore(now)) {
       bookingRepository.delete(booking);
-      throw new Exception("Booking expired");
+      throw new IllegalStateException("Booking expired");
     }
 
     if (booking.getStatus().equals(NOT_USED_STATUS)) {
       booking.setStatus("paid");
       bookingRepository.save(booking);
     } else {
-      throw new Exception("Booking already paid");
+      throw new IllegalStateException("Booking already paid");
     }
   }
 
   public void cancelBooking(Long bookingId) throws Exception {
     Booking booking =
-        bookingRepository.findById(bookingId).orElseThrow(() -> new Exception("Booking not found"));
+        bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     if (booking.getStatus().equals(NOT_USED_STATUS)) {
       bookingRepository.delete(booking);
     } else {
-      throw new Exception("Booking cannot be cancelled");
+      throw new IllegalStateException("Booking cannot be cancelled");
     }
   }
 
