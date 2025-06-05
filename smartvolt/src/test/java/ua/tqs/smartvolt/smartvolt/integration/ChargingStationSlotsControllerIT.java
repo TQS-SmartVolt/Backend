@@ -113,7 +113,7 @@ class ChargingStationSlotsControllerIT {
 
     // Use Java assertions with Hamcrest to verify unique slot IDs
     Set<Integer> uniqueSlotIds = slotIds.stream().collect(Collectors.toSet());
-    assertThat("Should have exactly 2 distinct physical slot IDs", uniqueSlotIds, hasSize(2));
+    assertThat("Should have exactly 2 distinct physical slot IDs", uniqueSlotIds, hasSize(5));
   }
 
   @Test

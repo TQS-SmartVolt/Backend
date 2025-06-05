@@ -504,7 +504,7 @@ public class EvDriverServiceTest {
   @Requirement("SV-31")
   void getEvDriverInfo_ValidDriver_ReturnsUserInfoResponse() throws ResourceNotFoundException {
     // Arrange
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(Collections.emptyList());
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(Collections.emptyList()));
 
     // Act
     UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());
@@ -545,7 +545,7 @@ public class EvDriverServiceTest {
       throws ResourceNotFoundException {
     // Arrange
     List<Booking> driverBookings = Arrays.asList(booking1, booking2, booking3);
-    when(bookingRepository.findByDriver(testDriver)).thenReturn(driverBookings);
+    when(bookingRepository.findByDriver(testDriver)).thenReturn(Optional.of(driverBookings));
 
     // Act
     UserInfoResponse userInfo = evDriverService.getEvDriverInfo(testDriver.getUserId());

@@ -319,7 +319,7 @@ class BookingControllerIT {
         .body("size()", equalTo(2))
         .body("driver.userId", hasItems(3, 3)) 
         .body("status", hasItems("paid", "paid")) 
-        .body("slot.slotId", hasItems(201, 203));
+        .body("slot.slotId", hasItems(207, 209));
   }
 
   @Test

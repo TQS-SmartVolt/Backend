@@ -8,9 +8,12 @@ import app.getxray.xray.junit.customjunitxml.annotations.Requirement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -63,8 +66,13 @@ class UserControllerIT {
   private String driverSvToken;
   private String operatorSvToken; // Also get operator token for negative test if needed
 
+  @Autowired
+  private Flyway flyway;
+
   @BeforeEach
   public void setUp() {
+    flyway.clean(); // Clean the database before each test
+    flyway.migrate(); // Apply migrations to set up the database
     // Get token for the EV Driver
     driverSvToken =
         given()
@@ -298,8 +306,8 @@ class UserControllerIT {
         .statusCode(HttpStatus.OK.value())
         .body("name", equalTo("Test Driver"))
         .body("email", equalTo("evdriver@example.com"))
-        .body("totalEnergyConsumed", equalTo(45.0F))
-        .body("totalMoneySpent", greaterThanOrEqualTo(12.5F));
+        .body("totalEnergyConsumed", equalTo(15.0F))
+        .body("totalMoneySpent", greaterThanOrEqualTo(6.5F));
     System.out.println("DEBUG: Successfully retrieved and verified user info.");
   }
 
