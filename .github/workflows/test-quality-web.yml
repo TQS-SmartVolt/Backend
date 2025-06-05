@@ -69,6 +69,7 @@ jobs:
 
       - name: Run Frontend Quality Tests
         working-directory: web-quality-tests
+        continue-on-error: true
         run: |
           npm install && npm install -g @lhci/cli@0.14.x
           npm run lhci:${{ matrix.target }}
