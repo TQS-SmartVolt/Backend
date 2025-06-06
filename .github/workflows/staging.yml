@@ -283,22 +283,21 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
-        working-directory: capacity-tests
-        run: |
-          npm install
+        working-directory: capacity-test/k6
+        run: npm install
 
       - name: Run booking_n_users.js test
+        working-directory: capacity-tests/k6
         run: k6 run booking_n_users.js
-        working-directory: capacity-tests
 
       - name: Run get_stations_map_test.js test
+        working-directory: capacity-tests/k6
         run: k6 run get_stations_map_test.js
-        working-directory: capacity-tests
 
       - name: Run auth_signin_test.js test
+        working-directory: capacity-tests/k6
         run: k6 run auth_signin_test.js
-        working-directory: capacity-tests
 
       - name: Run auth_signup_test.js test
+        working-directory: capacity-tests/k6
         run: k6 run auth_signup_test.js
-        working-directory: capacity-tests
