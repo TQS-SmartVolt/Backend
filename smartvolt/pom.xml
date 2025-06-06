@@ -48,7 +48,6 @@
         </build>
     </profile>
     <profile>
-
     <id>UnitTests-IT</id>
     <activation>
       <activeByDefault>true</activeByDefault>
