@@ -2,7 +2,7 @@
 export const testProfiles = {
   smoke: {
     options: {
-      vus: 1,
+      vus: 5,
       duration: '10s',
     },
     exec: 'smokeTest',

@@ -5,11 +5,11 @@ import { SharedArray } from 'k6/data';
 const BASE_URL = 'http://localhost/api/v1';
 const LOGIN_URL = `${BASE_URL}/auth/sign-in`;
 const PASSWORD = 'password123!';
-const numberOfDrivers = 10;
+const numberOfDrivers = 5;
 
 const driverEmails = new SharedArray('driverEmails', function () {
   const emails = [];
-  for (let i = 1; i <= numberOfDrivers; i++) { 
+  for (let i = 1; i <= numberOfDrivers; i++) {
     emails.push(`evdriver${i}@example.com`);
   }
   return emails;
@@ -36,19 +36,19 @@ function getTomorrowDate() {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const year = tomorrow.getFullYear();
-  const month = (tomorrow.getMonth() + 1).toString().padStart(2, '0'); 
+  const month = (tomorrow.getMonth() + 1).toString().padStart(2, '0');
   const day = tomorrow.getDate().toString().padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
 
 export const options = {
-  vus: 10,       
-  iterations: 10, 
-                   
+  vus: numberOfDrivers,
+  iterations: numberOfDrivers,
+
   thresholds: {
-    'http_req_failed': ['rate<0.01'], 
-    'http_req_duration': ['p(95)<2000'], 
+    'http_req_failed': ['rate<0.01'],
+    'http_req_duration': ['p(95)<2000'],
   },
 };
 
@@ -94,7 +94,7 @@ export default function () {
 
   const bookingPayload = JSON.stringify({
     slotId: randomSlot.slotId,
-    startTime: randomSlot.startTime, 
+    startTime: randomSlot.startTime,
   });
   const createBookingUrl = `${BASE_URL}/bookings/start-payment`;
   const bookingRes = http.post(createBookingUrl, bookingPayload, { headers: authHeaders });

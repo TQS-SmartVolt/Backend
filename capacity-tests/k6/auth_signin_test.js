@@ -3,7 +3,7 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { commonThresholds, breakpointThresholds, generateScenarios } from './common.js';
 
-const BASE_URL = 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://localhost/api/v1';
 const LOGIN_URL = `${BASE_URL}/auth/sign-in`;
 
 const EXISTING_EV_DRIVER_EMAIL = 'evdriver1@example.com';
