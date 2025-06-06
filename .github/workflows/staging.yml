@@ -283,7 +283,7 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
-        working-directory: capacity-test/k6
+        working-directory: capacity-tests/k6
         run: npm install
 
       - name: Run booking_n_users.js test
