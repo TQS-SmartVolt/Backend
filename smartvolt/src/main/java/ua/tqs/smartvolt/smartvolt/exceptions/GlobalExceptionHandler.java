@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+  private static final String ERROR_KEY = "error";
+  private static final String MESSAGE_KEY = "message";
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<Map<String, String>> handleResourceNotFoundException(
       ResourceNotFoundException ex) {
     Map<String, String> errorResponse = new HashMap<>();
-    errorResponse.put("error", "Not Found");
-    errorResponse.put("message", ex.getMessage());
+    errorResponse.put(ERROR_KEY, "Not Found");
+    errorResponse.put(MESSAGE_KEY, ex.getMessage());
     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND); // 404 Not Found
   }
 
@@ -23,8 +25,8 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, String>> handleSlotAlreadyBookedException(
       SlotAlreadyBookedException ex) {
     Map<String, String> errorResponse = new HashMap<>();
-    errorResponse.put("error", "Conflict"); // General error type for 409
-    errorResponse.put("message", ex.getMessage()); // Specific message from the exception
+    errorResponse.put(ERROR_KEY, "Conflict"); // General error type for 409
+    errorResponse.put(MESSAGE_KEY, ex.getMessage()); // Specific message from the exception
     return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT); // 409 Conflict
   }
 
@@ -32,8 +34,8 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, String>> handleIllegalArgumentException(
       IllegalArgumentException ex) {
     Map<String, String> errorResponse = new HashMap<>();
-    errorResponse.put("error", "Bad Request");
-    errorResponse.put("message", ex.getMessage());
+    errorResponse.put(ERROR_KEY, "Bad Request");
+    errorResponse.put(MESSAGE_KEY, ex.getMessage());
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST); // 400 Bad Request
   }
 

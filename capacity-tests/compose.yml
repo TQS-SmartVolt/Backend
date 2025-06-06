@@ -1,0 +1,50 @@
+name: Capacity Tests
+
+services:
+  prometheus:
+    container_name: ${PROMETHEUS_CONTAINER_NAME}
+    image: prom/prometheus:v3.4.1
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=${PROMETHEUS_CONF_VOLUME}
+    ports:
+      - ${PROMETHEUS_LOCAL_PORT}:${PROMETHEUS_CONTAINER_PORT}
+    volumes:
+      - ./config/prometheus.yaml:${PROMETHEUS_CONF_VOLUME}
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:${PROMETHEUS_CONTAINER_PORT}/-/healthy" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sv-network
+    restart: on-failure
+
+  grafana:
+    container_name: ${GRAFANA_CONTAINER_NAME}
+    image: grafana/grafana:12.0.1
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    ports:
+      - ${GRAFANA_LOCAL_PORT}:${GRAFANA_CONTAINER_PORT}
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    volumes:
+      - ./config/grafana:${GRAFANA_PROVISIONING_VOLUME}
+      - ./k6:${GRAFANA_SCRIPTS_VOLUME}
+    networks:
+      - sv-network
+    restart: on-failure
+
+networks:
+  sv-network:
+    driver: bridge
+
+volumes:
+  postgres_data_capacity:
