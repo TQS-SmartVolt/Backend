@@ -270,13 +270,14 @@ jobs:
       - name: Change working directory
         run: cd ..
 
-      - name: Checkout Backend repository
+      - name: Checkout Backend repository (dev branch)
         uses: actions/checkout@v2
         with:
           submodules: true
           repository: TQS-SmartVolt/Backend
+          ref: dev
           token: ${{ secrets.SMART_VOLT_SECRET }}
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -288,16 +289,16 @@ jobs:
 
       - name: Run booking_n_users.js test
         working-directory: capacity-tests/k6
-        run: k6 run booking_n_users.js
+        run: npm run k6:booking_n_users
 
       - name: Run get_stations_map_test.js test
         working-directory: capacity-tests/k6
-        run: k6 run get_stations_map_test.js
+        run: npm run k6:get_stations_map_test
 
       - name: Run auth_signin_test.js test
         working-directory: capacity-tests/k6
-        run: k6 run auth_signin_test.js
+        run: npm run k6:auth_signin_test
 
       - name: Run auth_signup_test.js test
         working-directory: capacity-tests/k6
-        run: k6 run auth_signup_test.js
+        run: npm run k6:auth_signup_test

@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "k6:auth_signup_test": "k6 run auth_signup_test.js",
+    "k6:auth_signin_test": "k6 run auth_signin_test.js",
+    "k6:booking_n_users": "k6 run booking_n_users.js",
+    "k6:get_stations_map_test": "k6 run get_stations_map_test.js"
   },
   "keywords": [],
   "author": "",
