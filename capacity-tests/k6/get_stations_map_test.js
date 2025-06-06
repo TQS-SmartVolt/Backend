@@ -2,11 +2,11 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { commonThresholds, breakpointThresholds, generateScenarios } from './common.js';
 
-const BASE_URL = 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://localhost/api/v1';
 const LOGIN_URL = `${BASE_URL}/auth/sign-in`;
 const GET_STATIONS_MAP_URL = `${BASE_URL}/stations/map`;
 
-const DRIVERS_COUNT = 5; 
+const DRIVERS_COUNT = 5;
 const COMMON_PASSWORD = 'password123!';
 
 const selectedProfile = __ENV.TEST_TYPE || 'smoke';

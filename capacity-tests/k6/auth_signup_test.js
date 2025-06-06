@@ -1,8 +1,8 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { commonThresholds, breakpointThresholds, generateScenarios } from './common.js'; 
+import { commonThresholds, breakpointThresholds, generateScenarios } from './common.js';
 
-const BASE_URL = 'http://localhost:8080/api/v1'; 
+const BASE_URL = 'http://localhost/api/v1';
 
 const selectedProfile = __ENV.TEST_TYPE || 'smoke';
 const scenarios = generateScenarios(selectedProfile);
@@ -16,13 +16,13 @@ export const options = {
 };
 
 function generateUniqueUser() {
-  const vuId = __VU; 
-  const iteration = __ITER; 
-  const timestamp = Date.now(); 
+  const vuId = __VU;
+  const iteration = __ITER;
+  const timestamp = Date.now();
 
   const name = `TestUser_${vuId}_${iteration}_${timestamp}`;
   const email = `testuser_${vuId}_${iteration}_${timestamp}@example.com`;
-  const password = 'Password123!'; 
+  const password = 'Password123!';
   return { name, email, password };
 }
 
