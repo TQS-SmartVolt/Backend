@@ -284,11 +284,11 @@ jobs:
       - name: Set up K6
         uses: grafana/setup-k6-action@v1
 
-      - name: Run k6 booking_n_users.js test
+      - name: Run k6 auth_signup_test.js test
         uses: grafana/run-k6-action@v1
         with:
           path: |
-            capacity-tests/k6/booking_n_users.js
+            capacity-tests/k6/auth_signup_test.js
 
       # - name: Install dependencies
       #   working-directory: capacity-tests/k6
