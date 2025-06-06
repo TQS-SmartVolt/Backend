@@ -278,6 +278,9 @@ jobs:
           ref: dev
           token: ${{ secrets.SMART_VOLT_SECRET }}
       
+      - name: list files
+        run: ls -la
+
       - name: Run k6 booking_n_users.js test
         uses: grafana/run-k6-action@v1
         with:
