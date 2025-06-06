@@ -279,12 +279,13 @@ jobs:
           token: ${{ secrets.SMART_VOLT_SECRET }}
       
       - name: list files
-        run: ls -la
+        run: ls -la capacity-tests/k6
 
       - name: Run k6 booking_n_users.js test
         uses: grafana/run-k6-action@v1
         with:
-          path: capacity-tests/k6/booking_n_users.js
+          path: |
+            capacity-tests/k6/booking_n_users.js
 
       # - name: Install dependencies
       #   working-directory: capacity-tests/k6
