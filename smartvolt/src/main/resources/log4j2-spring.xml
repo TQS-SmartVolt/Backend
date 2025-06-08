@@ -8,7 +8,8 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <Socket name="Logstash" host="${env:LOGSTASH_IP}" port="${env:LOGSTASH_CONTAINER_PORT}" protocol="tcp" ignoreExceptions="true">
+        <!-- Add reconnectionDelayMillis to allow Log4j2 to retry connection -->
+        <Socket name="Logstash" host="${env:LOGSTASH_IP}" port="${env:LOGSTASH_CONTAINER_PORT}" protocol="tcp" ignoreExceptions="true" reconnectionDelayMillis="5000">
             <JsonLayout compact="true" eventEol="true"/>
         </Socket>
     </Appenders>
