@@ -2,6 +2,8 @@ package ua.tqs.smartvolt.smartvolt.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +26,8 @@ import ua.tqs.smartvolt.smartvolt.services.BookingService;
 @RequestMapping("/api/v1/bookings")
 public class BookingController {
 
+  private static final Logger logger = LogManager.getLogger(BookingController.class);
+
   private final BookingService bookingService;
 
   public BookingController(BookingService bookingService) {
@@ -37,6 +41,7 @@ public class BookingController {
       description = "Allows an EV driver to create a new booking for a charging station.")
   public Booking createBooking(@RequestBody BookingRequest request)
       throws ResourceNotFoundException, SlotAlreadyBookedException {
+    logger.info("Creating booking");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.createBooking(request, driverId);
@@ -48,6 +53,7 @@ public class BookingController {
       summary = "Get current bookings",
       description = "Retrieves the list of current bookings for the authenticated EV driver.")
   public List<Booking> getBookingsToUnlock() throws ResourceNotFoundException {
+    logger.info("Retrieving current bookings for driver");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     return bookingService.getBookingsToUnlock(driverId);
@@ -59,6 +65,7 @@ public class BookingController {
       summary = "Unlock a charging station",
       description = "Allows an EV driver to unlock a charging station after payment.")
   public void unlockChargingSlot(@PathVariable Long bookingId) throws Exception {
+    logger.info("Unlocking charging slot for booking ID: {}", bookingId);
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long driverId = Long.parseLong(authentication.getName());
     bookingService.unlockChargingSlot(bookingId, driverId);
@@ -71,12 +78,14 @@ public class BookingController {
       description =
           "Finalizes the payment for a booking, allowing the EV driver to complete the transaction.")
   public void finalizeBookingPayment(@PathVariable Long bookingId) throws Exception {
+    logger.info("Finalizing payment for booking ID: {}", bookingId);
     bookingService.finalizeBookingPayment(bookingId);
   }
 
   @GetMapping("/{bookingId}")
   @PreAuthorize("hasRole('ROLE_EV_DRIVER')")
   public Booking getBooking(@PathVariable Long bookingId) throws ResourceNotFoundException {
+    logger.info("Retrieving booking details for booking ID: {}", bookingId);
     return bookingService.getBookingDetails(bookingId);
   }
 
@@ -85,7 +94,9 @@ public class BookingController {
   @Operation(
       summary = "Cancel a booking",
       description = "Allows an EV driver to cancel a booking before it is finalized.")
-  public void cancelBooking(@PathVariable Long bookingId) throws Exception {
+  public void cancelBooking(@PathVariable Long bookingId)
+      throws ResourceNotFoundException, IllegalStateException {
+    logger.info("Cancelling booking with ID: {}", bookingId);
     bookingService.cancelBooking(bookingId);
   }
 
@@ -95,6 +106,7 @@ public class BookingController {
       summary = "Get energy consumption statistics",
       description = "Retrieves the total energy consumption statistics for the operator.")
   public OperatorEnergyResponse getEnergyConsumption() {
+    logger.info("Retrieving energy consumption statistics for the operator");
     return bookingService.getEnergyConsumption();
   }
 }
