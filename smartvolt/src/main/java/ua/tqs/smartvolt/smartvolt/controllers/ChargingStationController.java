@@ -29,9 +29,13 @@ import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @RestController
 @RequestMapping("/api/v1/stations")
 public class ChargingStationController {
+  private static final Logger logger = LogManager.getLogger(ChargingStationController.class);
   private final ChargingStationService chargingStationService;
   private final ChargingSlotService chargingSlotService;
 
@@ -49,6 +53,7 @@ public class ChargingStationController {
       description = "Allows a station operator to create a new charging station.")
   public ChargingStation createChargingStation(@RequestBody ChargingStationRequest request)
       throws ResourceNotFoundException {
+    logger.info("Creating charging station");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long currentId = Long.parseLong(authentication.getName());
     return chargingStationService.createChargingStation(request, currentId);
@@ -60,6 +65,7 @@ public class ChargingStationController {
       summary = "Get all charging stations for the operator",
       description = "Returns a list of all charging stations managed by the operator.")
   public List<ChargingStationWithSlots> getAllChargingStations() throws ResourceNotFoundException {
+    logger.info("Retrieving all charging stations for the operator");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Long operatorId = Long.parseLong(authentication.getName());
     return chargingStationService.getAllChargingStations(operatorId);
@@ -76,6 +82,7 @@ public class ChargingStationController {
       @RequestParam String chargingSpeed,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
       throws ResourceNotFoundException {
+    logger.info("Retrieving available charging slots for station ID: {}", stationId);
     return chargingSlotService.getAvailableSlots(stationId, chargingSpeed, date);
   }
 
@@ -89,6 +96,7 @@ public class ChargingStationController {
   public ChargingSlot addChargingSlotToStation(
       @PathVariable Long stationId, @RequestBody ChargingSlotRequest request)
       throws ResourceNotFoundException, InvalidRequestException {
+    logger.info("Adding charging slot to station ID: {}", stationId);
     return chargingSlotService.addChargingSlotToStation(stationId, request);
   }
 
@@ -100,6 +108,7 @@ public class ChargingStationController {
           "Returns all charging stations along with their available slots for EV drivers.")
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
       @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
+    logger.info("Retrieving charging stations by charging speeds: {}", (Object) chargingSpeeds);
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
   }
 
@@ -111,6 +120,7 @@ public class ChargingStationController {
   public ChargingStation updateChargingStationStatus(
       @PathVariable Long stationId, @RequestParam boolean activate)
       throws ResourceNotFoundException {
+    logger.info("Updating status of charging station ID: {} to {}", stationId, activate);
     return chargingStationService.updateChargingStationStatus(stationId, activate);
   }
 }

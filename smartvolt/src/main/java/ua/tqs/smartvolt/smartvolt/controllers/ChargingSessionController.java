@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorSessionsResponse;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSessionService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @RestController
 @RequestMapping("/api/v1/sessions")
 public class ChargingSessionController {
+
+  private static final Logger logger = LogManager.getLogger(ChargingSessionController.class);
+
   private ChargingSessionService chargingSessionService;
 
   public ChargingSessionController(ChargingSessionService chargingSessionService) {
@@ -24,6 +30,7 @@ public class ChargingSessionController {
       description =
           "Retrieves the total number of charging sessions, average sessions per month, and a breakdown of sessions by month for the operator.")
   public OperatorSessionsResponse getOperatorSessions() {
+    logger.info("Retrieving charging sessions statistics for the operator");
     return chargingSessionService.getSessions();
   }
 }
