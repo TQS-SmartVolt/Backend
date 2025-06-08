@@ -53,7 +53,7 @@ public class AuthController {
       description =
           "Allows a new user to sign up by providing their details and creating an account.")
   public User apiCreateUser(@RequestBody UserSignUp userSignUp) throws ResourceNotFoundException {
-    logger.info("User {} is trying to sign up", userSignUp.getEmail());
+    logger.info("User is trying to sign up");
     return authService.createUser(userSignUp);
   }
 }

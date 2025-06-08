@@ -107,7 +107,7 @@ public class ChargingStationController {
           "Returns all charging stations along with their available slots for EV drivers.")
   public ChargingStationsResponse getChargingStationsByChargingSpeed(
       @RequestParam String[] chargingSpeeds) throws ResourceNotFoundException {
-    logger.info("Retrieving charging stations by charging speeds: {}", (Object) chargingSpeeds);
+    logger.info("Retrieving charging stations by charging speeds");
     return chargingStationService.getChargingStationsByChargingSpeed(chargingSpeeds);
   }
 
