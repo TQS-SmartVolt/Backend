@@ -2,6 +2,8 @@ package ua.tqs.smartvolt.smartvolt.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,16 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ua.tqs.smartvolt.smartvolt.dto.BookingRequest;
 import ua.tqs.smartvolt.smartvolt.dto.OperatorEnergyResponse;
 import ua.tqs.smartvolt.smartvolt.exceptions.ResourceNotFoundException;
 import ua.tqs.smartvolt.smartvolt.exceptions.SlotAlreadyBookedException;
 import ua.tqs.smartvolt.smartvolt.models.Booking;
 import ua.tqs.smartvolt.smartvolt.services.BookingService;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -96,7 +94,8 @@ public class BookingController {
   @Operation(
       summary = "Cancel a booking",
       description = "Allows an EV driver to cancel a booking before it is finalized.")
-  public void cancelBooking(@PathVariable Long bookingId) throws ResourceNotFoundException, IllegalStateException {
+  public void cancelBooking(@PathVariable Long bookingId)
+      throws ResourceNotFoundException, IllegalStateException {
     logger.info("Cancelling booking with ID: {}", bookingId);
     bookingService.cancelBooking(bookingId);
   }

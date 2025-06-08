@@ -3,6 +3,8 @@ package ua.tqs.smartvolt.smartvolt.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import java.time.LocalDate;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,9 +30,6 @@ import ua.tqs.smartvolt.smartvolt.models.ChargingSlot;
 import ua.tqs.smartvolt.smartvolt.models.ChargingStation;
 import ua.tqs.smartvolt.smartvolt.services.ChargingSlotService;
 import ua.tqs.smartvolt.smartvolt.services.ChargingStationService;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @RestController
 @RequestMapping("/api/v1/stations")
